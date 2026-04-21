@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary text-white px-6 py-2.5 rounded-xl font-medium hover:bg-blue-700 transition-colors duration-200 shadow-md;
+  }
+
+  .btn-secondary {
+    @apply bg-gray-200 text-gray-700 px-6 py-2.5 rounded-xl font-medium hover:bg-gray-300 transition-colors duration-200;
+  }
+
+  .card {
+    @apply bg-white rounded-xl shadow-md p-6;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all;
+  }
+
+  .badge {
+    @apply px-3 py-1 rounded-full text-sm font-medium;
+  }
+
+  .badge-pending {
+    @apply bg-yellow-100 text-yellow-800;
+  }
+
+  .badge-confirmed {
+    @apply bg-blue-100 text-blue-800;
+  }
+
+  .badge-completed {
+    @apply bg-green-100 text-green-800;
+  }
+
+  .badge-cancelled {
+    @apply bg-red-100 text-red-800;
+  }
+}
