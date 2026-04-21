@@ -6,15 +6,18 @@ import Payment from "../models/Payment.js";
 
 export const getPatientProfile = async (req, res) => {
   try {
-    const patient = await Patient.findOne({ userId: req.user._id }).populate(
-      "userId",
-      "-password",
-    );
+    // Ensure user can only access their own profile
+    const patient = await Patient.findOne({
+      userId: req.user._id,
+      isDeleted: false,
+    }).populate("userId", "-password");
+
     if (!patient) {
       return res
         .status(404)
         .json({ success: false, message: "Patient profile not found" });
     }
+
     res.json({ success: true, data: patient });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -24,10 +27,16 @@ export const getPatientProfile = async (req, res) => {
 export const updatePatientProfile = async (req, res) => {
   try {
     const patient = await Patient.findOneAndUpdate(
-      { userId: req.user._id },
+      { userId: req.user._id, isDeleted: false },
       req.body,
       { new: true, runValidators: true },
     ).populate("userId", "-password");
+
+    if (!patient) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Patient profile not found" });
+    }
 
     res.json({ success: true, data: patient });
   } catch (error) {
@@ -68,7 +77,17 @@ export const getAllDoctors = async (req, res) => {
 
 export const bookAppointment = async (req, res) => {
   try {
-    const patient = await Patient.findOne({ userId: req.user._id });
+    const patient = await Patient.findOne({
+      userId: req.user._id,
+      isDeleted: false,
+    });
+
+    if (!patient) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Patient profile not found" });
+    }
+
     const appointment = await Appointment.create({
       ...req.body,
       patientId: patient._id,
@@ -82,7 +101,17 @@ export const bookAppointment = async (req, res) => {
 
 export const getMyAppointments = async (req, res) => {
   try {
-    const patient = await Patient.findOne({ userId: req.user._id });
+    const patient = await Patient.findOne({
+      userId: req.user._id,
+      isDeleted: false,
+    });
+
+    if (!patient) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Patient profile not found" });
+    }
+
     const { status, page = 1, limit = 10 } = req.query;
     const skip = (page - 1) * limit;
 
@@ -117,19 +146,56 @@ export const getMyAppointments = async (req, res) => {
 
 export const cancelAppointment = async (req, res) => {
   try {
-    const appointment = await Appointment.findByIdAndUpdate(
-      req.params.id,
-      { status: "cancelled" },
-      { new: true },
-    );
+    const patient = await Patient.findOne({
+      userId: req.user._id,
+      isDeleted: false,
+    });
 
-    if (!appointment) {
+    if (!patient) {
       return res
         .status(404)
-        .json({ success: false, message: "Appointment not found" });
+        .json({ success: false, message: "Patient profile not found" });
     }
 
-    res.json({ success: true, data: appointment });
+    // Find appointment and verify ownership
+    const appointment = await Appointment.findOne({
+      _id: req.params.id,
+      patientId: patient._id,
+      isDeleted: false,
+    });
+
+    if (!appointment) {
+      return res.status(404).json({
+        success: false,
+        message:
+          "Appointment not found or you do not have permission to cancel it",
+      });
+    }
+
+    // Check if appointment can be cancelled
+    if (appointment.status === "completed") {
+      return res.status(400).json({
+        success: false,
+        message: "Cannot cancel a completed appointment",
+      });
+    }
+
+    if (appointment.status === "cancelled") {
+      return res.status(400).json({
+        success: false,
+        message: "Appointment is already cancelled",
+      });
+    }
+
+    // Update appointment status
+    appointment.status = "cancelled";
+    await appointment.save();
+
+    res.json({
+      success: true,
+      data: appointment,
+      message: "Appointment cancelled successfully",
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -137,7 +203,17 @@ export const cancelAppointment = async (req, res) => {
 
 export const getMedicalRecords = async (req, res) => {
   try {
-    const patient = await Patient.findOne({ userId: req.user._id });
+    const patient = await Patient.findOne({
+      userId: req.user._id,
+      isDeleted: false,
+    });
+
+    if (!patient) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Patient profile not found" });
+    }
+
     const records = await MedicalRecord.find({
       patientId: patient._id,
       isDeleted: false,
@@ -156,7 +232,17 @@ export const getMedicalRecords = async (req, res) => {
 
 export const getPaymentHistory = async (req, res) => {
   try {
-    const patient = await Patient.findOne({ userId: req.user._id });
+    const patient = await Patient.findOne({
+      userId: req.user._id,
+      isDeleted: false,
+    });
+
+    if (!patient) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Patient profile not found" });
+    }
+
     const payments = await Payment.find({
       patientId: patient._id,
       isDeleted: false,
