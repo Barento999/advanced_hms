@@ -106,3 +106,41 @@ export const toggleUserStatus = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+export const getAllAppointments = async (req, res) => {
+  try {
+    const { status, page = 1, limit = 50 } = req.query;
+    const skip = (page - 1) * limit;
+
+    const query = { isDeleted: false };
+    if (status) query.status = status;
+
+    const appointments = await Appointment.find(query)
+      .populate({
+        path: "patientId",
+        populate: { path: "userId", select: "name email phone" },
+      })
+      .populate({
+        path: "doctorId",
+        populate: { path: "userId", select: "name email phone" },
+      })
+      .skip(skip)
+      .limit(parseInt(limit))
+      .sort({ appointmentDate: -1 });
+
+    const total = await Appointment.countDocuments(query);
+
+    res.json({
+      success: true,
+      data: appointments,
+      pagination: {
+        page: parseInt(page),
+        limit: parseInt(limit),
+        total,
+        pages: Math.ceil(total / limit),
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

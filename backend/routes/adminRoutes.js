@@ -4,6 +4,7 @@ import {
   getAllUsers,
   deleteUser,
   toggleUserStatus,
+  getAllAppointments,
 } from "../controllers/adminController.js";
 import { protect, authorize } from "../middlewares/auth.js";
 
@@ -14,6 +15,7 @@ router.use(authorize("admin"));
 
 router.get("/dashboard", getDashboardStats);
 router.get("/users", getAllUsers);
+router.get("/appointments", getAllAppointments);
 router.delete("/users/:id", deleteUser);
 router.patch("/users/:id/toggle-status", toggleUserStatus);
 
