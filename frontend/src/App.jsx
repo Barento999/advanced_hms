@@ -46,7 +46,44 @@ function App() {
 
   return (
     <Router>
-      <Toaster position="top-right" />
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            marginTop: "10px",
+            marginRight: "10px",
+          },
+          success: {
+            style: {
+              background: "#10B981",
+              color: "#fff",
+              padding: "16px",
+              borderRadius: "12px",
+              fontSize: "14px",
+              fontWeight: "500",
+            },
+            iconTheme: {
+              primary: "#fff",
+              secondary: "#10B981",
+            },
+          },
+          error: {
+            style: {
+              background: "#EF4444",
+              color: "#fff",
+              padding: "16px",
+              borderRadius: "12px",
+              fontSize: "14px",
+              fontWeight: "500",
+            },
+            iconTheme: {
+              primary: "#fff",
+              secondary: "#EF4444",
+            },
+          },
+        }}
+      />
       <Routes>
         <Route
           path="/login"
