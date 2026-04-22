@@ -41,15 +41,15 @@ const seedDatabase = async () => {
   try {
     console.log("🌱 Starting database seeding...");
 
-    // Hash password for all users
-    const hashedPassword = await bcrypt.hash("password123", 10);
+    // Password will be hashed by the User model pre-save hook
+    const password = "password123";
 
     // ==================== CREATE ADMIN USER ====================
     console.log("Creating admin user...");
     const adminUser = await User.create({
       name: "Admin User",
       email: "admin@healthcare.com",
-      password: hashedPassword,
+      password: password,
       role: "admin",
       phone: "1234567890",
       isActive: true,
@@ -59,11 +59,11 @@ const seedDatabase = async () => {
     // ==================== CREATE DOCTORS ====================
     console.log("Creating doctors...");
 
-    const doctorUsers = await User.insertMany([
+    const doctorData = [
       {
         name: "Dr. Sarah Johnson",
         email: "sarah.johnson@healthcare.com",
-        password: hashedPassword,
+        password: password,
         role: "doctor",
         phone: "2345678901",
         isActive: true,
@@ -71,7 +71,7 @@ const seedDatabase = async () => {
       {
         name: "Dr. Michael Chen",
         email: "michael.chen@healthcare.com",
-        password: hashedPassword,
+        password: password,
         role: "doctor",
         phone: "3456789012",
         isActive: true,
@@ -79,7 +79,7 @@ const seedDatabase = async () => {
       {
         name: "Dr. Emily Rodriguez",
         email: "emily.rodriguez@healthcare.com",
-        password: hashedPassword,
+        password: password,
         role: "doctor",
         phone: "4567890123",
         isActive: true,
@@ -87,7 +87,7 @@ const seedDatabase = async () => {
       {
         name: "Dr. James Wilson",
         email: "james.wilson@healthcare.com",
-        password: hashedPassword,
+        password: password,
         role: "doctor",
         phone: "5678901234",
         isActive: true,
@@ -95,12 +95,18 @@ const seedDatabase = async () => {
       {
         name: "Dr. Lisa Anderson",
         email: "lisa.anderson@healthcare.com",
-        password: hashedPassword,
+        password: password,
         role: "doctor",
         phone: "6789012345",
         isActive: true,
       },
-    ]);
+    ];
+
+    const doctorUsers = [];
+    for (const doc of doctorData) {
+      const user = await User.create(doc);
+      doctorUsers.push(user);
+    }
 
     const doctors = await Doctor.insertMany([
       {
@@ -186,11 +192,11 @@ const seedDatabase = async () => {
     // ==================== CREATE PATIENTS ====================
     console.log("Creating patients...");
 
-    const patientUsers = await User.insertMany([
+    const patientData = [
       {
         name: "John Smith",
         email: "john.smith@email.com",
-        password: hashedPassword,
+        password: password,
         role: "patient",
         phone: "7890123456",
         isActive: true,
@@ -198,7 +204,7 @@ const seedDatabase = async () => {
       {
         name: "Emma Davis",
         email: "emma.davis@email.com",
-        password: hashedPassword,
+        password: password,
         role: "patient",
         phone: "8901234567",
         isActive: true,
@@ -206,7 +212,7 @@ const seedDatabase = async () => {
       {
         name: "Robert Brown",
         email: "robert.brown@email.com",
-        password: hashedPassword,
+        password: password,
         role: "patient",
         phone: "9012345678",
         isActive: true,
@@ -214,7 +220,7 @@ const seedDatabase = async () => {
       {
         name: "Sophia Martinez",
         email: "sophia.martinez@email.com",
-        password: hashedPassword,
+        password: password,
         role: "patient",
         phone: "0123456789",
         isActive: true,
@@ -222,7 +228,7 @@ const seedDatabase = async () => {
       {
         name: "William Taylor",
         email: "william.taylor@email.com",
-        password: hashedPassword,
+        password: password,
         role: "patient",
         phone: "1234509876",
         isActive: true,
@@ -230,7 +236,7 @@ const seedDatabase = async () => {
       {
         name: "Olivia Anderson",
         email: "olivia.anderson@email.com",
-        password: hashedPassword,
+        password: password,
         role: "patient",
         phone: "2345609876",
         isActive: true,
@@ -238,7 +244,7 @@ const seedDatabase = async () => {
       {
         name: "James Thomas",
         email: "james.thomas@email.com",
-        password: hashedPassword,
+        password: password,
         role: "patient",
         phone: "3456709876",
         isActive: true,
@@ -246,12 +252,18 @@ const seedDatabase = async () => {
       {
         name: "Ava Jackson",
         email: "ava.jackson@email.com",
-        password: hashedPassword,
+        password: password,
         role: "patient",
         phone: "4567809876",
         isActive: true,
       },
-    ]);
+    ];
+
+    const patientUsers = [];
+    for (const pat of patientData) {
+      const user = await User.create(pat);
+      patientUsers.push(user);
+    }
 
     const patients = await Patient.insertMany([
       {

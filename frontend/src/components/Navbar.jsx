@@ -6,7 +6,7 @@ const Navbar = () => {
   const { user } = useContext(AuthContext);
 
   return (
-    <div className="bg-gradient-to-r from-white to-orange-50 shadow-lg px-8 py-4 flex justify-between items-center border-b-2 border-primary/20">
+    <div className="fixed top-0 right-0 left-64 bg-gradient-to-r from-white to-orange-50 shadow-lg px-8 py-4 flex justify-between items-center border-b-2 border-primary/20 z-30">
       <div>
         <h2 className="text-2xl font-bold text-primary">
           Welcome back, {user?.name}

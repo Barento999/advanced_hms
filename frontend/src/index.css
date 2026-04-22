@@ -15,6 +15,18 @@ body {
 }
 
 @layer components {
+  .dashboard-layout {
+    @apply flex min-h-screen;
+  }
+
+  .dashboard-content {
+    @apply flex-1 ml-64;
+  }
+
+  .dashboard-main {
+    @apply p-8 mt-20;
+  }
+
   .btn-primary {
     @apply bg-primary text-white px-6 py-2.5 rounded-xl font-medium hover:shadow-lg transition-all duration-200 shadow-md;
   }

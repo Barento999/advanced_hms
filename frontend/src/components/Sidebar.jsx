@@ -47,7 +47,7 @@ const Sidebar = () => {
   const menuItems = getMenuItems();
 
   return (
-    <div className="w-64 bg-gradient-to-b from-primary via-orange-600 to-orange-700 min-h-screen flex flex-col shadow-2xl">
+    <div className="fixed left-0 top-0 w-64 bg-gradient-to-b from-primary via-orange-600 to-orange-700 h-screen flex flex-col shadow-2xl z-40">
       <div className="p-6 border-b border-orange-500/30">
         <h1 className="text-2xl font-bold text-white">HealthCare</h1>
         <p className="text-sm text-orange-100 mt-1">
@@ -55,7 +55,7 @@ const Sidebar = () => {
         </p>
       </div>
 
-      <nav className="flex-1 p-4">
+      <nav className="flex-1 p-4 overflow-y-auto">
         {menuItems.map((item) => {
           const Icon = item.icon;
           const isActive = location.pathname === item.path;
