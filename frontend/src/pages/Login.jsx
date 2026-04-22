@@ -15,18 +15,14 @@ const Login = () => {
     setLoading(true);
 
     try {
-      console.log("Attempting login with:", formData.email);
       const { data } = await api.post("/auth/login", formData);
-      console.log("Login response:", data);
 
       login(data.data, data.data.token);
-      toast.success("Login successful!");
 
       const role = data.data.role;
-      console.log("Navigating to:", `/${role}`);
+      // Navigate immediately without showing toast to prevent it from staying on screen
       navigate(`/${role}`);
     } catch (error) {
-      console.error("Login error:", error);
       toast.error(error.response?.data?.message || "Login failed");
     } finally {
       setLoading(false);
