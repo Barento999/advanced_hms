@@ -1,9 +1,12 @@
 import { Bell, User } from "lucide-react";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { SocketContext } from "../context/SocketContext";
 
 const Navbar = () => {
   const { user } = useContext(AuthContext);
+  const { notifications } = useContext(SocketContext);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   // Role-specific greeting messages
   const getRoleGreeting = () => {
@@ -43,13 +46,54 @@ const Navbar = () => {
       </div>
 
       <div className="flex items-center gap-4">
-        <button className="relative p-3 hover:bg-orange-100 rounded-xl transition-all duration-200 group">
-          <Bell
-            size={24}
-            className="text-gray-600 group-hover:text-primary transition-colors"
-          />
-          <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-danger rounded-full animate-pulse"></span>
-        </button>
+        <div className="relative">
+          <button
+            onClick={() => setShowNotifications(!showNotifications)}
+            className="relative p-3 hover:bg-orange-100 rounded-xl transition-all duration-200 group">
+            <Bell
+              size={24}
+              className="text-gray-600 group-hover:text-primary transition-colors"
+            />
+            {notifications.length > 0 && (
+              <span className="absolute top-2 right-2 w-5 h-5 bg-danger text-white text-xs rounded-full flex items-center justify-center font-bold">
+                {notifications.length}
+              </span>
+            )}
+          </button>
+
+          {/* Notifications Dropdown */}
+          {showNotifications && (
+            <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-2xl border border-gray-200 z-50 max-h-96 overflow-y-auto">
+              <div className="p-4 border-b border-gray-200">
+                <h3 className="font-bold text-dark">Notifications</h3>
+              </div>
+              {notifications.length === 0 ? (
+                <div className="p-8 text-center text-gray-500">
+                  <Bell size={48} className="mx-auto mb-3 text-gray-300" />
+                  <p>No notifications yet</p>
+                </div>
+              ) : (
+                <div className="divide-y divide-gray-100">
+                  {notifications.slice(0, 10).map((notif, index) => (
+                    <div
+                      key={index}
+                      className="p-4 hover:bg-gray-50 transition-colors">
+                      <h4 className="font-semibold text-dark text-sm">
+                        {notif.title}
+                      </h4>
+                      <p className="text-gray-600 text-sm mt-1">
+                        {notif.message}
+                      </p>
+                      <p className="text-xs text-gray-400 mt-2">
+                        {new Date(notif.createdAt).toLocaleString()}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
 
         <div className="flex items-center gap-3 pl-4 border-l-2 border-orange-200">
           <div

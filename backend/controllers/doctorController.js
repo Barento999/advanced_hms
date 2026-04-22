@@ -2,6 +2,7 @@ import Doctor from "../models/Doctor.js";
 import Appointment from "../models/Appointment.js";
 import MedicalRecord from "../models/MedicalRecord.js";
 import Patient from "../models/Patient.js";
+import { sendNotification } from "../utils/sendNotification.js";
 
 export const getDoctorProfile = async (req, res) => {
   try {
@@ -130,6 +131,27 @@ export const updateAppointmentStatus = async (req, res) => {
     // Update status
     appointment.status = status;
     await appointment.save();
+
+    // Get io instance and send notification to patient
+    const io = req.app.get("io");
+    const patient = await Patient.findById(appointment.patientId).populate(
+      "userId",
+    );
+
+    if (patient && patient.userId) {
+      const statusMessages = {
+        confirmed: "Your appointment has been confirmed",
+        completed: "Your appointment has been completed",
+        cancelled: "Your appointment has been cancelled",
+      };
+
+      await sendNotification(io, patient.userId._id, {
+        title: "Appointment Status Updated",
+        message:
+          statusMessages[status] || "Your appointment status has changed",
+        type: "appointment",
+      });
+    }
 
     res.json({
       success: true,

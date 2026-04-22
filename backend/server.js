@@ -1,4 +1,6 @@
 import express from "express";
+import { createServer } from "http";
+import { Server } from "socket.io";
 import dotenv from "dotenv";
 import cors from "cors";
 import morgan from "morgan";
@@ -13,6 +15,16 @@ import patientRoutes from "./routes/patientRoutes.js";
 dotenv.config();
 
 const app = express();
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+  },
+});
+
+// Make io accessible to routes
+app.set("io", io);
 
 // Connect to database
 connectDB();
@@ -40,8 +52,36 @@ app.get("/health", (req, res) => {
 // Error handler
 app.use(errorHandler);
 
+// Socket.io connection handling
+const userSockets = new Map(); // Store userId -> socketId mapping
+
+io.on("connection", (socket) => {
+  console.log("User connected:", socket.id);
+
+  // Register user
+  socket.on("register", (userId) => {
+    userSockets.set(userId, socket.id);
+    console.log(`User ${userId} registered with socket ${socket.id}`);
+  });
+
+  // Disconnect
+  socket.on("disconnect", () => {
+    // Remove user from map
+    for (const [userId, socketId] of userSockets.entries()) {
+      if (socketId === socket.id) {
+        userSockets.delete(userId);
+        console.log(`User ${userId} disconnected`);
+        break;
+      }
+    }
+  });
+});
+
+// Export userSockets for use in controllers
+export { userSockets };
+
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
   console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
 });

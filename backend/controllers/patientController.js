@@ -3,6 +3,7 @@ import Doctor from "../models/Doctor.js";
 import Appointment from "../models/Appointment.js";
 import MedicalRecord from "../models/MedicalRecord.js";
 import Payment from "../models/Payment.js";
+import { sendNotification } from "../utils/sendNotification.js";
 
 export const getPatientProfile = async (req, res) => {
   try {
@@ -88,12 +89,91 @@ export const bookAppointment = async (req, res) => {
         .json({ success: false, message: "Patient profile not found" });
     }
 
+    const { doctorId, appointmentDate, timeSlot } = req.body;
+
+    // Get doctor's schedule
+    const doctor = await Doctor.findById(doctorId);
+    if (!doctor) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Doctor not found" });
+    }
+
+    // Validate day of week
+    const appointmentDay = new Date(appointmentDate).toLocaleDateString(
+      "en-US",
+      { weekday: "long" },
+    );
+    if (!doctor.availableDays.includes(appointmentDay)) {
+      return res.status(400).json({
+        success: false,
+        message: `Doctor is not available on ${appointmentDay}. Available days: ${doctor.availableDays.join(", ")}`,
+      });
+    }
+
+    // Validate time slot
+    const isTimeSlotValid = doctor.availableTimeSlots.some((slot) => {
+      const requestedStart = timeSlot.startTime;
+      const requestedEnd = timeSlot.endTime;
+      const slotStart = slot.startTime;
+      const slotEnd = slot.endTime;
+
+      // Check if requested time is within any available slot
+      return requestedStart >= slotStart && requestedEnd <= slotEnd;
+    });
+
+    if (!isTimeSlotValid) {
+      return res.status(400).json({
+        success: false,
+        message: `Selected time slot is not available. Doctor's available time slots: ${doctor.availableTimeSlots.map((s) => `${s.startTime}-${s.endTime}`).join(", ")}`,
+      });
+    }
+
+    // Check for conflicting appointments
+    const conflictingAppointment = await Appointment.findOne({
+      doctorId,
+      appointmentDate: new Date(appointmentDate),
+      status: { $in: ["pending", "confirmed"] },
+      isDeleted: false,
+      $or: [
+        {
+          "timeSlot.startTime": { $lt: timeSlot.endTime },
+          "timeSlot.endTime": { $gt: timeSlot.startTime },
+        },
+      ],
+    });
+
+    if (conflictingAppointment) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "This time slot is already booked. Please choose a different time.",
+      });
+    }
+
     const appointment = await Appointment.create({
       ...req.body,
       patientId: patient._id,
     });
 
-    res.status(201).json({ success: true, data: appointment });
+    // Get io instance
+    const io = req.app.get("io");
+
+    // Send notification to doctor
+    const doctor = await Doctor.findById(req.body.doctorId).populate("userId");
+    if (doctor && doctor.userId) {
+      await sendNotification(io, doctor.userId._id, {
+        title: "New Appointment Request",
+        message: `New appointment request from ${req.user.name}`,
+        type: "appointment",
+      });
+    }
+
+    res.status(201).json({
+      success: true,
+      data: appointment,
+      message: "Appointment booked successfully",
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
