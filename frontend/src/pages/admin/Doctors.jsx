@@ -15,8 +15,8 @@ const Doctors = () => {
 
   const fetchDoctors = async () => {
     try {
-      const { data } = await api.get("/admin/users?role=doctor");
-      setDoctors(data.data.filter((user) => user.role === "doctor"));
+      const { data } = await api.get("/admin/users?role=doctor&limit=50");
+      setDoctors(data.data);
     } catch (error) {
       toast.error("Failed to fetch doctors");
     } finally {

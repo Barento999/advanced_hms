@@ -43,16 +43,22 @@ export const getDashboardStats = async (req, res) => {
 export const getAllUsers = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
+    const limit = parseInt(req.query.limit) || 50;
     const skip = (page - 1) * limit;
+    const { role } = req.query;
 
-    const users = await User.find({ isDeleted: false })
+    const query = { isDeleted: false };
+    if (role) {
+      query.role = role;
+    }
+
+    const users = await User.find(query)
       .select("-password")
       .skip(skip)
       .limit(limit)
       .sort({ createdAt: -1 });
 
-    const total = await User.countDocuments({ isDeleted: false });
+    const total = await User.countDocuments(query);
 
     res.json({
       success: true,
