@@ -65,7 +65,7 @@ const MedicalRecords = () => {
                         <div className="flex items-center gap-4 text-sm text-gray-600">
                           <div className="flex items-center gap-2">
                             <User size={16} />
-                            <span>Dr. {record.doctorId?.userId?.name}</span>
+                            <span>{record.doctorId?.userId?.name}</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <Calendar size={16} />

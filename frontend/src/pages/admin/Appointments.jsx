@@ -106,7 +106,7 @@ const Appointments = () => {
                             {apt.patientId?.userId?.name || "N/A"}
                           </td>
                           <td className="py-3 px-4">
-                            Dr. {apt.doctorId?.userId?.name || "N/A"}
+                            {apt.doctorId?.userId?.name || "N/A"}
                           </td>
                           <td className="py-3 px-4">
                             {new Date(apt.appointmentDate).toLocaleDateString()}

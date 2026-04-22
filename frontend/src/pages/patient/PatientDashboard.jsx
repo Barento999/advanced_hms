@@ -86,7 +86,7 @@ const PatientDashboard = () => {
                     className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
                     <div>
                       <h4 className="font-semibold text-dark">
-                        Dr. {apt.doctorId?.userId?.name || "N/A"}
+                        {apt.doctorId?.userId?.name || "N/A"}
                       </h4>
                       <p className="text-sm text-gray-500">
                         {new Date(apt.appointmentDate).toLocaleDateString()}
