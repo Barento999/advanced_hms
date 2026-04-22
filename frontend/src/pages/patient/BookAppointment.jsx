@@ -54,7 +54,7 @@ const BookAppointment = () => {
 
         <div className="p-8">
           <div className="max-w-2xl mx-auto card">
-            <h2 className="text-2xl font-bold text-secondary mb-6">
+            <h2 className="text-2xl font-bold text-dark mb-6">
               Book Appointment
             </h2>
 

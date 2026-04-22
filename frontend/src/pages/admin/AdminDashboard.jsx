@@ -52,7 +52,7 @@ const AdminDashboard = () => {
               title="Total Users"
               value={stats?.totalUsers || 0}
               color="text-primary"
-              bgColor="bg-blue-100"
+              bgColor="bg-orange-100"
             />
             <StatCard
               icon={UserCheck}
@@ -78,7 +78,7 @@ const AdminDashboard = () => {
           </div>
 
           <div className="card">
-            <h3 className="text-xl font-bold text-secondary mb-4">
+            <h3 className="text-xl font-bold text-dark mb-4">
               Recent Appointments
             </h3>
             <div className="overflow-x-auto">

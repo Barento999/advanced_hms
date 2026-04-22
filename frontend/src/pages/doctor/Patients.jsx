@@ -32,9 +32,7 @@ const Patients = () => {
 
         <div className="p-8">
           <div className="card">
-            <h2 className="text-2xl font-bold text-secondary mb-6">
-              My Patients
-            </h2>
+            <h2 className="text-2xl font-bold text-dark mb-6">My Patients</h2>
 
             {loading ? (
               <div className="flex justify-center py-8">
@@ -56,7 +54,7 @@ const Patients = () => {
                         {patient.userId?.name?.charAt(0) || "P"}
                       </div>
                       <div>
-                        <h3 className="font-bold text-lg text-secondary">
+                        <h3 className="font-bold text-lg text-dark">
                           {patient.userId?.name}
                         </h3>
                         <p className="text-sm text-gray-500">

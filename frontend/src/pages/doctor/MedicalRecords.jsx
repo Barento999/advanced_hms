@@ -70,7 +70,7 @@ const MedicalRecords = () => {
 
         <div className="p-8">
           <div className="max-w-4xl mx-auto card">
-            <h2 className="text-2xl font-bold text-secondary mb-6">
+            <h2 className="text-2xl font-bold text-dark mb-6">
               Add Medical Record
             </h2>
 
@@ -150,7 +150,7 @@ const MedicalRecords = () => {
                   <button
                     type="button"
                     onClick={handleAddPrescription}
-                    className="flex items-center gap-2 text-primary hover:text-blue-700">
+                    className="flex items-center gap-2 text-primary hover:text-orange-700">
                     <Plus size={20} />
                     Add Medicine
                   </button>

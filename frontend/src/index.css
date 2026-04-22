@@ -10,17 +10,17 @@
 
 body {
   font-family: "Inter", sans-serif;
-  background-color: #f8fafc;
-  color: #0f172a;
+  background-color: #fff5ef;
+  color: #2c1810;
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-primary text-white px-6 py-2.5 rounded-xl font-medium hover:bg-blue-700 transition-colors duration-200 shadow-md;
+    @apply bg-primary text-white px-6 py-2.5 rounded-xl font-medium hover:shadow-lg transition-all duration-200 shadow-md;
   }
 
   .btn-secondary {
-    @apply bg-gray-200 text-gray-700 px-6 py-2.5 rounded-xl font-medium hover:bg-gray-300 transition-colors duration-200;
+    @apply bg-secondary text-gray-800 px-6 py-2.5 rounded-xl font-medium hover:bg-orange-200 transition-colors duration-200 border border-orange-300;
   }
 
   .card {
@@ -28,7 +28,7 @@ body {
   }
 
   .input-field {
-    @apply w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all;
+    @apply w-full px-4 py-2.5 border border-orange-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all;
   }
 
   .badge {
@@ -40,7 +40,7 @@ body {
   }
 
   .badge-confirmed {
-    @apply bg-blue-100 text-blue-800;
+    @apply bg-orange-100 text-primary;
   }
 
   .badge-completed {

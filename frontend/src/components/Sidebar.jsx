@@ -47,10 +47,10 @@ const Sidebar = () => {
   const menuItems = getMenuItems();
 
   return (
-    <div className="w-64 bg-secondary min-h-screen text-white flex flex-col">
-      <div className="p-6 border-b border-gray-700">
-        <h1 className="text-2xl font-bold">HealthCare</h1>
-        <p className="text-sm text-gray-400 mt-1">
+    <div className="w-64 bg-gradient-to-b from-primary via-orange-600 to-orange-700 min-h-screen flex flex-col shadow-2xl">
+      <div className="p-6 border-b border-orange-500/30">
+        <h1 className="text-2xl font-bold text-white">HealthCare</h1>
+        <p className="text-sm text-orange-100 mt-1">
           {user?.role?.toUpperCase()}
         </p>
       </div>
@@ -64,10 +64,10 @@ const Sidebar = () => {
             <Link
               key={item.path}
               to={item.path}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl mb-2 transition-all ${
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl mb-2 transition-all duration-200 ${
                 isActive
-                  ? "bg-primary text-white shadow-lg"
-                  : "text-gray-300 hover:bg-gray-700"
+                  ? "bg-white text-primary shadow-lg transform scale-105"
+                  : "text-white/90 hover:bg-white/20 hover:text-white"
               }`}>
               <Icon size={20} />
               <span className="font-medium">{item.label}</span>
@@ -76,10 +76,10 @@ const Sidebar = () => {
         })}
       </nav>
 
-      <div className="p-4 border-t border-gray-700">
+      <div className="p-4 border-t border-orange-500/30">
         <button
           onClick={logout}
-          className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gray-700 w-full transition-all">
+          className="flex items-center gap-3 px-4 py-3 rounded-xl text-white/90 hover:bg-red-500 hover:text-white w-full transition-all duration-200">
           <LogOut size={20} />
           <span className="font-medium">Logout</span>
         </button>

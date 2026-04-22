@@ -55,7 +55,7 @@ const DoctorDashboard = () => {
               title="Total Appointments"
               value={stats.total}
               color="text-primary"
-              bgColor="bg-blue-100"
+              bgColor="bg-orange-100"
             />
             <StatCard
               icon={Clock}
@@ -68,8 +68,8 @@ const DoctorDashboard = () => {
               icon={Users}
               title="Confirmed"
               value={stats.confirmed}
-              color="text-blue-600"
-              bgColor="bg-blue-100"
+              color="text-primary"
+              bgColor="bg-orange-100"
             />
             <StatCard
               icon={CheckCircle}
@@ -81,7 +81,7 @@ const DoctorDashboard = () => {
           </div>
 
           <div className="card">
-            <h3 className="text-xl font-bold text-secondary mb-4">
+            <h3 className="text-xl font-bold text-dark mb-4">
               Upcoming Appointments
             </h3>
             <div className="space-y-4">
@@ -94,7 +94,7 @@ const DoctorDashboard = () => {
                       {apt.patientId?.userId?.name?.charAt(0) || "P"}
                     </div>
                     <div>
-                      <h4 className="font-semibold text-secondary">
+                      <h4 className="font-semibold text-dark">
                         {apt.patientId?.userId?.name || "Patient"}
                       </h4>
                       <p className="text-sm text-gray-500">{apt.reason}</p>

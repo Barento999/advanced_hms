@@ -58,7 +58,7 @@ const UserManagement = () => {
 
         <div className="p-8">
           <div className="card">
-            <h2 className="text-2xl font-bold text-secondary mb-6">
+            <h2 className="text-2xl font-bold text-dark mb-6">
               User Management
             </h2>
 
@@ -91,7 +91,7 @@ const UserManagement = () => {
                       <td className="py-3 px-4">{user.name}</td>
                       <td className="py-3 px-4">{user.email}</td>
                       <td className="py-3 px-4">
-                        <span className="badge bg-blue-100 text-blue-800">
+                        <span className="badge bg-orange-100 text-primary">
                           {user.role}
                         </span>
                       </td>

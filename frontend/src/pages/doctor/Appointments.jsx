@@ -48,9 +48,7 @@ const Appointments = () => {
         <div className="p-8">
           <div className="card">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-secondary">
-                Appointments
-              </h2>
+              <h2 className="text-2xl font-bold text-dark">Appointments</h2>
 
               <div className="flex gap-2">
                 {["all", "pending", "confirmed", "completed"].map((status) => (

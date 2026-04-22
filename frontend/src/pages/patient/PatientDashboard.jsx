@@ -49,7 +49,7 @@ const PatientDashboard = () => {
               title="Total Appointments"
               value={stats.total}
               color="text-primary"
-              bgColor="bg-blue-100"
+              bgColor="bg-orange-100"
             />
             <StatCard
               icon={Activity}
@@ -76,7 +76,7 @@ const PatientDashboard = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="card">
-              <h3 className="text-xl font-bold text-secondary mb-4">
+              <h3 className="text-xl font-bold text-dark mb-4">
                 Recent Appointments
               </h3>
               <div className="space-y-3">
@@ -85,7 +85,7 @@ const PatientDashboard = () => {
                     key={apt._id}
                     className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
                     <div>
-                      <h4 className="font-semibold text-secondary">
+                      <h4 className="font-semibold text-dark">
                         Dr. {apt.doctorId?.userId?.name || "N/A"}
                       </h4>
                       <p className="text-sm text-gray-500">
@@ -101,7 +101,7 @@ const PatientDashboard = () => {
             </div>
 
             <div className="card">
-              <h3 className="text-xl font-bold text-secondary mb-4">
+              <h3 className="text-xl font-bold text-dark mb-4">
                 Quick Actions
               </h3>
               <div className="space-y-3">

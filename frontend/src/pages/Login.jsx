@@ -29,12 +29,12 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary to-blue-700 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary to-orange-700 p-4">
       <Toaster position="top-right" />
 
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-secondary">Welcome Back</h1>
+          <h1 className="text-3xl font-bold text-dark">Welcome Back</h1>
           <p className="text-gray-500 mt-2">Sign in to your account</p>
         </div>
 

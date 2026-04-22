@@ -93,7 +93,7 @@ const Payments = () => {
                     {payments.length}
                   </h3>
                 </div>
-                <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center">
+                <div className="w-14 h-14 bg-orange-100 rounded-xl flex items-center justify-center">
                   <CreditCard size={28} className="text-primary" />
                 </div>
               </div>
@@ -101,7 +101,7 @@ const Payments = () => {
           </div>
 
           <div className="card">
-            <h2 className="text-2xl font-bold text-secondary mb-6">
+            <h2 className="text-2xl font-bold text-dark mb-6">
               Payment History
             </h2>
 
@@ -150,7 +150,7 @@ const Payments = () => {
                         <td className="py-3 px-4 font-mono text-sm">
                           {payment.transactionId || "N/A"}
                         </td>
-                        <td className="py-3 px-4 font-bold text-secondary">
+                        <td className="py-3 px-4 font-bold text-dark">
                           ${payment.amount}
                         </td>
                         <td className="py-3 px-4">

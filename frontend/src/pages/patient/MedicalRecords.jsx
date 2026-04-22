@@ -33,7 +33,7 @@ const MedicalRecords = () => {
 
         <div className="p-8">
           <div className="card">
-            <h2 className="text-2xl font-bold text-secondary mb-6">
+            <h2 className="text-2xl font-bold text-dark mb-6">
               My Medical Records
             </h2>
 
@@ -59,7 +59,7 @@ const MedicalRecords = () => {
                     }>
                     <div className="flex justify-between items-start mb-4">
                       <div>
-                        <h3 className="text-xl font-bold text-secondary mb-2">
+                        <h3 className="text-xl font-bold text-dark mb-2">
                           {record.diagnosis}
                         </h3>
                         <div className="flex items-center gap-4 text-sm text-gray-600">
@@ -108,7 +108,7 @@ const MedicalRecords = () => {
                                   <div
                                     key={index}
                                     className="bg-white p-4 rounded-lg">
-                                    <p className="font-semibold text-secondary">
+                                    <p className="font-semibold text-dark">
                                       {med.medicine}
                                     </p>
                                     <p className="text-sm text-gray-600">
