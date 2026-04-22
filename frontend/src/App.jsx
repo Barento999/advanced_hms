@@ -16,6 +16,8 @@ import Register from "./pages/Register";
 // Admin Pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import UserManagement from "./pages/admin/UserManagement";
+import Doctors from "./pages/admin/Doctors";
+import Patients from "./pages/admin/Patients";
 import AdminAppointments from "./pages/admin/Appointments";
 
 // Doctor Pages
@@ -69,6 +71,22 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={["admin"]}>
               <UserManagement />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/doctors"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <Doctors />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/patients"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <Patients />
             </ProtectedRoute>
           }
         />

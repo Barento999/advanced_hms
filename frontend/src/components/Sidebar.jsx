@@ -19,7 +19,8 @@ const Sidebar = () => {
     if (user?.role === "admin") {
       return [
         { icon: Home, label: "Dashboard", path: "/admin" },
-        { icon: Users, label: "Users", path: "/admin/users" },
+        { icon: Users, label: "Doctors", path: "/admin/doctors" },
+        { icon: Users, label: "Patients", path: "/admin/patients" },
         { icon: Calendar, label: "Appointments", path: "/admin/appointments" },
       ];
     } else if (user?.role === "doctor") {
