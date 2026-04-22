@@ -19,8 +19,14 @@ export const getDashboardStats = async (req, res) => {
     ]);
 
     const recentAppointments = await Appointment.find({ isDeleted: false })
-      .populate("patientId", "userId")
-      .populate("doctorId", "userId")
+      .populate({
+        path: "patientId",
+        populate: { path: "userId", select: "name email" },
+      })
+      .populate({
+        path: "doctorId",
+        populate: { path: "userId", select: "name email" },
+      })
       .sort({ createdAt: -1 })
       .limit(5);
 

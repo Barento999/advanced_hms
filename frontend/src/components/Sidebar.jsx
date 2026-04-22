@@ -29,6 +29,7 @@ const Sidebar = () => {
         { icon: Calendar, label: "Appointments", path: "/doctor/appointments" },
         { icon: Users, label: "Patients", path: "/doctor/patients" },
         { icon: FileText, label: "Medical Records", path: "/doctor/records" },
+        { icon: Settings, label: "Schedule", path: "/doctor/schedule" },
       ];
     } else {
       return [

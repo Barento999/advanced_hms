@@ -193,3 +193,53 @@ export const getPatientsList = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+export const updateSchedule = async (req, res) => {
+  try {
+    const { availableDays, availableTimeSlots } = req.body;
+
+    const doctor = await Doctor.findOne({
+      userId: req.user._id,
+      isDeleted: false,
+    });
+
+    if (!doctor) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Doctor profile not found" });
+    }
+
+    // Update schedule
+    if (availableDays) doctor.availableDays = availableDays;
+    if (availableTimeSlots) doctor.availableTimeSlots = availableTimeSlots;
+
+    await doctor.save();
+
+    res.json({
+      success: true,
+      data: doctor,
+      message: "Schedule updated successfully",
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const getSchedule = async (req, res) => {
+  try {
+    const doctor = await Doctor.findOne({
+      userId: req.user._id,
+      isDeleted: false,
+    }).select("availableDays availableTimeSlots");
+
+    if (!doctor) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Doctor profile not found" });
+    }
+
+    res.json({ success: true, data: doctor });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

@@ -104,8 +104,12 @@ const AdminDashboard = () => {
                     <tr
                       key={apt._id}
                       className="border-b border-gray-100 hover:bg-gray-50">
-                      <td className="py-3 px-4">Patient</td>
-                      <td className="py-3 px-4">Doctor</td>
+                      <td className="py-3 px-4">
+                        {apt.patientId?.userId?.name || "N/A"}
+                      </td>
+                      <td className="py-3 px-4">
+                        {apt.doctorId?.userId?.name || "N/A"}
+                      </td>
                       <td className="py-3 px-4">
                         {new Date(apt.appointmentDate).toLocaleDateString()}
                       </td>

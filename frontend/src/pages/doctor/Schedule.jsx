@@ -1,0 +1,241 @@
+import { useState, useEffect } from "react";
+import { Calendar, Clock, Save, Plus, Trash2 } from "lucide-react";
+import Sidebar from "../../components/Sidebar";
+import Navbar from "../../components/Navbar";
+import api from "../../utils/api";
+import toast from "react-hot-toast";
+
+const Schedule = () => {
+  const [schedule, setSchedule] = useState({
+    availableDays: [],
+    availableTimeSlots: [],
+  });
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  const daysOfWeek = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+  ];
+
+  useEffect(() => {
+    fetchSchedule();
+  }, []);
+
+  const fetchSchedule = async () => {
+    try {
+      const { data } = await api.get("/doctor/schedule");
+      setSchedule({
+        availableDays: data.data.availableDays || [],
+        availableTimeSlots: data.data.availableTimeSlots || [],
+      });
+    } catch (error) {
+      toast.error("Failed to fetch schedule");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDayToggle = (day) => {
+    setSchedule((prev) => ({
+      ...prev,
+      availableDays: prev.availableDays.includes(day)
+        ? prev.availableDays.filter((d) => d !== day)
+        : [...prev.availableDays, day],
+    }));
+  };
+
+  const addTimeSlot = () => {
+    setSchedule((prev) => ({
+      ...prev,
+      availableTimeSlots: [
+        ...prev.availableTimeSlots,
+        { startTime: "09:00", endTime: "17:00" },
+      ],
+    }));
+  };
+
+  const updateTimeSlot = (index, field, value) => {
+    setSchedule((prev) => ({
+      ...prev,
+      availableTimeSlots: prev.availableTimeSlots.map((slot, i) =>
+        i === index ? { ...slot, [field]: value } : slot,
+      ),
+    }));
+  };
+
+  const removeTimeSlot = (index) => {
+    setSchedule((prev) => ({
+      ...prev,
+      availableTimeSlots: prev.availableTimeSlots.filter((_, i) => i !== index),
+    }));
+  };
+
+  const handleSave = async () => {
+    if (schedule.availableDays.length === 0) {
+      toast.error("Please select at least one available day");
+      return;
+    }
+
+    if (schedule.availableTimeSlots.length === 0) {
+      toast.error("Please add at least one time slot");
+      return;
+    }
+
+    setSaving(true);
+    try {
+      await api.put("/doctor/schedule", schedule);
+      toast.success("Schedule updated successfully");
+    } catch (error) {
+      toast.error("Failed to update schedule");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen">
+        <Sidebar />
+        <div className="flex-1 ml-64">
+          <Navbar />
+          <div className="p-8 mt-20 flex justify-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex min-h-screen">
+      <Sidebar />
+      <div className="flex-1 ml-64">
+        <Navbar />
+
+        <div className="p-8 mt-20">
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold text-dark">
+              Manage Your Schedule
+            </h2>
+            <p className="text-gray-600 mt-1">
+              Set your available days and working hours
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Available Days */}
+            <div className="card">
+              <div className="flex items-center gap-3 mb-6">
+                <Calendar className="text-primary" size={24} />
+                <h3 className="text-xl font-bold text-dark">Available Days</h3>
+              </div>
+
+              <div className="space-y-3">
+                {daysOfWeek.map((day) => (
+                  <label
+                    key={day}
+                    className="flex items-center gap-3 p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-primary transition-colors">
+                    <input
+                      type="checkbox"
+                      checked={schedule.availableDays.includes(day)}
+                      onChange={() => handleDayToggle(day)}
+                      className="w-5 h-5 text-primary rounded focus:ring-2 focus:ring-primary"
+                    />
+                    <span className="font-medium text-gray-700">{day}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* Time Slots */}
+            <div className="card">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                  <Clock className="text-primary" size={24} />
+                  <h3 className="text-xl font-bold text-dark">Time Slots</h3>
+                </div>
+                <button
+                  onClick={addTimeSlot}
+                  className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl hover:bg-orange-600 transition-colors">
+                  <Plus size={18} />
+                  Add Slot
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                {schedule.availableTimeSlots.length === 0 ? (
+                  <div className="text-center py-8 text-gray-500">
+                    <Clock size={48} className="mx-auto mb-3 text-gray-400" />
+                    <p>No time slots added yet</p>
+                    <p className="text-sm mt-1">
+                      Click "Add Slot" to create your first time slot
+                    </p>
+                  </div>
+                ) : (
+                  schedule.availableTimeSlots.map((slot, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl">
+                      <div className="flex-1 grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Start Time
+                          </label>
+                          <input
+                            type="time"
+                            value={slot.startTime}
+                            onChange={(e) =>
+                              updateTimeSlot(index, "startTime", e.target.value)
+                            }
+                            className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:border-primary outline-none"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            End Time
+                          </label>
+                          <input
+                            type="time"
+                            value={slot.endTime}
+                            onChange={(e) =>
+                              updateTimeSlot(index, "endTime", e.target.value)
+                            }
+                            className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:border-primary outline-none"
+                          />
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => removeTimeSlot(index)}
+                        className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors">
+                        <Trash2 size={20} />
+                      </button>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Save Button */}
+          <div className="mt-6 flex justify-end">
+            <button
+              onClick={handleSave}
+              disabled={saving}
+              className="flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-semibold hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+              <Save size={20} />
+              {saving ? "Saving..." : "Save Schedule"}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Schedule;

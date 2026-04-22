@@ -6,6 +6,8 @@ import {
   updateAppointmentStatus,
   addMedicalRecord,
   getPatientsList,
+  updateSchedule,
+  getSchedule,
 } from "../controllers/doctorController.js";
 import { protect, authorize } from "../middlewares/auth.js";
 
@@ -20,5 +22,7 @@ router.get("/appointments", getDoctorAppointments);
 router.patch("/appointments/:id/status", updateAppointmentStatus);
 router.post("/medical-records", addMedicalRecord);
 router.get("/patients", getPatientsList);
+router.get("/schedule", getSchedule);
+router.put("/schedule", updateSchedule);
 
 export default router;

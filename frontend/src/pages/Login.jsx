@@ -31,7 +31,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary via-orange-600 to-orange-700 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-[#FFF5EF] p-4">
       <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden">
         {/* Header Section */}
         <div className="bg-gradient-to-r from-primary to-orange-600 p-8 text-center">
