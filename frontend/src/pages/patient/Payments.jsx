@@ -46,12 +46,12 @@ const Payments = () => {
     .reduce((sum, p) => sum + p.amount, 0);
 
   return (
-    <div className="flex">
+    <div className="flex min-h-screen">
       <Sidebar />
-      <div className="flex-1">
+      <div className="flex-1 ml-64">
         <Navbar />
 
-        <div className="p-8">
+        <div className="p-8 mt-20">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div className="card">
               <div className="flex items-center justify-between">

@@ -63,12 +63,12 @@ const MedicalRecords = () => {
   };
 
   return (
-    <div className="flex">
+    <div className="flex min-h-screen">
       <Sidebar />
-      <div className="flex-1">
+      <div className="flex-1 ml-64">
         <Navbar />
 
-        <div className="p-8">
+        <div className="p-8 mt-20">
           <div className="max-w-4xl mx-auto card">
             <h2 className="text-2xl font-bold text-dark mb-6">
               Add Medical Record

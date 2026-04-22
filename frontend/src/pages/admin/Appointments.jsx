@@ -31,12 +31,12 @@ const Appointments = () => {
       : appointments.filter((apt) => apt.status === filter);
 
   return (
-    <div className="flex">
+    <div className="flex min-h-screen">
       <Sidebar />
-      <div className="flex-1">
+      <div className="flex-1 ml-64">
         <Navbar />
 
-        <div className="p-8">
+        <div className="p-8 mt-20">
           <div className="card">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold text-dark">All Appointments</h2>
