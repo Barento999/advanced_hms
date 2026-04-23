@@ -174,8 +174,10 @@ const Profile = () => {
 
         <div className="p-8 mt-20">
           <div className="mb-6">
-            <h2 className="text-2xl font-bold text-dark">My Profile</h2>
-            <p className="text-gray-600 mt-1">
+            <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
+              My Profile
+            </h2>
+            <p className="text-gray-600 dark:text-slate-400 mt-1">
               Complete your profile for better healthcare experience
             </p>
           </div>
@@ -183,13 +185,13 @@ const Profile = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Basic Information */}
             <div className="card">
-              <h3 className="text-lg font-bold text-dark mb-4 flex items-center gap-2">
+              <h3 className="text-lg font-bold text-dark dark:text-slate-100 mb-4 flex items-center gap-2">
                 <User size={20} className="text-primary" />
                 Basic Information
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                     Date of Birth
                   </label>
                   <input
@@ -201,7 +203,7 @@ const Profile = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                     Gender
                   </label>
                   <select
@@ -216,7 +218,7 @@ const Profile = () => {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                     Blood Group
                   </label>
                   <select
@@ -240,13 +242,13 @@ const Profile = () => {
 
             {/* Address */}
             <div className="card">
-              <h3 className="text-lg font-bold text-dark mb-4 flex items-center gap-2">
+              <h3 className="text-lg font-bold text-dark dark:text-slate-100 mb-4 flex items-center gap-2">
                 <MapPin size={20} className="text-primary" />
                 Address
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                     Street Address
                   </label>
                   <input
@@ -259,7 +261,7 @@ const Profile = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                     City
                   </label>
                   <input
@@ -272,7 +274,7 @@ const Profile = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                     State
                   </label>
                   <input
@@ -285,7 +287,7 @@ const Profile = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                     Zip Code
                   </label>
                   <input
@@ -302,13 +304,13 @@ const Profile = () => {
 
             {/* Emergency Contact */}
             <div className="card">
-              <h3 className="text-lg font-bold text-dark mb-4 flex items-center gap-2">
+              <h3 className="text-lg font-bold text-dark dark:text-slate-100 mb-4 flex items-center gap-2">
                 <Phone size={20} className="text-primary" />
                 Emergency Contact
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                     Name
                   </label>
                   <input
@@ -321,7 +323,7 @@ const Profile = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                     Phone
                   </label>
                   <input
@@ -334,7 +336,7 @@ const Profile = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                     Relation
                   </label>
                   <input
@@ -351,7 +353,7 @@ const Profile = () => {
 
             {/* Allergies */}
             <div className="card">
-              <h3 className="text-lg font-bold text-dark mb-4 flex items-center gap-2">
+              <h3 className="text-lg font-bold text-dark dark:text-slate-100 mb-4 flex items-center gap-2">
                 <AlertCircle size={20} className="text-danger" />
                 Allergies
               </h3>
@@ -379,25 +381,27 @@ const Profile = () => {
                 {profile.allergies.map((allergy, index) => (
                   <span
                     key={index}
-                    className="inline-flex items-center gap-2 px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm">
+                    className="inline-flex items-center gap-2 px-3 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded-full text-sm">
                     {allergy}
                     <button
                       type="button"
                       onClick={() => handleRemoveAllergy(index)}
-                      className="hover:text-red-900">
+                      className="hover:text-red-900 dark:hover:text-red-300">
                       <X size={14} />
                     </button>
                   </span>
                 ))}
                 {profile.allergies.length === 0 && (
-                  <p className="text-gray-500 text-sm">No allergies added</p>
+                  <p className="text-gray-500 dark:text-slate-400 text-sm">
+                    No allergies added
+                  </p>
                 )}
               </div>
             </div>
 
             {/* Medical History */}
             <div className="card">
-              <h3 className="text-lg font-bold text-dark mb-4 flex items-center gap-2">
+              <h3 className="text-lg font-bold text-dark dark:text-slate-100 mb-4 flex items-center gap-2">
                 <Heart size={20} className="text-primary" />
                 Medical History
               </h3>
@@ -451,19 +455,19 @@ const Profile = () => {
                 {profile.medicalHistory.map((item, index) => (
                   <div
                     key={index}
-                    className="flex items-start justify-between p-4 bg-orange-50 rounded-lg">
+                    className="flex items-start justify-between p-4 bg-orange-50 dark:bg-slate-700/30 rounded-lg">
                     <div className="flex-1">
-                      <h4 className="font-semibold text-dark">
+                      <h4 className="font-semibold text-dark dark:text-slate-100">
                         {item.condition}
                       </h4>
                       {item.diagnosedDate && (
-                        <p className="text-sm text-gray-600 mt-1">
+                        <p className="text-sm text-gray-600 dark:text-slate-400 mt-1">
                           Diagnosed:{" "}
                           {new Date(item.diagnosedDate).toLocaleDateString()}
                         </p>
                       )}
                       {item.notes && (
-                        <p className="text-sm text-gray-600 mt-1">
+                        <p className="text-sm text-gray-600 dark:text-slate-400 mt-1">
                           {item.notes}
                         </p>
                       )}
@@ -471,13 +475,13 @@ const Profile = () => {
                     <button
                       type="button"
                       onClick={() => handleRemoveCondition(index)}
-                      className="text-red-600 hover:text-red-800">
+                      className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
                       <X size={18} />
                     </button>
                   </div>
                 ))}
                 {profile.medicalHistory.length === 0 && (
-                  <p className="text-gray-500 text-sm">
+                  <p className="text-gray-500 dark:text-slate-400 text-sm">
                     No medical history added
                   </p>
                 )}

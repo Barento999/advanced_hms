@@ -58,10 +58,10 @@ const Sidebar = () => {
   const menuItems = getMenuItems();
 
   return (
-    <div className="fixed left-0 top-0 w-64 bg-gradient-to-b from-primary via-blue-800 to-blue-900 h-screen flex flex-col shadow-2xl z-40">
-      <div className="p-6 border-b border-blue-700/30">
+    <div className="fixed left-0 top-0 w-64 bg-primary h-screen flex flex-col shadow-2xl z-40">
+      <div className="p-6 border-b border-white/10">
         <h1 className="text-2xl font-bold text-white">HealthCare</h1>
-        <p className="text-sm text-blue-100 mt-1">
+        <p className="text-sm text-white/80 mt-1">
           {user?.role?.toUpperCase()}
         </p>
       </div>
@@ -78,7 +78,7 @@ const Sidebar = () => {
               className={`flex items-center gap-3 px-4 py-3 rounded-xl mb-2 transition-all duration-200 ${
                 isActive
                   ? "bg-white text-primary shadow-lg transform scale-105"
-                  : "text-white/90 hover:bg-white/20 hover:text-white"
+                  : "text-white/90 hover:bg-white/10 hover:text-white"
               }`}>
               <Icon size={20} />
               <span className="font-medium">{item.label}</span>
@@ -87,14 +87,14 @@ const Sidebar = () => {
         })}
       </nav>
 
-      <div className="p-4 border-t border-blue-700/30">
+      <div className="p-4 border-t border-white/10">
         {user?.role === "patient" && (
           <Link
             to="/patient/profile"
             className={`flex items-center gap-3 px-4 py-3 rounded-xl mb-2 transition-all duration-200 ${
               location.pathname === "/patient/profile"
                 ? "bg-white text-primary shadow-lg transform scale-105"
-                : "text-white/90 hover:bg-white/20 hover:text-white"
+                : "text-white/90 hover:bg-white/10 hover:text-white"
             }`}>
             <User size={20} />
             <span className="font-medium">Profile</span>
@@ -106,7 +106,7 @@ const Sidebar = () => {
             className={`flex items-center gap-3 px-4 py-3 rounded-xl mb-2 transition-all duration-200 ${
               location.pathname === "/doctor/profile"
                 ? "bg-white text-primary shadow-lg transform scale-105"
-                : "text-white/90 hover:bg-white/20 hover:text-white"
+                : "text-white/90 hover:bg-white/10 hover:text-white"
             }`}>
             <User size={20} />
             <span className="font-medium">Profile</span>

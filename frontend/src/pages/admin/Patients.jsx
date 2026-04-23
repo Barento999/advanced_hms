@@ -98,7 +98,7 @@ const Patients = () => {
                       patients.map((patient) => (
                         <tr
                           key={patient._id}
-                          className="border-b border-gray-100 hover:bg-gray-50">
+                          className="border-b border-gray-100 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
                           <td className="py-3 px-4">{patient.name}</td>
                           <td className="py-3 px-4">{patient.email}</td>
                           <td className="py-3 px-4">{patient.phone}</td>

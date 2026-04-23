@@ -66,8 +66,10 @@ const Reviews = () => {
 
         <div className="p-8 mt-20">
           <div className="mb-6">
-            <h2 className="text-2xl font-bold text-dark">Doctor Reviews</h2>
-            <p className="text-gray-600 mt-1">
+            <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
+              Doctor Reviews
+            </h2>
+            <p className="text-gray-600 dark:text-slate-400 mt-1">
               Rate and review your completed appointments
             </p>
           </div>
@@ -80,17 +82,17 @@ const Reviews = () => {
                 <div key={apt._id} className="card">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-dark">
+                      <h3 className="text-lg font-semibold text-dark dark:text-slate-100">
                         {apt.doctorId?.userId?.name}
                       </h3>
-                      <p className="text-sm text-gray-600 mt-1">
+                      <p className="text-sm text-gray-600 dark:text-slate-400 mt-1">
                         {apt.doctorId?.specialization}
                       </p>
-                      <p className="text-sm text-gray-500 mt-2">
+                      <p className="text-sm text-gray-500 dark:text-slate-400 mt-2">
                         Appointment Date:{" "}
                         {new Date(apt.appointmentDate).toLocaleDateString()}
                       </p>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-gray-500 dark:text-slate-400">
                         Time: {apt.timeSlot?.startTime} -{" "}
                         {apt.timeSlot?.endTime}
                       </p>
@@ -117,7 +119,7 @@ const Reviews = () => {
 
             {!loading && appointments.length === 0 && (
               <div className="card text-center py-12">
-                <p className="text-gray-500">
+                <p className="text-gray-500 dark:text-slate-400">
                   No completed appointments to review
                 </p>
               </div>
@@ -129,11 +131,13 @@ const Reviews = () => {
       {/* Review Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 max-w-md w-full mx-4">
-            <h3 className="text-xl font-bold text-dark mb-4">Write a Review</h3>
+          <div className="bg-white dark:bg-slate-800 rounded-xl p-6 max-w-md w-full mx-4">
+            <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-4">
+              Write a Review
+            </h3>
             <form onSubmit={handleSubmitReview} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                   Rating
                 </label>
                 <div className="flex gap-2">
@@ -157,7 +161,7 @@ const Reviews = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                   Your Review
                 </label>
                 <textarea

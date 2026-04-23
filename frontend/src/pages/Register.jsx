@@ -30,16 +30,30 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#FFF5EF] p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
+    <div className="min-h-screen flex items-center justify-center bg-secondary p-4">
+      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-8 border border-border">
         <div className="text-center mb-8">
+          <div className="w-16 h-16 bg-primary rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg">
+            <svg
+              className="w-10 h-10 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
+              />
+            </svg>
+          </div>
           <h1 className="text-3xl font-bold text-dark">Create Account</h1>
-          <p className="text-gray-500 mt-2">Join our healthcare platform</p>
+          <p className="text-muted mt-2">Join our healthcare platform</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-dark mb-2">
               Full Name
             </label>
             <input
@@ -55,7 +69,7 @@ const Register = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-dark mb-2">
               Email
             </label>
             <input
@@ -71,7 +85,7 @@ const Register = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-dark mb-2">
               Phone
             </label>
             <input
@@ -86,7 +100,7 @@ const Register = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-dark mb-2">
               Password
             </label>
             <input
@@ -102,7 +116,7 @@ const Register = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-dark mb-2">
               Register as
             </label>
             <select
@@ -124,11 +138,11 @@ const Register = () => {
           </button>
         </form>
 
-        <p className="text-center text-gray-600 mt-6">
+        <p className="text-center text-muted mt-6">
           Already have an account?{" "}
           <Link
             to="/login"
-            className="text-primary font-medium hover:underline">
+            className="text-primary font-medium hover:text-blue-800 transition-colors">
             Sign in
           </Link>
         </p>

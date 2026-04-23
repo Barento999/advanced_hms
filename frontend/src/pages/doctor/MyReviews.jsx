@@ -64,8 +64,10 @@ const MyReviews = () => {
           <Navbar />
           <div className="p-8 mt-20">
             <div className="mb-6">
-              <h2 className="text-2xl font-bold text-dark">My Reviews</h2>
-              <p className="text-gray-600 mt-1">
+              <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
+                My Reviews
+              </h2>
+              <p className="text-gray-600 dark:text-slate-400 mt-1">
                 See what your patients are saying about you
               </p>
             </div>
@@ -89,8 +91,10 @@ const MyReviews = () => {
 
         <div className="p-8 mt-20">
           <div className="mb-6">
-            <h2 className="text-2xl font-bold text-dark">My Reviews</h2>
-            <p className="text-gray-600 mt-1">
+            <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
+              My Reviews
+            </h2>
+            <p className="text-gray-600 dark:text-slate-400 mt-1">
               See what your patients are saying about you
             </p>
           </div>
@@ -105,12 +109,12 @@ const MyReviews = () => {
                 <div className="flex justify-center mt-2">
                   {renderStars(Math.round(profile?.rating || 0))}
                 </div>
-                <p className="text-sm text-gray-600 mt-2">
+                <p className="text-sm text-gray-600 dark:text-slate-400 mt-2">
                   {reviews.length} {reviews.length === 1 ? "review" : "reviews"}
                 </p>
               </div>
-              <div className="flex-1 border-l pl-6">
-                <h3 className="font-semibold text-dark mb-3">
+              <div className="flex-1 border-l dark:border-slate-700 pl-6">
+                <h3 className="font-semibold text-dark dark:text-slate-100 mb-3">
                   Rating Breakdown
                 </h3>
                 {[5, 4, 3, 2, 1].map((star) => {
@@ -119,16 +123,16 @@ const MyReviews = () => {
                     reviews.length > 0 ? (count / reviews.length) * 100 : 0;
                   return (
                     <div key={star} className="flex items-center gap-3 mb-2">
-                      <span className="text-sm text-gray-600 w-12">
+                      <span className="text-sm text-gray-600 dark:text-slate-400 w-12">
                         {star} star
                       </span>
-                      <div className="flex-1 bg-gray-200 rounded-full h-2">
+                      <div className="flex-1 bg-gray-200 dark:bg-slate-700 rounded-full h-2">
                         <div
                           className="bg-yellow-400 h-2 rounded-full"
                           style={{ width: `${percentage}%` }}
                         />
                       </div>
-                      <span className="text-sm text-gray-600 w-12">
+                      <span className="text-sm text-gray-600 dark:text-slate-400 w-12">
                         {count}
                       </span>
                     </div>
@@ -149,18 +153,20 @@ const MyReviews = () => {
                   <div className="flex-1">
                     <div className="flex items-start justify-between">
                       <div>
-                        <h4 className="font-semibold text-dark">
+                        <h4 className="font-semibold text-dark dark:text-slate-100">
                           {review.patientId?.userId?.name || "Anonymous"}
                         </h4>
                         <div className="flex items-center gap-2 mt-1">
                           {renderStars(review.rating)}
-                          <span className="text-sm text-gray-500">
+                          <span className="text-sm text-gray-500 dark:text-slate-400">
                             {new Date(review.createdAt).toLocaleDateString()}
                           </span>
                         </div>
                       </div>
                     </div>
-                    <p className="text-gray-700 mt-3">{review.comment}</p>
+                    <p className="text-gray-700 dark:text-slate-300 mt-3">
+                      {review.comment}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -168,11 +174,14 @@ const MyReviews = () => {
 
             {reviews.length === 0 && (
               <div className="card text-center py-12">
-                <Star size={48} className="mx-auto text-gray-300 mb-3" />
-                <h3 className="text-lg font-semibold text-gray-600 mb-2">
+                <Star
+                  size={48}
+                  className="mx-auto text-gray-300 dark:text-slate-600 mb-3"
+                />
+                <h3 className="text-lg font-semibold text-gray-600 dark:text-slate-400 mb-2">
                   No reviews yet
                 </h3>
-                <p className="text-gray-500">
+                <p className="text-gray-500 dark:text-slate-400">
                   Your reviews will appear here once patients rate your service
                 </p>
               </div>

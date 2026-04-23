@@ -73,8 +73,10 @@ const Notifications = () => {
         <div className="p-8 mt-20">
           <div className="flex justify-between items-center mb-6">
             <div>
-              <h2 className="text-2xl font-bold text-dark">Notifications</h2>
-              <p className="text-gray-600 mt-1">
+              <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
+                Notifications
+              </h2>
+              <p className="text-gray-600 dark:text-slate-400 mt-1">
                 {unreadNotifications.length} unread notification
                 {unreadNotifications.length !== 1 ? "s" : ""}
               </p>
@@ -95,11 +97,14 @@ const Notifications = () => {
             </div>
           ) : notifications.length === 0 ? (
             <div className="card text-center py-16">
-              <Bell size={64} className="mx-auto mb-4 text-gray-300" />
-              <h3 className="text-xl font-semibold text-gray-600 mb-2">
+              <Bell
+                size={64}
+                className="mx-auto mb-4 text-gray-300 dark:text-slate-600"
+              />
+              <h3 className="text-xl font-semibold text-gray-600 dark:text-slate-400 mb-2">
                 No notifications yet
               </h3>
-              <p className="text-gray-500">
+              <p className="text-gray-500 dark:text-slate-400">
                 You'll see notifications here when you have updates
               </p>
             </div>
@@ -108,25 +113,25 @@ const Notifications = () => {
               {/* Unread Notifications */}
               {unreadNotifications.length > 0 && (
                 <div className="card">
-                  <h3 className="text-lg font-bold text-dark mb-4">
+                  <h3 className="text-lg font-bold text-dark dark:text-slate-100 mb-4">
                     Unread ({unreadNotifications.length})
                   </h3>
                   <div className="space-y-3">
                     {unreadNotifications.map((notification) => (
                       <div
                         key={notification._id}
-                        className="flex items-start gap-4 p-4 bg-orange-50 border-l-4 border-primary rounded-lg hover:shadow-md transition-shadow">
+                        className="flex items-start gap-4 p-4 bg-orange-50 dark:bg-slate-700/50 border-l-4 border-primary rounded-lg hover:shadow-md transition-shadow">
                         <div className="text-3xl flex-shrink-0">
                           {getNotificationIcon(notification.type)}
                         </div>
                         <div className="flex-1">
-                          <h4 className="font-semibold text-dark">
+                          <h4 className="font-semibold text-dark dark:text-slate-100">
                             {notification.title}
                           </h4>
-                          <p className="text-gray-600 text-sm mt-1">
+                          <p className="text-gray-600 dark:text-slate-300 text-sm mt-1">
                             {notification.message}
                           </p>
-                          <p className="text-xs text-gray-400 mt-2">
+                          <p className="text-xs text-gray-400 dark:text-slate-400 mt-2">
                             {new Date(notification.createdAt).toLocaleString()}
                           </p>
                         </div>
@@ -153,25 +158,25 @@ const Notifications = () => {
               {/* Read Notifications */}
               {readNotifications.length > 0 && (
                 <div className="card">
-                  <h3 className="text-lg font-bold text-dark mb-4">
+                  <h3 className="text-lg font-bold text-dark dark:text-slate-100 mb-4">
                     Read ({readNotifications.length})
                   </h3>
                   <div className="space-y-3">
                     {readNotifications.map((notification) => (
                       <div
                         key={notification._id}
-                        className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg hover:shadow-md transition-shadow opacity-75">
+                        className="flex items-start gap-4 p-4 bg-gray-50 dark:bg-slate-700/30 rounded-lg hover:shadow-md transition-shadow opacity-75">
                         <div className="text-3xl flex-shrink-0">
                           {getNotificationIcon(notification.type)}
                         </div>
                         <div className="flex-1">
-                          <h4 className="font-semibold text-dark">
+                          <h4 className="font-semibold text-dark dark:text-slate-100">
                             {notification.title}
                           </h4>
-                          <p className="text-gray-600 text-sm mt-1">
+                          <p className="text-gray-600 dark:text-slate-300 text-sm mt-1">
                             {notification.message}
                           </p>
-                          <p className="text-xs text-gray-400 mt-2">
+                          <p className="text-xs text-gray-400 dark:text-slate-400 mt-2">
                             {new Date(notification.createdAt).toLocaleString()}
                           </p>
                         </div>

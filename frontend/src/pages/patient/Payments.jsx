@@ -163,7 +163,7 @@ const Payments = () => {
                         {payments.map((payment) => (
                           <tr
                             key={payment._id}
-                            className="border-b border-gray-100 hover:bg-gray-50">
+                            className="border-b border-gray-100 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
                             <td className="py-3 px-4">
                               <div className="flex items-center gap-2">
                                 <Calendar size={16} className="text-gray-400" />

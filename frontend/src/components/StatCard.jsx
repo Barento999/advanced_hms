@@ -3,8 +3,12 @@ const StatCard = ({ icon: Icon, title, value, color, bgColor }) => {
     <div className="card hover:shadow-md transition-shadow">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-muted text-sm font-medium">{title}</p>
-          <h3 className="text-3xl font-bold text-dark mt-2">{value}</h3>
+          <p className="text-muted dark:text-slate-400 text-sm font-medium">
+            {title}
+          </p>
+          <h3 className="text-3xl font-bold text-dark dark:text-white mt-2">
+            {value}
+          </h3>
         </div>
         <div
           className={`w-14 h-14 ${bgColor} rounded-xl flex items-center justify-center`}>

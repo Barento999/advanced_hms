@@ -36,7 +36,7 @@ const MedicalRecords = () => {
 
         <div className="p-8 mt-20">
           <div className="card">
-            <h2 className="text-2xl font-bold text-dark mb-6">
+            <h2 className="text-2xl font-bold text-dark dark:text-slate-100 mb-6">
               My Medical Records
             </h2>
 
@@ -44,15 +44,20 @@ const MedicalRecords = () => {
               <ListSkeleton items={3} />
             ) : records.length === 0 ? (
               <div className="text-center py-12">
-                <FileText size={48} className="mx-auto text-gray-400 mb-4" />
-                <p className="text-gray-500">No medical records yet</p>
+                <FileText
+                  size={48}
+                  className="mx-auto text-gray-400 dark:text-slate-600 mb-4"
+                />
+                <p className="text-gray-500 dark:text-slate-400">
+                  No medical records yet
+                </p>
               </div>
             ) : (
               <div className="space-y-4">
                 {records.map((record) => (
                   <div
                     key={record._id}
-                    className="bg-gray-50 rounded-xl p-6 hover:shadow-lg transition-shadow cursor-pointer"
+                    className="bg-gray-50 dark:bg-slate-700/30 rounded-xl p-6 hover:shadow-lg transition-shadow cursor-pointer"
                     onClick={() =>
                       setSelectedRecord(
                         selectedRecord?._id === record._id ? null : record,
@@ -60,10 +65,10 @@ const MedicalRecords = () => {
                     }>
                     <div className="flex justify-between items-start mb-4">
                       <div>
-                        <h3 className="text-xl font-bold text-dark mb-2">
+                        <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-2">
                           {record.diagnosis}
                         </h3>
-                        <div className="flex items-center gap-4 text-sm text-gray-600">
+                        <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-slate-400">
                           <div className="flex items-center gap-2">
                             <User size={16} />
                             <span>{record.doctorId?.userId?.name}</span>
@@ -80,17 +85,17 @@ const MedicalRecords = () => {
                     </div>
 
                     {selectedRecord?._id === record._id && (
-                      <div className="mt-4 pt-4 border-t border-gray-200 space-y-4">
+                      <div className="mt-4 pt-4 border-t border-gray-200 dark:border-slate-700 space-y-4">
                         {record.symptoms && record.symptoms.length > 0 && (
                           <div>
-                            <h4 className="font-semibold text-gray-700 mb-2">
+                            <h4 className="font-semibold text-gray-700 dark:text-slate-300 mb-2">
                               Symptoms:
                             </h4>
                             <div className="flex flex-wrap gap-2">
                               {record.symptoms.map((symptom, index) => (
                                 <span
                                   key={index}
-                                  className="badge bg-yellow-100 text-yellow-800">
+                                  className="badge bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-400">
                                   {symptom}
                                 </span>
                               ))}
@@ -101,25 +106,25 @@ const MedicalRecords = () => {
                         {record.prescription &&
                           record.prescription.length > 0 && (
                             <div>
-                              <h4 className="font-semibold text-gray-700 mb-2">
+                              <h4 className="font-semibold text-gray-700 dark:text-slate-300 mb-2">
                                 Prescription:
                               </h4>
                               <div className="space-y-3">
                                 {record.prescription.map((med, index) => (
                                   <div
                                     key={index}
-                                    className="bg-white p-4 rounded-lg">
-                                    <p className="font-semibold text-dark">
+                                    className="bg-white dark:bg-slate-800 p-4 rounded-lg">
+                                    <p className="font-semibold text-dark dark:text-slate-100">
                                       {med.medicine}
                                     </p>
-                                    <p className="text-sm text-gray-600">
+                                    <p className="text-sm text-gray-600 dark:text-slate-400">
                                       Dosage: {med.dosage}
                                     </p>
-                                    <p className="text-sm text-gray-600">
+                                    <p className="text-sm text-gray-600 dark:text-slate-400">
                                       Duration: {med.duration}
                                     </p>
                                     {med.instructions && (
-                                      <p className="text-sm text-gray-600 mt-1">
+                                      <p className="text-sm text-gray-600 dark:text-slate-400 mt-1">
                                         Instructions: {med.instructions}
                                       </p>
                                     )}
@@ -131,10 +136,12 @@ const MedicalRecords = () => {
 
                         {record.notes && (
                           <div>
-                            <h4 className="font-semibold text-gray-700 mb-2">
+                            <h4 className="font-semibold text-gray-700 dark:text-slate-300 mb-2">
                               Doctor's Notes:
                             </h4>
-                            <p className="text-gray-600">{record.notes}</p>
+                            <p className="text-gray-600 dark:text-slate-400">
+                              {record.notes}
+                            </p>
                           </div>
                         )}
                       </div>

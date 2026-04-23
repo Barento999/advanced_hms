@@ -35,7 +35,9 @@ const Patients = () => {
 
         <div className="p-8 mt-20">
           <div className="card">
-            <h2 className="text-2xl font-bold text-dark mb-6">My Patients</h2>
+            <h2 className="text-2xl font-bold text-dark dark:text-slate-100 mb-6">
+              My Patients
+            </h2>
 
             {loading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -48,35 +50,40 @@ const Patients = () => {
               </div>
             ) : patients.length === 0 ? (
               <div className="text-center py-12">
-                <User size={48} className="mx-auto text-gray-400 mb-4" />
-                <p className="text-gray-500">No patients yet</p>
+                <User
+                  size={48}
+                  className="mx-auto text-gray-400 dark:text-slate-600 mb-4"
+                />
+                <p className="text-gray-500 dark:text-slate-400">
+                  No patients yet
+                </p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {patients.map((patient) => (
                   <div
                     key={patient._id}
-                    className="bg-gray-50 rounded-xl p-6 hover:shadow-lg transition-shadow">
+                    className="bg-gray-50 dark:bg-slate-700/30 rounded-xl p-6 hover:shadow-lg transition-shadow">
                     <div className="flex items-center gap-4 mb-4">
                       <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold">
                         {patient.userId?.name?.charAt(0) || "P"}
                       </div>
                       <div>
-                        <h3 className="font-bold text-lg text-dark">
+                        <h3 className="font-bold text-lg text-dark dark:text-slate-100">
                           {patient.userId?.name}
                         </h3>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-gray-500 dark:text-slate-400">
                           {patient.gender} • {patient.bloodGroup || "N/A"}
                         </p>
                       </div>
                     </div>
 
                     <div className="space-y-2">
-                      <div className="flex items-center gap-2 text-gray-600">
+                      <div className="flex items-center gap-2 text-gray-600 dark:text-slate-300">
                         <Mail size={16} />
                         <span className="text-sm">{patient.userId?.email}</span>
                       </div>
-                      <div className="flex items-center gap-2 text-gray-600">
+                      <div className="flex items-center gap-2 text-gray-600 dark:text-slate-300">
                         <Phone size={16} />
                         <span className="text-sm">
                           {patient.userId?.phone || "N/A"}
@@ -85,15 +92,15 @@ const Patients = () => {
                     </div>
 
                     {patient.allergies && patient.allergies.length > 0 && (
-                      <div className="mt-4 pt-4 border-t border-gray-200">
-                        <p className="text-xs font-semibold text-gray-600 mb-2">
+                      <div className="mt-4 pt-4 border-t border-gray-200 dark:border-slate-700">
+                        <p className="text-xs font-semibold text-gray-600 dark:text-slate-400 mb-2">
                           Allergies:
                         </p>
                         <div className="flex flex-wrap gap-2">
                           {patient.allergies.map((allergy, index) => (
                             <span
                               key={index}
-                              className="badge bg-red-100 text-red-800 text-xs">
+                              className="badge bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-400 text-xs">
                               {allergy}
                             </span>
                           ))}

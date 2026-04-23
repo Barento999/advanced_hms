@@ -87,8 +87,10 @@ const Profile = () => {
 
         <div className="p-8 mt-20">
           <div className="mb-6">
-            <h2 className="text-2xl font-bold text-dark">My Profile</h2>
-            <p className="text-gray-600 mt-1">
+            <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
+              My Profile
+            </h2>
+            <p className="text-gray-600 dark:text-slate-400 mt-1">
               Manage your professional information
             </p>
           </div>
@@ -96,13 +98,13 @@ const Profile = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Professional Information */}
             <div className="card">
-              <h3 className="text-lg font-bold text-dark mb-4 flex items-center gap-2">
+              <h3 className="text-lg font-bold text-dark dark:text-slate-100 mb-4 flex items-center gap-2">
                 <User size={20} className="text-primary" />
                 Professional Information
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                     <span className="flex items-center gap-2">
                       <Award size={16} />
                       Specialization
@@ -130,7 +132,7 @@ const Profile = () => {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                     <span className="flex items-center gap-2">
                       <Award size={16} />
                       Qualification
@@ -147,7 +149,7 @@ const Profile = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                     <span className="flex items-center gap-2">
                       <Briefcase size={16} />
                       Experience (Years)
@@ -164,7 +166,7 @@ const Profile = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                     <span className="flex items-center gap-2">
                       <DollarSign size={16} />
                       Consultation Fee ($)

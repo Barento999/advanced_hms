@@ -146,8 +146,10 @@ const Reviews = () => {
 
         <div className="p-8 mt-20">
           <div className="mb-6">
-            <h2 className="text-2xl font-bold text-dark">All Doctor Reviews</h2>
-            <p className="text-gray-600 mt-1">
+            <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
+              All Doctor Reviews
+            </h2>
+            <p className="text-gray-600 dark:text-slate-400 mt-1">
               View and manage all reviews across the platform
             </p>
           </div>
@@ -155,13 +157,17 @@ const Reviews = () => {
           {/* Summary Stats */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
             <div className="card">
-              <p className="text-sm text-gray-600 mb-1">Total Reviews</p>
+              <p className="text-sm text-gray-600 dark:text-slate-400 mb-1">
+                Total Reviews
+              </p>
               <p className="text-3xl font-bold text-primary">
                 {allReviews.length}
               </p>
             </div>
             <div className="card">
-              <p className="text-sm text-gray-600 mb-1">Average Rating</p>
+              <p className="text-sm text-gray-600 dark:text-slate-400 mb-1">
+                Average Rating
+              </p>
               <div className="flex items-center gap-2">
                 <p className="text-3xl font-bold text-primary">
                   {getAverageRating()}
@@ -170,13 +176,17 @@ const Reviews = () => {
               </div>
             </div>
             <div className="card">
-              <p className="text-sm text-gray-600 mb-1">Doctors with Reviews</p>
+              <p className="text-sm text-gray-600 dark:text-slate-400 mb-1">
+                Doctors with Reviews
+              </p>
               <p className="text-3xl font-bold text-primary">
                 {new Set(allReviews.map((r) => r.doctorId._id)).size}
               </p>
             </div>
             <div className="card">
-              <p className="text-sm text-gray-600 mb-1">5-Star Reviews</p>
+              <p className="text-sm text-gray-600 dark:text-slate-400 mb-1">
+                5-Star Reviews
+              </p>
               <p className="text-3xl font-bold text-primary">
                 {allReviews.filter((r) => r.rating === 5).length}
               </p>
@@ -185,12 +195,12 @@ const Reviews = () => {
 
           {/* Filters */}
           <div className="card mb-6">
-            <h3 className="text-lg font-semibold text-dark mb-4">
+            <h3 className="text-lg font-semibold text-dark dark:text-slate-100 mb-4">
               Filter Reviews
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                   <span className="flex items-center gap-2">
                     <Filter size={16} />
                     Filter by Doctor
@@ -210,7 +220,7 @@ const Reviews = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                   <span className="flex items-center gap-2">
                     <Search size={16} />
                     Search Reviews
@@ -225,7 +235,7 @@ const Reviews = () => {
                 />
               </div>
             </div>
-            <div className="mt-3 text-sm text-gray-600">
+            <div className="mt-3 text-sm text-gray-600 dark:text-slate-400">
               Showing {reviews.length} of {allReviews.length} reviews
             </div>
           </div>
@@ -241,10 +251,10 @@ const Reviews = () => {
                   <div className="flex-1">
                     <div className="flex items-start justify-between mb-2">
                       <div>
-                        <h4 className="font-semibold text-dark">
+                        <h4 className="font-semibold text-dark dark:text-slate-100">
                           {review.patientId?.userId?.name || "Anonymous"}
                         </h4>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-gray-600 dark:text-slate-400">
                           reviewed{" "}
                           <span className="font-medium text-primary">
                             {review.doctorId?.userId?.name}
@@ -254,12 +264,14 @@ const Reviews = () => {
                       </div>
                       <div className="text-right">
                         {renderStars(review.rating)}
-                        <p className="text-xs text-gray-500 mt-1">
+                        <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">
                           {new Date(review.createdAt).toLocaleDateString()}
                         </p>
                       </div>
                     </div>
-                    <p className="text-gray-700 mt-2">{review.comment}</p>
+                    <p className="text-gray-700 dark:text-slate-300 mt-2">
+                      {review.comment}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -267,11 +279,14 @@ const Reviews = () => {
 
             {reviews.length === 0 && (
               <div className="card text-center py-12">
-                <Star size={48} className="mx-auto text-gray-300 mb-3" />
-                <h3 className="text-lg font-semibold text-gray-600 mb-2">
+                <Star
+                  size={48}
+                  className="mx-auto text-gray-300 dark:text-slate-600 mb-3"
+                />
+                <h3 className="text-lg font-semibold text-gray-600 dark:text-slate-400 mb-2">
                   No reviews found
                 </h3>
-                <p className="text-gray-500">
+                <p className="text-gray-500 dark:text-slate-400">
                   {selectedDoctor || searchTerm
                     ? "Try adjusting your filters"
                     : "Reviews will appear here once patients start rating doctors"}

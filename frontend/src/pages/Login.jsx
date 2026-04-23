@@ -31,11 +31,11 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#FFF5EF] p-4">
-      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center bg-secondary p-4">
+      <div className="bg-white rounded-3xl shadow-xl w-full max-w-md overflow-hidden border border-border">
         {/* Header Section */}
-        <div className="bg-gradient-to-r from-primary to-orange-600 p-8 text-center">
-          <div className="w-20 h-20 bg-white rounded-full mx-auto mb-4 flex items-center justify-center">
+        <div className="bg-primary p-8 text-center">
+          <div className="w-20 h-20 bg-white rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg">
             <svg
               className="w-12 h-12 text-primary"
               fill="none"
@@ -50,7 +50,7 @@ const Login = () => {
             </svg>
           </div>
           <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1>
-          <p className="text-orange-100">Sign in to access your account</p>
+          <p className="text-blue-100">Sign in to access your account</p>
         </div>
 
         {/* Form Section */}
@@ -74,17 +74,17 @@ const Login = () => {
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Email Field */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-dark mb-2">
                 Email Address
               </label>
               <div className="relative">
                 <Mail
-                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted"
                   size={20}
                 />
                 <input
                   type="email"
-                  className="w-full pl-11 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                  className="w-full pl-11 pr-4 py-3 border-2 border-border rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
                   placeholder="Enter your email"
                   value={formData.email}
                   onChange={(e) =>
@@ -98,17 +98,17 @@ const Login = () => {
 
             {/* Password Field */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-dark mb-2">
                 Password
               </label>
               <div className="relative">
                 <Lock
-                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted"
                   size={20}
                 />
                 <input
                   type="password"
-                  className="w-full pl-11 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                  className="w-full pl-11 pr-4 py-3 border-2 border-border rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
                   placeholder="Enter your password"
                   value={formData.password}
                   onChange={(e) =>
@@ -124,7 +124,7 @@ const Login = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-primary to-orange-600 text-white py-3.5 rounded-xl font-semibold hover:shadow-lg transform hover:scale-[1.02] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2">
+              className="w-full bg-primary text-white py-3.5 rounded-xl font-semibold hover:bg-blue-800 hover:shadow-lg transform hover:scale-[1.02] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2">
               {loading ? (
                 <>
                   <Loader2 className="animate-spin" size={20} />
@@ -139,10 +139,10 @@ const Login = () => {
           {/* Divider */}
           <div className="relative my-6">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-200"></div>
+              <div className="w-full border-t border-border"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white text-gray-500">
+              <span className="px-4 bg-white text-muted">
                 New to HealthCare?
               </span>
             </div>
@@ -152,7 +152,7 @@ const Login = () => {
           <div className="text-center">
             <Link
               to="/register"
-              className="text-primary font-semibold hover:text-orange-600 transition-colors inline-flex items-center gap-1">
+              className="text-primary font-semibold hover:text-blue-800 transition-colors inline-flex items-center gap-1">
               Create an account
               <svg
                 className="w-4 h-4"

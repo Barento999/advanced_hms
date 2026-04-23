@@ -123,10 +123,10 @@ const Schedule = () => {
 
         <div className="p-8 mt-20">
           <div className="mb-6">
-            <h2 className="text-2xl font-bold text-dark">
+            <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
               Manage Your Schedule
             </h2>
-            <p className="text-gray-600 mt-1">
+            <p className="text-gray-600 dark:text-slate-400 mt-1">
               Set your available days and working hours
             </p>
           </div>
@@ -136,21 +136,25 @@ const Schedule = () => {
             <div className="card">
               <div className="flex items-center gap-3 mb-6">
                 <Calendar className="text-primary" size={24} />
-                <h3 className="text-xl font-bold text-dark">Available Days</h3>
+                <h3 className="text-xl font-bold text-dark dark:text-slate-100">
+                  Available Days
+                </h3>
               </div>
 
               <div className="space-y-3">
                 {daysOfWeek.map((day) => (
                   <label
                     key={day}
-                    className="flex items-center gap-3 p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-primary transition-colors">
+                    className="flex items-center gap-3 p-4 border-2 border-gray-200 dark:border-slate-700 rounded-xl cursor-pointer hover:border-primary transition-colors">
                     <input
                       type="checkbox"
                       checked={schedule.availableDays.includes(day)}
                       onChange={() => handleDayToggle(day)}
                       className="w-5 h-5 text-primary rounded focus:ring-2 focus:ring-primary"
                     />
-                    <span className="font-medium text-gray-700">{day}</span>
+                    <span className="font-medium text-gray-700 dark:text-slate-300">
+                      {day}
+                    </span>
                   </label>
                 ))}
               </div>
@@ -161,7 +165,9 @@ const Schedule = () => {
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                   <Clock className="text-primary" size={24} />
-                  <h3 className="text-xl font-bold text-dark">Time Slots</h3>
+                  <h3 className="text-xl font-bold text-dark dark:text-slate-100">
+                    Time Slots
+                  </h3>
                 </div>
                 <button
                   onClick={addTimeSlot}
@@ -173,8 +179,11 @@ const Schedule = () => {
 
               <div className="space-y-4">
                 {schedule.availableTimeSlots.length === 0 ? (
-                  <div className="text-center py-8 text-gray-500">
-                    <Clock size={48} className="mx-auto mb-3 text-gray-400" />
+                  <div className="text-center py-8 text-gray-500 dark:text-slate-400">
+                    <Clock
+                      size={48}
+                      className="mx-auto mb-3 text-gray-400 dark:text-slate-600"
+                    />
                     <p>No time slots added yet</p>
                     <p className="text-sm mt-1">
                       Click "Add Slot" to create your first time slot
@@ -184,10 +193,10 @@ const Schedule = () => {
                   schedule.availableTimeSlots.map((slot, index) => (
                     <div
                       key={index}
-                      className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl">
+                      className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-slate-700/30 rounded-xl">
                       <div className="flex-1 grid grid-cols-2 gap-3">
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                          <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
                             Start Time
                           </label>
                           <input
@@ -196,11 +205,11 @@ const Schedule = () => {
                             onChange={(e) =>
                               updateTimeSlot(index, "startTime", e.target.value)
                             }
-                            className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:border-primary outline-none"
+                            className="w-full px-3 py-2 border-2 border-gray-200 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 rounded-lg focus:border-primary outline-none"
                           />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                          <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
                             End Time
                           </label>
                           <input
@@ -209,7 +218,7 @@ const Schedule = () => {
                             onChange={(e) =>
                               updateTimeSlot(index, "endTime", e.target.value)
                             }
-                            className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:border-primary outline-none"
+                            className="w-full px-3 py-2 border-2 border-gray-200 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 rounded-lg focus:border-primary outline-none"
                           />
                         </div>
                       </div>
