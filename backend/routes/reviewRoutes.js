@@ -28,6 +28,26 @@ router.get("/doctor/:doctorId", async (req, res) => {
   }
 });
 
+// Get all reviews (admin only)
+router.get("/all", authorize("admin"), async (req, res) => {
+  try {
+    const reviews = await Review.find({ isDeleted: false })
+      .populate({
+        path: "doctorId",
+        populate: { path: "userId", select: "name email" },
+      })
+      .populate({
+        path: "patientId",
+        populate: { path: "userId", select: "name email" },
+      })
+      .sort({ createdAt: -1 });
+
+    res.json({ success: true, data: reviews });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
 // Create a review (patients only)
 router.post("/", authorize("patient"), async (req, res) => {
   try {

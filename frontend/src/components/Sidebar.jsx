@@ -25,6 +25,7 @@ const Sidebar = () => {
         { icon: Users, label: "Doctors", path: "/admin/doctors" },
         { icon: Users, label: "Patients", path: "/admin/patients" },
         { icon: Calendar, label: "Appointments", path: "/admin/appointments" },
+        { icon: Star, label: "Reviews", path: "/admin/reviews" },
         { icon: Bell, label: "Notifications", path: "/admin/notifications" },
       ];
     } else if (user?.role === "doctor") {
