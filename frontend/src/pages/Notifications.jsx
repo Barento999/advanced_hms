@@ -15,6 +15,8 @@ const Notifications = () => {
   useEffect(() => {
     const loadNotifications = async () => {
       await fetchNotifications();
+      // Delay to show skeleton
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       setLoading(false);
     };
     loadNotifications();

@@ -19,6 +19,8 @@ const AdminDashboard = () => {
     try {
       const { data } = await api.get("/admin/dashboard");
       setStats(data.data);
+      // Delay to show skeleton
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     } catch (error) {
       toast.error("Failed to fetch dashboard stats");
     } finally {

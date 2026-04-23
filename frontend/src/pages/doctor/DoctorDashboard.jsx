@@ -39,6 +39,8 @@ const DoctorDashboard = () => {
       ).length;
 
       setStats({ total, pending, confirmed, completed });
+      // Delay to show skeleton
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     } catch (error) {
       toast.error("Failed to fetch appointments");
     } finally {

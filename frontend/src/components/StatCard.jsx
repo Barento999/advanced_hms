@@ -1,9 +1,9 @@
 const StatCard = ({ icon: Icon, title, value, color, bgColor }) => {
   return (
-    <div className="card hover:shadow-lg transition-shadow">
+    <div className="card hover:shadow-md transition-shadow">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-gray-500 text-sm font-medium">{title}</p>
+          <p className="text-muted text-sm font-medium">{title}</p>
           <h3 className="text-3xl font-bold text-dark mt-2">{value}</h3>
         </div>
         <div

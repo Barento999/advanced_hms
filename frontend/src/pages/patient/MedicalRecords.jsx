@@ -19,6 +19,8 @@ const MedicalRecords = () => {
     try {
       const { data } = await api.get("/patient/medical-records");
       setRecords(data.data);
+      // Delay to show skeleton
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     } catch (error) {
       toast.error("Failed to fetch medical records");
     } finally {

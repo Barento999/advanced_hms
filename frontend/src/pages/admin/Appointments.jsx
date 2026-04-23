@@ -19,6 +19,8 @@ const Appointments = () => {
       // Admin can view all appointments
       const { data } = await api.get("/admin/appointments");
       setAppointments(data.data || []);
+      // Delay to show skeleton
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     } catch (error) {
       toast.error("Failed to fetch appointments");
     } finally {

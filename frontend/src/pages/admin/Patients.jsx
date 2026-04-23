@@ -18,6 +18,8 @@ const Patients = () => {
     try {
       const { data } = await api.get("/admin/users?role=patient&limit=50");
       setPatients(data.data);
+      // Delay to show skeleton
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     } catch (error) {
       toast.error("Failed to fetch patients");
     } finally {

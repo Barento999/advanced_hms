@@ -23,6 +23,8 @@ const Appointments = () => {
           : `/doctor/appointments?status=${filter}`;
       const { data } = await api.get(url);
       setAppointments(data.data);
+      // Delay to show skeleton
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     } catch (error) {
       toast.error("Failed to fetch appointments");
     } finally {

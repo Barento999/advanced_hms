@@ -35,6 +35,8 @@ const Schedule = () => {
         availableDays: data.data.availableDays || [],
         availableTimeSlots: data.data.availableTimeSlots || [],
       });
+      // Delay to show skeleton
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     } catch (error) {
       toast.error("Failed to fetch schedule");
     } finally {

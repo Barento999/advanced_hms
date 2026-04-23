@@ -33,6 +33,8 @@ const PatientDashboard = () => {
       ).length;
 
       setStats({ total, upcoming, completed });
+      // Delay to show skeleton
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     } catch (error) {
       toast.error("Failed to fetch data");
     } finally {
