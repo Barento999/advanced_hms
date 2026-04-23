@@ -59,19 +59,19 @@ const PatientDashboard = () => {
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div className="card">
-                  <h3 className="text-xl font-bold text-dark mb-4">
+                  <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-4">
                     Recent Appointments
                   </h3>
                   <ListSkeleton items={5} />
                 </div>
                 <div className="card">
-                  <h3 className="text-xl font-bold text-dark mb-4">
+                  <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-4">
                     Quick Actions
                   </h3>
                   <div className="space-y-3">
-                    <div className="h-12 bg-gray-200 rounded-xl animate-pulse"></div>
-                    <div className="h-12 bg-gray-200 rounded-xl animate-pulse"></div>
-                    <div className="h-12 bg-gray-200 rounded-xl animate-pulse"></div>
+                    <div className="h-12 bg-gray-200 dark:bg-slate-700 rounded-xl animate-pulse"></div>
+                    <div className="h-12 bg-gray-200 dark:bg-slate-700 rounded-xl animate-pulse"></div>
+                    <div className="h-12 bg-gray-200 dark:bg-slate-700 rounded-xl animate-pulse"></div>
                   </div>
                 </div>
               </div>
@@ -111,19 +111,19 @@ const PatientDashboard = () => {
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div className="card">
-                  <h3 className="text-xl font-bold text-dark mb-4">
+                  <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-4">
                     Recent Appointments
                   </h3>
                   <div className="space-y-3">
                     {appointments.slice(0, 5).map((apt) => (
                       <div
                         key={apt._id}
-                        className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                        className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-700/30 rounded-xl">
                         <div>
-                          <h4 className="font-semibold text-dark">
+                          <h4 className="font-semibold text-dark dark:text-slate-100">
                             {apt.doctorId?.userId?.name || "N/A"}
                           </h4>
-                          <p className="text-sm text-gray-500">
+                          <p className="text-sm text-gray-500 dark:text-slate-400">
                             {new Date(apt.appointmentDate).toLocaleDateString()}
                           </p>
                         </div>
@@ -136,7 +136,7 @@ const PatientDashboard = () => {
                 </div>
 
                 <div className="card">
-                  <h3 className="text-xl font-bold text-dark mb-4">
+                  <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-4">
                     Quick Actions
                   </h3>
                   <div className="space-y-3">

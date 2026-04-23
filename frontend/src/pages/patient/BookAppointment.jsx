@@ -133,18 +133,18 @@ const BookAppointment = () => {
 
         <div className="p-8 mt-20">
           <div className="max-w-2xl mx-auto">
-            <h2 className="text-2xl font-bold text-dark mb-6">
+            <h2 className="text-2xl font-bold text-dark dark:text-slate-100 mb-6">
               Book Appointment
             </h2>
 
             {/* Search and Filter Section */}
             <div className="card mb-6">
-              <h3 className="text-lg font-semibold text-dark mb-4">
+              <h3 className="text-lg font-semibold text-dark dark:text-slate-100 mb-4">
                 Find a Doctor
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                     <span className="flex items-center gap-2">
                       <Search size={16} />
                       Search by Name
@@ -159,7 +159,7 @@ const BookAppointment = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                     <span className="flex items-center gap-2">
                       <Filter size={16} />
                       Filter by Specialization
@@ -177,7 +177,7 @@ const BookAppointment = () => {
                   </select>
                 </div>
               </div>
-              <div className="mt-3 text-sm text-gray-600">
+              <div className="mt-3 text-sm text-gray-600 dark:text-slate-400">
                 Showing {filteredDoctors.length} of {doctors.length} doctors
               </div>
             </div>
@@ -186,7 +186,7 @@ const BookAppointment = () => {
             <div className="card">
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                     Select Doctor
                   </label>
                   <select
@@ -214,21 +214,21 @@ const BookAppointment = () => {
                     ))}
                   </select>
                   {filteredDoctors.length === 0 && (
-                    <p className="text-gray-500 text-sm mt-2">
+                    <p className="text-gray-500 dark:text-slate-400 text-sm mt-2">
                       No doctors found matching your criteria
                     </p>
                   )}
                 </div>
 
                 {selectedDoctor && (
-                  <div className="p-4 bg-blue-50 border-l-4 border-blue-500 rounded-lg">
+                  <div className="p-4 bg-blue-50 dark:bg-slate-700/50 border-l-4 border-blue-500 rounded-lg">
                     <div className="flex items-start gap-3">
                       <AlertCircle
                         className="text-blue-500 flex-shrink-0 mt-0.5"
                         size={20}
                       />
                       <div>
-                        <h4 className="font-semibold text-blue-800 text-sm">
+                        <h4 className="font-semibold text-blue-800 dark:text-blue-300 text-sm">
                           Doctor's Information
                         </h4>
                         <div className="flex items-center gap-2 mt-2">
@@ -239,22 +239,22 @@ const BookAppointment = () => {
                                 size={16}
                                 className="text-yellow-400 fill-yellow-400"
                               />
-                              <span className="text-blue-700 text-sm font-medium">
+                              <span className="text-blue-700 dark:text-blue-300 text-sm font-medium">
                                 {selectedDoctor.rating} Rating
                               </span>
                             </>
                           ) : (
-                            <span className="text-blue-700 text-sm font-medium">
+                            <span className="text-blue-700 dark:text-blue-300 text-sm font-medium">
                               No reviews yet
                             </span>
                           )}
                         </div>
-                        <p className="text-blue-700 text-sm mt-1">
+                        <p className="text-blue-700 dark:text-blue-300 text-sm mt-1">
                           <strong>Available Days:</strong>{" "}
                           {selectedDoctor.availableDays?.join(", ") ||
                             "Not set"}
                         </p>
-                        <p className="text-blue-700 text-sm mt-1">
+                        <p className="text-blue-700 dark:text-blue-300 text-sm mt-1">
                           <strong>Time Slots:</strong>{" "}
                           {availableSlots.length > 0
                             ? availableSlots
@@ -270,7 +270,7 @@ const BookAppointment = () => {
                 )}
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                     Appointment Date
                   </label>
                   <input
@@ -289,7 +289,7 @@ const BookAppointment = () => {
                   />
                   {formData.appointmentDate &&
                     !isDateAvailable(formData.appointmentDate) && (
-                      <p className="text-red-500 text-sm mt-1">
+                      <p className="text-red-500 dark:text-red-400 text-sm mt-1">
                         Doctor is not available on this day. Please select
                         another date.
                       </p>
@@ -297,7 +297,7 @@ const BookAppointment = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                     Select Time Slot
                   </label>
                   {availableSlots.length > 0 ? (
@@ -323,7 +323,7 @@ const BookAppointment = () => {
                       ))}
                     </select>
                   ) : (
-                    <p className="text-gray-500 text-sm">
+                    <p className="text-gray-500 dark:text-slate-400 text-sm">
                       {formData.doctorId
                         ? "Doctor has not set available time slots yet"
                         : "Please select a doctor first"}
@@ -332,7 +332,7 @@ const BookAppointment = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                     Reason for Visit
                   </label>
                   <textarea

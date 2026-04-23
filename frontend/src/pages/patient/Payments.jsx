@@ -78,14 +78,14 @@ const Payments = () => {
                 <div className="card">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-gray-500 text-sm font-medium">
+                      <p className="text-gray-500 dark:text-slate-400 text-sm font-medium">
                         Total Paid
                       </p>
                       <h3 className="text-3xl font-bold text-accent mt-2">
                         ${totalPaid}
                       </h3>
                     </div>
-                    <div className="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center">
+                    <div className="w-14 h-14 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center">
                       <DollarSign size={28} className="text-accent" />
                     </div>
                   </div>
@@ -94,14 +94,14 @@ const Payments = () => {
                 <div className="card">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-gray-500 text-sm font-medium">
+                      <p className="text-gray-500 dark:text-slate-400 text-sm font-medium">
                         Pending
                       </p>
                       <h3 className="text-3xl font-bold text-yellow-600 mt-2">
                         ${totalPending}
                       </h3>
                     </div>
-                    <div className="w-14 h-14 bg-yellow-100 rounded-xl flex items-center justify-center">
+                    <div className="w-14 h-14 bg-yellow-100 dark:bg-yellow-900/30 rounded-xl flex items-center justify-center">
                       <DollarSign size={28} className="text-yellow-600" />
                     </div>
                   </div>
@@ -110,14 +110,14 @@ const Payments = () => {
                 <div className="card">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-gray-500 text-sm font-medium">
+                      <p className="text-gray-500 dark:text-slate-400 text-sm font-medium">
                         Total Transactions
                       </p>
                       <h3 className="text-3xl font-bold text-primary mt-2">
                         {payments.length}
                       </h3>
                     </div>
-                    <div className="w-14 h-14 bg-orange-100 rounded-xl flex items-center justify-center">
+                    <div className="w-14 h-14 bg-orange-100 dark:bg-orange-900/30 rounded-xl flex items-center justify-center">
                       <CreditCard size={28} className="text-primary" />
                     </div>
                   </div>
@@ -125,7 +125,7 @@ const Payments = () => {
               </div>
 
               <div className="card">
-                <h2 className="text-2xl font-bold text-dark mb-6">
+                <h2 className="text-2xl font-bold text-dark dark:text-slate-100 mb-6">
                   Payment History
                 </h2>
 
@@ -133,28 +133,30 @@ const Payments = () => {
                   <div className="text-center py-12">
                     <DollarSign
                       size={48}
-                      className="mx-auto text-gray-400 mb-4"
+                      className="mx-auto text-gray-400 dark:text-slate-600 mb-4"
                     />
-                    <p className="text-gray-500">No payment history yet</p>
+                    <p className="text-gray-500 dark:text-slate-400">
+                      No payment history yet
+                    </p>
                   </div>
                 ) : (
                   <div className="overflow-x-auto">
                     <table className="w-full">
                       <thead>
-                        <tr className="border-b border-gray-200">
-                          <th className="text-left py-3 px-4 font-semibold text-gray-600">
+                        <tr className="border-b border-gray-200 dark:border-slate-700">
+                          <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
                             Date
                           </th>
-                          <th className="text-left py-3 px-4 font-semibold text-gray-600">
+                          <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
                             Transaction ID
                           </th>
-                          <th className="text-left py-3 px-4 font-semibold text-gray-600">
+                          <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
                             Amount
                           </th>
-                          <th className="text-left py-3 px-4 font-semibold text-gray-600">
+                          <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
                             Method
                           </th>
-                          <th className="text-left py-3 px-4 font-semibold text-gray-600">
+                          <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
                             Status
                           </th>
                         </tr>
@@ -166,19 +168,24 @@ const Payments = () => {
                             className="border-b border-gray-100 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
                             <td className="py-3 px-4">
                               <div className="flex items-center gap-2">
-                                <Calendar size={16} className="text-gray-400" />
-                                {new Date(
-                                  payment.createdAt,
-                                ).toLocaleDateString()}
+                                <Calendar
+                                  size={16}
+                                  className="text-gray-400 dark:text-slate-500"
+                                />
+                                <span className="text-dark dark:text-slate-100">
+                                  {new Date(
+                                    payment.createdAt,
+                                  ).toLocaleDateString()}
+                                </span>
                               </div>
                             </td>
-                            <td className="py-3 px-4 font-mono text-sm">
+                            <td className="py-3 px-4 font-mono text-sm text-dark dark:text-slate-100">
                               {payment.transactionId || "N/A"}
                             </td>
-                            <td className="py-3 px-4 font-bold text-dark">
+                            <td className="py-3 px-4 font-bold text-dark dark:text-slate-100">
                               ${payment.amount}
                             </td>
-                            <td className="py-3 px-4">
+                            <td className="py-3 px-4 text-dark dark:text-slate-100">
                               <span className="capitalize">
                                 {payment.paymentMethod}
                               </span>

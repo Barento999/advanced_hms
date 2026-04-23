@@ -79,23 +79,23 @@ const AdminDashboard = () => {
           </div>
 
           <div className="card">
-            <h3 className="text-xl font-bold text-dark mb-4">
+            <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-4">
               Recent Appointments
             </h3>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-gray-200">
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600">
+                  <tr className="border-b border-gray-200 dark:border-slate-700">
+                    <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
                       Patient
                     </th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600">
+                    <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
                       Doctor
                     </th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600">
+                    <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
                       Date
                     </th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600">
+                    <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
                       Status
                     </th>
                   </tr>
@@ -105,13 +105,13 @@ const AdminDashboard = () => {
                     <tr
                       key={apt._id}
                       className="border-b border-gray-100 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
-                      <td className="py-3 px-4">
+                      <td className="py-3 px-4 text-dark dark:text-slate-100">
                         {apt.patientId?.userId?.name || "N/A"}
                       </td>
-                      <td className="py-3 px-4">
+                      <td className="py-3 px-4 text-dark dark:text-slate-100">
                         {apt.doctorId?.userId?.name || "N/A"}
                       </td>
-                      <td className="py-3 px-4">
+                      <td className="py-3 px-4 text-dark dark:text-slate-100">
                         {new Date(apt.appointmentDate).toLocaleDateString()}
                       </td>
                       <td className="py-3 px-4">

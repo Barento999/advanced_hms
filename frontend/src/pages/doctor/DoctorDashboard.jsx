@@ -64,7 +64,7 @@ const DoctorDashboard = () => {
                 <StatCardSkeleton />
               </div>
               <div className="card">
-                <h3 className="text-xl font-bold text-dark mb-4">
+                <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-4">
                   Upcoming Appointments
                 </h3>
                 <ListSkeleton items={5} />
@@ -104,27 +104,29 @@ const DoctorDashboard = () => {
               </div>
 
               <div className="card">
-                <h3 className="text-xl font-bold text-dark mb-4">
+                <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-4">
                   Upcoming Appointments
                 </h3>
                 <div className="space-y-4">
                   {appointments.map((apt) => (
                     <div
                       key={apt._id}
-                      className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                      className="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-700/30 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-700/50 transition-colors">
                       <div className="flex items-center gap-4">
                         <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white font-bold">
                           {apt.patientId?.userId?.name?.charAt(0) || "P"}
                         </div>
                         <div>
-                          <h4 className="font-semibold text-dark">
+                          <h4 className="font-semibold text-dark dark:text-slate-100">
                             {apt.patientId?.userId?.name || "Patient"}
                           </h4>
-                          <p className="text-sm text-gray-500">{apt.reason}</p>
+                          <p className="text-sm text-gray-500 dark:text-slate-400">
+                            {apt.reason}
+                          </p>
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm font-medium text-gray-700">
+                        <p className="text-sm font-medium text-gray-700 dark:text-slate-300">
                           {new Date(apt.appointmentDate).toLocaleDateString()}
                         </p>
                         <span className={`badge badge-${apt.status} mt-1`}>

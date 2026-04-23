@@ -70,14 +70,14 @@ const MedicalRecords = () => {
 
         <div className="p-8 mt-20">
           <div className="max-w-4xl mx-auto card">
-            <h2 className="text-2xl font-bold text-dark mb-6">
+            <h2 className="text-2xl font-bold text-dark dark:text-slate-100 mb-6">
               Add Medical Record
             </h2>
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                     Patient ID
                   </label>
                   <input
@@ -93,7 +93,7 @@ const MedicalRecords = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                     Appointment ID (Optional)
                   </label>
                   <input
@@ -112,7 +112,7 @@ const MedicalRecords = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                   Diagnosis
                 </label>
                 <input
@@ -128,7 +128,7 @@ const MedicalRecords = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                   Symptoms (comma separated)
                 </label>
                 <input
@@ -144,7 +144,7 @@ const MedicalRecords = () => {
 
               <div>
                 <div className="flex justify-between items-center mb-4">
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300">
                     Prescription
                   </label>
                   <button
@@ -159,7 +159,7 @@ const MedicalRecords = () => {
                 {formData.prescription.map((item, index) => (
                   <div
                     key={index}
-                    className="grid grid-cols-2 gap-4 mb-4 p-4 bg-gray-50 rounded-xl">
+                    className="grid grid-cols-2 gap-4 mb-4 p-4 bg-gray-50 dark:bg-slate-700/30 rounded-xl">
                     <input
                       type="text"
                       className="input-field"
@@ -217,7 +217,7 @@ const MedicalRecords = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                   Additional Notes
                 </label>
                 <textarea
