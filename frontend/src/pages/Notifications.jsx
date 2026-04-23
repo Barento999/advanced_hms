@@ -1,7 +1,8 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Bell, Check, CheckCheck, Trash2 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
+import { ListSkeleton } from "../components/LoadingSkeleton";
 import { NotificationContext } from "../context/SocketContext";
 import api from "../utils/api";
 import toast from "react-hot-toast";
@@ -9,9 +10,14 @@ import toast from "react-hot-toast";
 const Notifications = () => {
   const { notifications, fetchNotifications, markAsRead } =
     useContext(NotificationContext);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchNotifications();
+    const loadNotifications = async () => {
+      await fetchNotifications();
+      setLoading(false);
+    };
+    loadNotifications();
   }, []);
 
   const handleMarkAsRead = async (notificationId) => {
@@ -81,7 +87,11 @@ const Notifications = () => {
             )}
           </div>
 
-          {notifications.length === 0 ? (
+          {loading ? (
+            <div className="card">
+              <ListSkeleton items={6} />
+            </div>
+          ) : notifications.length === 0 ? (
             <div className="card text-center py-16">
               <Bell size={64} className="mx-auto mb-4 text-gray-300" />
               <h3 className="text-xl font-semibold text-gray-600 mb-2">

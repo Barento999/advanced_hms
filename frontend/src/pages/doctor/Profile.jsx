@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
+import { ProfileSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
 
@@ -72,9 +73,7 @@ const Profile = () => {
         <Sidebar />
         <div className="flex-1 ml-64">
           <Navbar />
-          <div className="p-8 mt-20 flex justify-center items-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-          </div>
+          <ProfileSkeleton />
         </div>
       </div>
     );

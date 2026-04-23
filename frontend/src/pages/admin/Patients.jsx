@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Trash2, ToggleLeft, ToggleRight } from "lucide-react";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
+import { TableSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
 
@@ -59,9 +60,7 @@ const Patients = () => {
             </h2>
 
             {loading ? (
-              <div className="flex justify-center py-8">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-              </div>
+              <TableSkeleton rows={8} />
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full">

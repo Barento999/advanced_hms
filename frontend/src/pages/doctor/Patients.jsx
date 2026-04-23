@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { User, Phone, Mail } from "lucide-react";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
+import { CardSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
 
@@ -35,8 +36,13 @@ const Patients = () => {
             <h2 className="text-2xl font-bold text-dark mb-6">My Patients</h2>
 
             {loading ? (
-              <div className="flex justify-center py-8">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <CardSkeleton />
+                <CardSkeleton />
+                <CardSkeleton />
+                <CardSkeleton />
+                <CardSkeleton />
+                <CardSkeleton />
               </div>
             ) : patients.length === 0 ? (
               <div className="text-center py-12">
