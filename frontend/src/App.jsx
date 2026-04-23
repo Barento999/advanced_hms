@@ -12,6 +12,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 // Auth Pages
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Notifications from "./pages/Notifications";
 
 // Admin Pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -22,6 +23,7 @@ import AdminAppointments from "./pages/admin/Appointments";
 
 // Doctor Pages
 import DoctorDashboard from "./pages/doctor/DoctorDashboard";
+import DoctorProfile from "./pages/doctor/Profile";
 import DoctorAppointments from "./pages/doctor/Appointments";
 import DoctorPatients from "./pages/doctor/Patients";
 import DoctorMedicalRecords from "./pages/doctor/MedicalRecords";
@@ -29,6 +31,7 @@ import DoctorSchedule from "./pages/doctor/Schedule";
 
 // Patient Pages
 import PatientDashboard from "./pages/patient/PatientDashboard";
+import PatientProfile from "./pages/patient/Profile";
 import BookAppointment from "./pages/patient/BookAppointment";
 import MyAppointments from "./pages/patient/MyAppointments";
 import PatientMedicalRecords from "./pages/patient/MedicalRecords";
@@ -136,6 +139,14 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/admin/notifications"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <Notifications />
+            </ProtectedRoute>
+          }
+        />
 
         {/* Doctor Routes */}
         <Route
@@ -143,6 +154,14 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={["doctor"]}>
               <DoctorDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/doctor/profile"
+          element={
+            <ProtectedRoute allowedRoles={["doctor"]}>
+              <DoctorProfile />
             </ProtectedRoute>
           }
         />
@@ -178,6 +197,14 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/doctor/notifications"
+          element={
+            <ProtectedRoute allowedRoles={["doctor"]}>
+              <Notifications />
+            </ProtectedRoute>
+          }
+        />
 
         {/* Patient Routes */}
         <Route
@@ -185,6 +212,14 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={["patient"]}>
               <PatientDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/patient/profile"
+          element={
+            <ProtectedRoute allowedRoles={["patient"]}>
+              <PatientProfile />
             </ProtectedRoute>
           }
         />
@@ -217,6 +252,14 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={["patient"]}>
               <Payments />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/patient/notifications"
+          element={
+            <ProtectedRoute allowedRoles={["patient"]}>
+              <Notifications />
             </ProtectedRoute>
           }
         />

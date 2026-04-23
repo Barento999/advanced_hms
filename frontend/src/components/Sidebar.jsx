@@ -2,11 +2,13 @@ import { Link, useLocation } from "react-router-dom";
 import {
   Home,
   Users,
+  User,
   Calendar,
   FileText,
   CreditCard,
   Settings,
   LogOut,
+  Bell,
 } from "lucide-react";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
@@ -22,6 +24,7 @@ const Sidebar = () => {
         { icon: Users, label: "Doctors", path: "/admin/doctors" },
         { icon: Users, label: "Patients", path: "/admin/patients" },
         { icon: Calendar, label: "Appointments", path: "/admin/appointments" },
+        { icon: Bell, label: "Notifications", path: "/admin/notifications" },
       ];
     } else if (user?.role === "doctor") {
       return [
@@ -30,6 +33,7 @@ const Sidebar = () => {
         { icon: Users, label: "Patients", path: "/doctor/patients" },
         { icon: FileText, label: "Medical Records", path: "/doctor/records" },
         { icon: Settings, label: "Schedule", path: "/doctor/schedule" },
+        { icon: Bell, label: "Notifications", path: "/doctor/notifications" },
       ];
     } else {
       return [
@@ -42,6 +46,7 @@ const Sidebar = () => {
         },
         { icon: FileText, label: "Medical Records", path: "/patient/records" },
         { icon: CreditCard, label: "Payments", path: "/patient/payments" },
+        { icon: Bell, label: "Notifications", path: "/patient/notifications" },
       ];
     }
   };
@@ -79,6 +84,30 @@ const Sidebar = () => {
       </nav>
 
       <div className="p-4 border-t border-orange-500/30">
+        {user?.role === "patient" && (
+          <Link
+            to="/patient/profile"
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl mb-2 transition-all duration-200 ${
+              location.pathname === "/patient/profile"
+                ? "bg-white text-primary shadow-lg transform scale-105"
+                : "text-white/90 hover:bg-white/20 hover:text-white"
+            }`}>
+            <User size={20} />
+            <span className="font-medium">Profile</span>
+          </Link>
+        )}
+        {user?.role === "doctor" && (
+          <Link
+            to="/doctor/profile"
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl mb-2 transition-all duration-200 ${
+              location.pathname === "/doctor/profile"
+                ? "bg-white text-primary shadow-lg transform scale-105"
+                : "text-white/90 hover:bg-white/20 hover:text-white"
+            }`}>
+            <User size={20} />
+            <span className="font-medium">Profile</span>
+          </Link>
+        )}
         <button
           onClick={logout}
           className="flex items-center gap-3 px-4 py-3 rounded-xl text-white/90 hover:bg-red-500 hover:text-white w-full transition-all duration-200">

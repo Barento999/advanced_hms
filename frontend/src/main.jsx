@@ -3,14 +3,14 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.css";
 import { AuthProvider } from "./context/AuthContext";
-import { SocketProvider } from "./context/SocketContext";
+import { NotificationProvider } from "./context/SocketContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <AuthProvider>
-      <SocketProvider>
+      <NotificationProvider>
         <App />
-      </SocketProvider>
+      </NotificationProvider>
     </AuthProvider>
   </React.StrictMode>,
 );

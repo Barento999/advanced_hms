@@ -8,8 +8,10 @@ export const sendNotification = async (io, userId, notificationData) => {
       ...notificationData,
     });
 
-    // Send real-time notification via Socket.io
-    io.to(userId.toString()).emit("notification", notification);
+    console.log(
+      `✅ Notification saved for user ${userId}:`,
+      notificationData.title,
+    );
 
     return notification;
   } catch (error) {

@@ -1,54 +1,68 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { io } from "socket.io-client";
 import { AuthContext } from "./AuthContext";
+import api from "../utils/api";
 import toast from "react-hot-toast";
 
-export const SocketContext = createContext();
+export const NotificationContext = createContext({
+  notifications: [],
+  unreadCount: 0,
+  fetchNotifications: () => {},
+  markAsRead: () => {},
+});
 
-export const SocketProvider = ({ children }) => {
-  const [socket, setSocket] = useState(null);
+export const NotificationProvider = ({ children }) => {
   const [notifications, setNotifications] = useState([]);
-  const { user } = useContext(AuthContext);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const { user, loading } = useContext(AuthContext);
+  const [lastCount, setLastCount] = useState(0);
 
-  useEffect(() => {
-    if (user) {
-      // Connect to Socket.io server
-      const newSocket = io("http://localhost:5000");
+  const fetchNotifications = async () => {
+    if (!user) return;
 
-      newSocket.on("connect", () => {
-        console.log("Connected to Socket.io server");
-        // Register user with their ID
-        newSocket.emit("register", user._id);
-      });
+    try {
+      const { data } = await api.get("/notifications");
+      setNotifications(data.data);
+      setUnreadCount(data.unreadCount);
 
-      // Listen for notifications
-      newSocket.on("notification", (notification) => {
-        console.log("Received notification:", notification);
-        setNotifications((prev) => [notification, ...prev]);
-
-        // Show toast notification
-        toast.success(notification.message, {
-          duration: 5000,
-          icon: "🔔",
-        });
-      });
-
-      newSocket.on("disconnect", () => {
-        console.log("Disconnected from Socket.io server");
-      });
-
-      setSocket(newSocket);
-
-      // Cleanup on unmount
-      return () => {
-        newSocket.close();
-      };
+      // Show toast for new notifications
+      if (data.unreadCount > lastCount && lastCount > 0) {
+        const newNotifications = data.data.filter((n) => !n.isRead);
+        if (newNotifications.length > 0) {
+          toast.success(newNotifications[0].message, {
+            duration: 5000,
+            icon: "🔔",
+          });
+        }
+      }
+      setLastCount(data.unreadCount);
+    } catch (error) {
+      console.error("Failed to fetch notifications:", error);
     }
-  }, [user]);
+  };
+
+  const markAsRead = async (notificationId) => {
+    try {
+      await api.patch(`/notifications/${notificationId}/read`);
+      fetchNotifications();
+    } catch (error) {
+      console.error("Failed to mark notification as read:", error);
+    }
+  };
+
+  // Poll for notifications every 10 seconds
+  useEffect(() => {
+    if (loading || !user) return;
+
+    fetchNotifications();
+    const interval = setInterval(fetchNotifications, 10000);
+
+    return () => clearInterval(interval);
+  }, [user, loading]);
 
   return (
-    <SocketContext.Provider value={{ socket, notifications, setNotifications }}>
+    <NotificationContext.Provider
+      value={{ notifications, unreadCount, fetchNotifications, markAsRead }}>
       {children}
-    </SocketContext.Provider>
+    </NotificationContext.Provider>
   );
 };

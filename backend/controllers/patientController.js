@@ -156,17 +156,28 @@ export const bookAppointment = async (req, res) => {
       patientId: patient._id,
     });
 
+    console.log("Appointment created:", appointment._id);
+
     // Get io instance
     const io = req.app.get("io");
+    console.log("IO instance:", io ? "Found" : "Not found");
 
-    // Send notification to doctor
-    const doctor = await Doctor.findById(req.body.doctorId).populate("userId");
-    if (doctor && doctor.userId) {
-      await sendNotification(io, doctor.userId._id, {
+    // Send notification to doctor (reuse doctor variable from above)
+    const doctorWithUser = await Doctor.findById(req.body.doctorId).populate(
+      "userId",
+    );
+
+    console.log("Doctor found:", doctorWithUser ? "Yes" : "No");
+    console.log("Doctor userId:", doctorWithUser?.userId?._id);
+
+    if (doctorWithUser && doctorWithUser.userId) {
+      console.log("Sending notification to doctor:", doctorWithUser.userId._id);
+      await sendNotification(io, doctorWithUser.userId._id, {
         title: "New Appointment Request",
         message: `New appointment request from ${req.user.name}`,
         type: "appointment",
       });
+      console.log("Notification sent successfully");
     }
 
     res.status(201).json({

@@ -1,12 +1,17 @@
 import { Bell, User } from "lucide-react";
 import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import { SocketContext } from "../context/SocketContext";
+import { NotificationContext } from "../context/SocketContext";
 
 const Navbar = () => {
   const { user } = useContext(AuthContext);
-  const { notifications } = useContext(SocketContext);
+  const { notifications, unreadCount } = useContext(NotificationContext) || {
+    notifications: [],
+    unreadCount: 0,
+  };
   const [showNotifications, setShowNotifications] = useState(false);
+  const navigate = useNavigate();
 
   // Role-specific greeting messages
   const getRoleGreeting = () => {
@@ -54,9 +59,9 @@ const Navbar = () => {
               size={24}
               className="text-gray-600 group-hover:text-primary transition-colors"
             />
-            {notifications.length > 0 && (
+            {unreadCount > 0 && (
               <span className="absolute top-2 right-2 w-5 h-5 bg-danger text-white text-xs rounded-full flex items-center justify-center font-bold">
-                {notifications.length}
+                {unreadCount}
               </span>
             )}
           </button>
@@ -77,7 +82,11 @@ const Navbar = () => {
                   {notifications.slice(0, 10).map((notif, index) => (
                     <div
                       key={index}
-                      className="p-4 hover:bg-gray-50 transition-colors">
+                      onClick={() => {
+                        setShowNotifications(false);
+                        navigate(`/${user?.role}/notifications`);
+                      }}
+                      className="p-4 hover:bg-gray-50 transition-colors cursor-pointer">
                       <h4 className="font-semibold text-dark text-sm">
                         {notif.title}
                       </h4>
@@ -89,6 +98,18 @@ const Navbar = () => {
                       </p>
                     </div>
                   ))}
+                </div>
+              )}
+              {notifications.length > 0 && (
+                <div className="p-3 border-t border-gray-200">
+                  <button
+                    onClick={() => {
+                      setShowNotifications(false);
+                      navigate(`/${user?.role}/notifications`);
+                    }}
+                    className="w-full text-center text-primary hover:text-orange-600 font-semibold text-sm">
+                    View All Notifications
+                  </button>
                 </div>
               )}
             </div>

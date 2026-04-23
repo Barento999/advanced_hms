@@ -11,6 +11,7 @@ import authRoutes from "./routes/authRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import doctorRoutes from "./routes/doctorRoutes.js";
 import patientRoutes from "./routes/patientRoutes.js";
+import notificationRoutes from "./routes/notificationRoutes.js";
 
 dotenv.config();
 
@@ -43,6 +44,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/doctor", doctorRoutes);
 app.use("/api/patient", patientRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 // Health check
 app.get("/health", (req, res) => {
@@ -61,6 +63,7 @@ io.on("connection", (socket) => {
   // Register user
   socket.on("register", (userId) => {
     userSockets.set(userId, socket.id);
+    socket.join(userId); // Join a room with userId
     console.log(`User ${userId} registered with socket ${socket.id}`);
   });
 
@@ -77,8 +80,9 @@ io.on("connection", (socket) => {
   });
 });
 
-// Export userSockets for use in controllers
-export { userSockets };
+// Make io and userSockets globally accessible
+global.io = io;
+global.userSockets = userSockets;
 
 const PORT = process.env.PORT || 5000;
 
