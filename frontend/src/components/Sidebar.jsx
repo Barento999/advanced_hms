@@ -9,6 +9,7 @@ import {
   Settings,
   LogOut,
   Bell,
+  Star,
 } from "lucide-react";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
@@ -33,6 +34,7 @@ const Sidebar = () => {
         { icon: Users, label: "Patients", path: "/doctor/patients" },
         { icon: FileText, label: "Medical Records", path: "/doctor/records" },
         { icon: Settings, label: "Schedule", path: "/doctor/schedule" },
+        { icon: Star, label: "Reviews", path: "/doctor/reviews" },
         { icon: Bell, label: "Notifications", path: "/doctor/notifications" },
       ];
     } else {
@@ -46,6 +48,7 @@ const Sidebar = () => {
         },
         { icon: FileText, label: "Medical Records", path: "/patient/records" },
         { icon: CreditCard, label: "Payments", path: "/patient/payments" },
+        { icon: Star, label: "Reviews", path: "/patient/reviews" },
         { icon: Bell, label: "Notifications", path: "/patient/notifications" },
       ];
     }

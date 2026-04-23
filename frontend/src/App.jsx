@@ -28,6 +28,7 @@ import DoctorAppointments from "./pages/doctor/Appointments";
 import DoctorPatients from "./pages/doctor/Patients";
 import DoctorMedicalRecords from "./pages/doctor/MedicalRecords";
 import DoctorSchedule from "./pages/doctor/Schedule";
+import DoctorReviews from "./pages/doctor/MyReviews";
 
 // Patient Pages
 import PatientDashboard from "./pages/patient/PatientDashboard";
@@ -36,6 +37,7 @@ import BookAppointment from "./pages/patient/BookAppointment";
 import MyAppointments from "./pages/patient/MyAppointments";
 import PatientMedicalRecords from "./pages/patient/MedicalRecords";
 import Payments from "./pages/patient/Payments";
+import Reviews from "./pages/patient/Reviews";
 
 function App() {
   const { user, loading } = useContext(AuthContext);
@@ -198,6 +200,14 @@ function App() {
           }
         />
         <Route
+          path="/doctor/reviews"
+          element={
+            <ProtectedRoute allowedRoles={["doctor"]}>
+              <DoctorReviews />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/doctor/notifications"
           element={
             <ProtectedRoute allowedRoles={["doctor"]}>
@@ -252,6 +262,14 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={["patient"]}>
               <Payments />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/patient/reviews"
+          element={
+            <ProtectedRoute allowedRoles={["patient"]}>
+              <Reviews />
             </ProtectedRoute>
           }
         />
