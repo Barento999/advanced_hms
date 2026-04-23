@@ -58,27 +58,27 @@ const UserManagement = () => {
 
         <div className="p-8 mt-20">
           <div className="card">
-            <h2 className="text-2xl font-bold text-dark mb-6">
+            <h2 className="text-2xl font-bold text-dark dark:text-slate-100 mb-6">
               User Management
             </h2>
 
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-gray-200">
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600">
+                  <tr className="border-b border-gray-200 dark:border-slate-700">
+                    <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
                       Name
                     </th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600">
+                    <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
                       Email
                     </th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600">
+                    <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
                       Role
                     </th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600">
+                    <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
                       Status
                     </th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600">
+                    <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
                       Actions
                     </th>
                   </tr>
@@ -88,10 +88,14 @@ const UserManagement = () => {
                     <tr
                       key={user._id}
                       className="border-b border-gray-100 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
-                      <td className="py-3 px-4">{user.name}</td>
-                      <td className="py-3 px-4">{user.email}</td>
+                      <td className="py-3 px-4 text-dark dark:text-slate-100">
+                        {user.name}
+                      </td>
+                      <td className="py-3 px-4 text-dark dark:text-slate-100">
+                        {user.email}
+                      </td>
                       <td className="py-3 px-4">
-                        <span className="badge bg-orange-100 text-primary">
+                        <span className="badge bg-orange-100 dark:bg-orange-900/30 text-primary dark:text-orange-400">
                           {user.role}
                         </span>
                       </td>
@@ -105,7 +109,7 @@ const UserManagement = () => {
                         <div className="flex gap-2">
                           <button
                             onClick={() => handleToggleStatus(user._id)}
-                            className="p-2 hover:bg-gray-200 rounded-lg transition-colors">
+                            className="p-2 hover:bg-gray-200 dark:hover:bg-slate-700 text-gray-600 dark:text-slate-400 rounded-lg transition-colors">
                             {user.isActive ? (
                               <ToggleRight size={20} />
                             ) : (
@@ -114,7 +118,7 @@ const UserManagement = () => {
                           </button>
                           <button
                             onClick={() => handleDelete(user._id)}
-                            className="p-2 hover:bg-red-100 text-danger rounded-lg transition-colors">
+                            className="p-2 hover:bg-red-100 dark:hover:bg-red-900/30 text-danger dark:text-red-400 rounded-lg transition-colors">
                             <Trash2 size={20} />
                           </button>
                         </div>

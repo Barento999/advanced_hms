@@ -10,6 +10,19 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
       rel="stylesheet" />
     <title>Healthcare Management System</title>
+    <script>
+      // Prevent FOUC by applying theme before React loads
+      (function () {
+        try {
+          const darkMode = localStorage.getItem("darkMode");
+          if (darkMode && JSON.parse(darkMode)) {
+            document.documentElement.classList.add("dark");
+          }
+        } catch (e) {
+          console.error("Error applying initial theme:", e);
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

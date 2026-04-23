@@ -30,8 +30,8 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-secondary p-4">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-8 border border-border">
+    <div className="min-h-screen flex items-center justify-center bg-secondary dark:bg-slate-900 p-4">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl w-full max-w-md p-8 border border-border dark:border-slate-700">
         <div className="text-center mb-8">
           <div className="w-16 h-16 bg-primary rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg">
             <svg
@@ -47,13 +47,17 @@ const Register = () => {
               />
             </svg>
           </div>
-          <h1 className="text-3xl font-bold text-dark">Create Account</h1>
-          <p className="text-muted mt-2">Join our healthcare platform</p>
+          <h1 className="text-3xl font-bold text-dark dark:text-slate-100">
+            Create Account
+          </h1>
+          <p className="text-muted dark:text-slate-400 mt-2">
+            Join our healthcare platform
+          </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-dark mb-2">
+            <label className="block text-sm font-medium text-dark dark:text-slate-200 mb-2">
               Full Name
             </label>
             <input
@@ -69,7 +73,7 @@ const Register = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-dark mb-2">
+            <label className="block text-sm font-medium text-dark dark:text-slate-200 mb-2">
               Email
             </label>
             <input
@@ -85,7 +89,7 @@ const Register = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-dark mb-2">
+            <label className="block text-sm font-medium text-dark dark:text-slate-200 mb-2">
               Phone
             </label>
             <input
@@ -100,7 +104,7 @@ const Register = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-dark mb-2">
+            <label className="block text-sm font-medium text-dark dark:text-slate-200 mb-2">
               Password
             </label>
             <input
@@ -116,7 +120,7 @@ const Register = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-dark mb-2">
+            <label className="block text-sm font-medium text-dark dark:text-slate-200 mb-2">
               Register as
             </label>
             <select
@@ -138,11 +142,11 @@ const Register = () => {
           </button>
         </form>
 
-        <p className="text-center text-muted mt-6">
+        <p className="text-center text-muted dark:text-slate-400 mt-6">
           Already have an account?{" "}
           <Link
             to="/login"
-            className="text-primary font-medium hover:text-blue-800 transition-colors">
+            className="text-primary font-medium hover:text-blue-800 dark:hover:text-blue-400 transition-colors">
             Sign in
           </Link>
         </p>

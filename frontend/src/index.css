@@ -9,8 +9,19 @@
 }
 
 @layer base {
+  html {
+    @apply transition-colors duration-200;
+  }
+
   body {
-    @apply font-sans bg-secondary dark:bg-slate-900 text-dark dark:text-slate-100 transition-colors duration-200;
+    @apply font-sans transition-colors duration-200;
+    background-color: #f8fafc;
+    color: #111827;
+  }
+
+  .dark body {
+    background-color: #0f172a;
+    color: #f1f5f9;
   }
 }
 
@@ -32,15 +43,83 @@
   }
 
   .btn-secondary {
-    @apply bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-200 px-6 py-2.5 rounded-xl font-medium hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors duration-200 border border-border dark:border-slate-600;
+    @apply bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-200 px-6 py-2.5 rounded-xl font-medium transition-colors duration-200 border;
+    border-color: #e5e7eb;
+  }
+
+  .dark .btn-secondary {
+    border-color: #475569;
+    background-color: #1e293b;
+  }
+
+  .btn-secondary:hover {
+    background-color: #f9fafb;
+  }
+
+  .dark .btn-secondary:hover {
+    background-color: #334155;
   }
 
   .card {
-    @apply bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 p-6 border border-border dark:border-slate-700;
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    @apply rounded-xl shadow-sm p-6 transition-colors duration-200;
+  }
+
+  .dark .card {
+    background-color: #1e293b;
+    border-color: #475569;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
   }
 
   .input-field {
-    @apply w-full px-4 py-2.5 border border-border dark:border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-white dark:bg-slate-800 text-dark dark:text-slate-100 placeholder:text-gray-400 dark:placeholder:text-slate-500;
+    width: 100%;
+    padding: 0.625rem 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    background-color: white;
+    color: #111827;
+    transition: all 0.2s;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent;
+  }
+
+  .input-field::placeholder {
+    color: #9ca3af;
+  }
+
+  .dark .input-field {
+    background-color: #1e293b;
+    border-color: #475569;
+    color: #f1f5f9;
+  }
+
+  .dark .input-field::placeholder {
+    color: #64748b;
+  }
+
+  .input {
+    width: 100%;
+    padding: 0.625rem 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    background-color: white;
+    color: #111827;
+    transition: all 0.2s;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent;
+  }
+
+  .input::placeholder {
+    color: #9ca3af;
+  }
+
+  .dark .input {
+    background-color: #1e293b;
+    border-color: #475569;
+    color: #f1f5f9;
+  }
+
+  .dark .input::placeholder {
+    color: #64748b;
   }
 
   .badge {

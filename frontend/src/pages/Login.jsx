@@ -31,8 +31,8 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-secondary p-4">
-      <div className="bg-white rounded-3xl shadow-xl w-full max-w-md overflow-hidden border border-border">
+    <div className="min-h-screen flex items-center justify-center bg-secondary dark:bg-slate-900 p-4">
+      <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-xl w-full max-w-md overflow-hidden border border-border dark:border-slate-700">
         {/* Header Section */}
         <div className="bg-primary p-8 text-center">
           <div className="w-20 h-20 bg-white rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg">
@@ -57,16 +57,18 @@ const Login = () => {
         <div className="p-8">
           {/* Error Alert */}
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 rounded-lg flex items-start gap-3 animate-shake">
+            <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 rounded-lg flex items-start gap-3 animate-shake">
               <AlertCircle
-                className="text-red-500 flex-shrink-0 mt-0.5"
+                className="text-red-500 dark:text-red-400 flex-shrink-0 mt-0.5"
                 size={20}
               />
               <div>
-                <h3 className="text-red-800 font-semibold text-sm">
+                <h3 className="text-red-800 dark:text-red-300 font-semibold text-sm">
                   Login Failed
                 </h3>
-                <p className="text-red-600 text-sm mt-1">{error}</p>
+                <p className="text-red-600 dark:text-red-400 text-sm mt-1">
+                  {error}
+                </p>
               </div>
             </div>
           )}
@@ -74,17 +76,17 @@ const Login = () => {
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Email Field */}
             <div>
-              <label className="block text-sm font-semibold text-dark mb-2">
+              <label className="block text-sm font-semibold text-dark dark:text-slate-200 mb-2">
                 Email Address
               </label>
               <div className="relative">
                 <Mail
-                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted"
+                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted dark:text-slate-400"
                   size={20}
                 />
                 <input
                   type="email"
-                  className="w-full pl-11 pr-4 py-3 border-2 border-border rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                  className="w-full pl-11 pr-4 py-3 border-2 border-border dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
                   placeholder="Enter your email"
                   value={formData.email}
                   onChange={(e) =>
@@ -98,17 +100,17 @@ const Login = () => {
 
             {/* Password Field */}
             <div>
-              <label className="block text-sm font-semibold text-dark mb-2">
+              <label className="block text-sm font-semibold text-dark dark:text-slate-200 mb-2">
                 Password
               </label>
               <div className="relative">
                 <Lock
-                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted"
+                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted dark:text-slate-400"
                   size={20}
                 />
                 <input
                   type="password"
-                  className="w-full pl-11 pr-4 py-3 border-2 border-border rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                  className="w-full pl-11 pr-4 py-3 border-2 border-border dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
                   placeholder="Enter your password"
                   value={formData.password}
                   onChange={(e) =>
@@ -139,10 +141,10 @@ const Login = () => {
           {/* Divider */}
           <div className="relative my-6">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-border"></div>
+              <div className="w-full border-t border-border dark:border-slate-600"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white text-muted">
+              <span className="px-4 bg-white dark:bg-slate-800 text-muted dark:text-slate-400">
                 New to HealthCare?
               </span>
             </div>
@@ -152,7 +154,7 @@ const Login = () => {
           <div className="text-center">
             <Link
               to="/register"
-              className="text-primary font-semibold hover:text-blue-800 transition-colors inline-flex items-center gap-1">
+              className="text-primary font-semibold hover:text-blue-800 dark:hover:text-blue-400 transition-colors inline-flex items-center gap-1">
               Create an account
               <svg
                 className="w-4 h-4"

@@ -42,7 +42,9 @@ const Appointments = () => {
         <div className="p-8 mt-20">
           <div className="card">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-dark">All Appointments</h2>
+              <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
+                All Appointments
+              </h2>
 
               <div className="flex gap-2">
                 {["all", "pending", "confirmed", "completed", "cancelled"].map(
@@ -53,7 +55,7 @@ const Appointments = () => {
                       className={`px-4 py-2 rounded-xl font-medium transition-colors ${
                         filter === status
                           ? "bg-primary text-white"
-                          : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                          : "bg-gray-200 dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-gray-300 dark:hover:bg-slate-600"
                       }`}>
                       {status.charAt(0).toUpperCase() + status.slice(1)}
                     </button>
@@ -68,23 +70,23 @@ const Appointments = () => {
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="border-b border-gray-200">
-                      <th className="text-left py-3 px-4 font-semibold text-gray-600">
+                    <tr className="border-b border-gray-200 dark:border-slate-700">
+                      <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
                         Patient
                       </th>
-                      <th className="text-left py-3 px-4 font-semibold text-gray-600">
+                      <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
                         Doctor
                       </th>
-                      <th className="text-left py-3 px-4 font-semibold text-gray-600">
+                      <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
                         Date
                       </th>
-                      <th className="text-left py-3 px-4 font-semibold text-gray-600">
+                      <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
                         Time
                       </th>
-                      <th className="text-left py-3 px-4 font-semibold text-gray-600">
+                      <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
                         Reason
                       </th>
-                      <th className="text-left py-3 px-4 font-semibold text-gray-600">
+                      <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
                         Status
                       </th>
                     </tr>
@@ -94,7 +96,7 @@ const Appointments = () => {
                       <tr>
                         <td
                           colSpan="6"
-                          className="text-center py-8 text-gray-500">
+                          className="text-center py-8 text-gray-500 dark:text-slate-400">
                           No appointments found
                         </td>
                       </tr>
@@ -103,19 +105,21 @@ const Appointments = () => {
                         <tr
                           key={apt._id}
                           className="border-b border-gray-100 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
-                          <td className="py-3 px-4">
+                          <td className="py-3 px-4 text-dark dark:text-slate-100">
                             {apt.patientId?.userId?.name || "N/A"}
                           </td>
-                          <td className="py-3 px-4">
+                          <td className="py-3 px-4 text-dark dark:text-slate-100">
                             {apt.doctorId?.userId?.name || "N/A"}
                           </td>
-                          <td className="py-3 px-4">
+                          <td className="py-3 px-4 text-dark dark:text-slate-100">
                             {new Date(apt.appointmentDate).toLocaleDateString()}
                           </td>
-                          <td className="py-3 px-4">
+                          <td className="py-3 px-4 text-dark dark:text-slate-100">
                             {apt.timeSlot?.startTime} - {apt.timeSlot?.endTime}
                           </td>
-                          <td className="py-3 px-4">{apt.reason}</td>
+                          <td className="py-3 px-4 text-dark dark:text-slate-100">
+                            {apt.reason}
+                          </td>
                           <td className="py-3 px-4">
                             <span className={`badge badge-${apt.status}`}>
                               {apt.status}

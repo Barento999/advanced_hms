@@ -4,26 +4,69 @@ export const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
   const [darkMode, setDarkMode] = useState(() => {
-    const saved = localStorage.getItem("darkMode");
-    return saved ? JSON.parse(saved) : false;
+    try {
+      const saved = localStorage.getItem("darkMode");
+      return saved ? JSON.parse(saved) : false;
+    } catch (error) {
+      console.error("Error reading darkMode from localStorage:", error);
+      return false;
+    }
   });
 
+  // Apply theme immediately on mount
   useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add("dark");
+    const htmlElement = document.documentElement;
+    const saved = localStorage.getItem("darkMode");
+    const isDark = saved ? JSON.parse(saved) : false;
+
+    if (isDark) {
+      htmlElement.classList.add("dark");
     } else {
-      document.documentElement.classList.remove("dark");
+      htmlElement.classList.remove("dark");
     }
-    localStorage.setItem("darkMode", JSON.stringify(darkMode));
+  }, []);
+
+  useEffect(() => {
+    try {
+      const htmlElement = document.documentElement;
+
+      if (darkMode) {
+        htmlElement.classList.add("dark");
+      } else {
+        htmlElement.classList.remove("dark");
+      }
+
+      // Force a repaint to ensure styles are applied
+      setTimeout(() => {
+        document.body.style.display = "none";
+        document.body.offsetHeight; // Trigger reflow
+        document.body.style.display = "";
+      }, 0);
+
+      localStorage.setItem("darkMode", JSON.stringify(darkMode));
+      console.log("Dark mode updated:", darkMode);
+    } catch (error) {
+      console.error("Error updating dark mode:", error);
+    }
   }, [darkMode]);
 
   const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
+    console.log("toggleDarkMode called, current state:", darkMode);
+    setDarkMode((prev) => {
+      const newValue = !prev;
+      console.log("Setting darkMode to:", newValue);
+      return newValue;
+    });
   };
 
+  const value = {
+    darkMode,
+    toggleDarkMode,
+  };
+
+  console.log("ThemeProvider rendering with value:", value);
+
   return (
-    <ThemeContext.Provider value={{ darkMode, toggleDarkMode }}>
-      {children}
-    </ThemeContext.Provider>
+    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
   );
 };

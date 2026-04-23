@@ -57,13 +57,16 @@ const Navbar = () => {
       <div className="flex items-center gap-4">
         {/* Dark Mode Toggle */}
         <button
-          onClick={toggleDarkMode}
-          className="p-3 hover:bg-secondary dark:hover:bg-slate-700 rounded-xl transition-all duration-200"
+          onClick={() => {
+            console.log("Toggle clicked, current darkMode:", darkMode);
+            toggleDarkMode();
+          }}
+          className="p-3 hover:bg-secondary dark:hover:bg-slate-700 rounded-xl transition-all duration-200 border border-transparent hover:border-border dark:hover:border-slate-600"
           title={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}>
           {darkMode ? (
             <Sun size={24} className="text-yellow-400" />
           ) : (
-            <Moon size={24} className="text-muted" />
+            <Moon size={24} className="text-slate-600" />
           )}
         </button>
 

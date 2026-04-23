@@ -57,7 +57,7 @@ const Doctors = () => {
 
         <div className="p-8 mt-20">
           <div className="card">
-            <h2 className="text-2xl font-bold text-dark mb-6">
+            <h2 className="text-2xl font-bold text-dark dark:text-slate-100 mb-6">
               Doctor Management
             </h2>
 
@@ -67,20 +67,20 @@ const Doctors = () => {
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="border-b border-gray-200">
-                      <th className="text-left py-3 px-4 font-semibold text-gray-600">
+                    <tr className="border-b border-gray-200 dark:border-slate-700">
+                      <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
                         Name
                       </th>
-                      <th className="text-left py-3 px-4 font-semibold text-gray-600">
+                      <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
                         Email
                       </th>
-                      <th className="text-left py-3 px-4 font-semibold text-gray-600">
+                      <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
                         Phone
                       </th>
-                      <th className="text-left py-3 px-4 font-semibold text-gray-600">
+                      <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
                         Status
                       </th>
-                      <th className="text-left py-3 px-4 font-semibold text-gray-600">
+                      <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
                         Actions
                       </th>
                     </tr>
@@ -90,7 +90,7 @@ const Doctors = () => {
                       <tr>
                         <td
                           colSpan="5"
-                          className="text-center py-8 text-gray-500">
+                          className="text-center py-8 text-gray-500 dark:text-slate-400">
                           No doctors found
                         </td>
                       </tr>
@@ -99,9 +99,15 @@ const Doctors = () => {
                         <tr
                           key={doctor._id}
                           className="border-b border-gray-100 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
-                          <td className="py-3 px-4">{doctor.name}</td>
-                          <td className="py-3 px-4">{doctor.email}</td>
-                          <td className="py-3 px-4">{doctor.phone}</td>
+                          <td className="py-3 px-4 text-dark dark:text-slate-100">
+                            {doctor.name}
+                          </td>
+                          <td className="py-3 px-4 text-dark dark:text-slate-100">
+                            {doctor.email}
+                          </td>
+                          <td className="py-3 px-4 text-dark dark:text-slate-100">
+                            {doctor.phone}
+                          </td>
                           <td className="py-3 px-4">
                             <span
                               className={`badge ${doctor.isActive ? "badge-completed" : "badge-cancelled"}`}>
@@ -112,7 +118,7 @@ const Doctors = () => {
                             <div className="flex gap-2">
                               <button
                                 onClick={() => handleToggleStatus(doctor._id)}
-                                className="p-2 hover:bg-gray-200 rounded-lg transition-colors">
+                                className="p-2 hover:bg-gray-200 dark:hover:bg-slate-700 text-gray-600 dark:text-slate-400 rounded-lg transition-colors">
                                 {doctor.isActive ? (
                                   <ToggleRight size={20} />
                                 ) : (
@@ -121,7 +127,7 @@ const Doctors = () => {
                               </button>
                               <button
                                 onClick={() => handleDelete(doctor._id)}
-                                className="p-2 hover:bg-red-100 text-danger rounded-lg transition-colors">
+                                className="p-2 hover:bg-red-100 dark:hover:bg-red-900/30 text-danger dark:text-red-400 rounded-lg transition-colors">
                                 <Trash2 size={20} />
                               </button>
                             </div>
