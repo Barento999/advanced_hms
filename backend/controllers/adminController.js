@@ -51,18 +51,79 @@ export const getAllUsers = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
-    const { role } = req.query;
+    const { role, all } = req.query;
 
     const query = { isDeleted: false };
     if (role) {
       query.role = role;
     }
 
-    const users = await User.find(query)
+    let users;
+
+    // If 'all' parameter is provided, return all users without pagination
+    if (all === "true") {
+      users = await User.find(query)
+        .select("-password")
+        .sort({ createdAt: -1 });
+
+      // If role is doctor, populate with doctor profile information
+      if (role === "doctor") {
+        const userIds = users.map((user) => user._id);
+        const doctors = await Doctor.find({
+          userId: { $in: userIds },
+          isDeleted: false,
+        });
+
+        // Merge user and doctor data
+        users = users.map((user) => {
+          const doctorProfile = doctors.find(
+            (doc) => doc.userId.toString() === user._id.toString(),
+          );
+          return {
+            ...user.toObject(),
+            specialization: doctorProfile?.specialization || "N/A",
+            experience: doctorProfile?.experience || "N/A",
+            rating: doctorProfile?.rating || 0,
+            consultationFee: doctorProfile?.consultationFee || 0,
+          };
+        });
+      }
+
+      return res.json({
+        success: true,
+        data: users,
+      });
+    }
+
+    // Otherwise, return paginated results
+    users = await User.find(query)
       .select("-password")
       .skip(skip)
       .limit(limit)
       .sort({ createdAt: -1 });
+
+    // If role is doctor, populate with doctor profile information
+    if (role === "doctor") {
+      const userIds = users.map((user) => user._id);
+      const doctors = await Doctor.find({
+        userId: { $in: userIds },
+        isDeleted: false,
+      });
+
+      // Merge user and doctor data
+      users = users.map((user) => {
+        const doctorProfile = doctors.find(
+          (doc) => doc.userId.toString() === user._id.toString(),
+        );
+        return {
+          ...user.toObject(),
+          specialization: doctorProfile?.specialization || "N/A",
+          experience: doctorProfile?.experience || "N/A",
+          rating: doctorProfile?.rating || 0,
+          consultationFee: doctorProfile?.consultationFee || 0,
+        };
+      });
+    }
 
     const total = await User.countDocuments(query);
 
@@ -119,20 +180,41 @@ export const toggleUserStatus = async (req, res) => {
 
 export const getAllAppointments = async (req, res) => {
   try {
-    const { status, page = 1, limit = 10 } = req.query;
-    const skip = (page - 1) * limit;
+    const { status, page = 1, limit = 10, all } = req.query;
 
     const query = { isDeleted: false };
     if (status) query.status = status;
 
+    // If 'all' parameter is provided, return all appointments without pagination
+    if (all === "true") {
+      const appointments = await Appointment.find(query)
+        .populate({
+          path: "patientId",
+          populate: { path: "userId", select: "name email phone isActive" },
+        })
+        .populate({
+          path: "doctorId",
+          populate: { path: "userId", select: "name email phone isActive" },
+        })
+        .sort({ appointmentDate: -1 });
+
+      return res.json({
+        success: true,
+        data: appointments,
+      });
+    }
+
+    // Otherwise, return paginated results
+    const skip = (page - 1) * limit;
+
     const appointments = await Appointment.find(query)
       .populate({
         path: "patientId",
-        populate: { path: "userId", select: "name email phone" },
+        populate: { path: "userId", select: "name email phone isActive" },
       })
       .populate({
         path: "doctorId",
-        populate: { path: "userId", select: "name email phone" },
+        populate: { path: "userId", select: "name email phone isActive" },
       })
       .skip(skip)
       .limit(parseInt(limit))

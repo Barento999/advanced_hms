@@ -5,12 +5,14 @@ import Navbar from "../../components/Navbar";
 import EmptyState from "../../components/EmptyState";
 import ConfirmationModal from "../../components/ConfirmationModal";
 import Pagination from "../../components/Pagination";
+import ExportButton from "../../components/ExportButton";
 import { TableSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
 
 const Doctors = () => {
   const [doctors, setDoctors] = useState([]);
+  const [allDoctors, setAllDoctors] = useState([]); // For export
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState({
     currentPage: 1,
@@ -27,7 +29,17 @@ const Doctors = () => {
 
   useEffect(() => {
     fetchDoctors();
+    fetchAllDoctors(); // Fetch all for export
   }, [pagination.currentPage]);
+
+  const fetchAllDoctors = async () => {
+    try {
+      const { data } = await api.get("/admin/users?role=doctor&all=true");
+      setAllDoctors(data.data || []);
+    } catch (error) {
+      console.error("Failed to fetch all doctors for export");
+    }
+  };
 
   const fetchDoctors = async (page = pagination.currentPage) => {
     setLoading(true);
@@ -122,9 +134,17 @@ const Doctors = () => {
 
         <div className="p-8 mt-20">
           <div className="card">
-            <h2 className="text-2xl font-bold text-dark dark:text-slate-100 mb-6">
-              Doctor Management
-            </h2>
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
+                Doctor Management
+              </h2>
+              <ExportButton
+                data={allDoctors}
+                type="doctors"
+                title="Doctors Report"
+                filename="doctors_report"
+              />
+            </div>
 
             {loading ? (
               <TableSkeleton rows={8} />

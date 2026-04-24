@@ -4,12 +4,14 @@ import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
 import EmptyState from "../../components/EmptyState";
 import Pagination from "../../components/Pagination";
+import ExportButton from "../../components/ExportButton";
 import { ListSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
 
 const MedicalRecords = () => {
   const [records, setRecords] = useState([]);
+  const [allRecords, setAllRecords] = useState([]); // For export
   const [loading, setLoading] = useState(true);
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [pagination, setPagination] = useState({
@@ -21,7 +23,17 @@ const MedicalRecords = () => {
 
   useEffect(() => {
     fetchRecords();
+    fetchAllRecords(); // Fetch all for export
   }, [pagination.currentPage]);
+
+  const fetchAllRecords = async () => {
+    try {
+      const { data } = await api.get("/patient/medical-records?all=true");
+      setAllRecords(data.data || []);
+    } catch (error) {
+      console.error("Failed to fetch all medical records for export");
+    }
+  };
 
   const fetchRecords = async (page = pagination.currentPage) => {
     setLoading(true);
@@ -58,9 +70,17 @@ const MedicalRecords = () => {
 
         <div className="p-8 mt-20">
           <div className="card">
-            <h2 className="text-2xl font-bold text-dark dark:text-slate-100 mb-6">
-              My Medical Records
-            </h2>
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
+                My Medical Records
+              </h2>
+              <ExportButton
+                data={allRecords.length > 0 ? allRecords : records}
+                type="medicalRecords"
+                title="Medical Records Report"
+                filename="medical_records"
+              />
+            </div>
 
             {loading ? (
               <ListSkeleton items={5} />

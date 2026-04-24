@@ -57,16 +57,41 @@ export const getDoctorAppointments = async (req, res) => {
         .json({ success: false, message: "Doctor profile not found" });
     }
 
-    const { status, page = 1, limit = 10 } = req.query;
-    const skip = (page - 1) * limit;
+    const { status, page = 1, limit = 10, all } = req.query;
 
     const query = { doctorId: doctor._id, isDeleted: false };
     if (status) query.status = status;
 
+    // If 'all' parameter is provided, return all appointments without pagination
+    if (all === "true") {
+      const appointments = await Appointment.find(query)
+        .populate({
+          path: "patientId",
+          populate: { path: "userId", select: "name email phone isActive" },
+        })
+        .populate({
+          path: "doctorId",
+          populate: { path: "userId", select: "name email phone isActive" },
+        })
+        .sort({ appointmentDate: -1 });
+
+      return res.json({
+        success: true,
+        data: appointments,
+      });
+    }
+
+    // Otherwise, return paginated results
+    const skip = (page - 1) * limit;
+
     const appointments = await Appointment.find(query)
       .populate({
         path: "patientId",
-        populate: { path: "userId", select: "name email phone" },
+        populate: { path: "userId", select: "name email phone isActive" },
+      })
+      .populate({
+        path: "doctorId",
+        populate: { path: "userId", select: "name email phone isActive" },
       })
       .skip(skip)
       .limit(parseInt(limit))
@@ -198,22 +223,39 @@ export const getPatientsList = async (req, res) => {
         .json({ success: false, message: "Doctor profile not found" });
     }
 
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 9;
-    const skip = (page - 1) * limit;
+    const { page = 1, limit = 9, all } = req.query;
 
     const appointments = await Appointment.find({
       doctorId: doctor._id,
       isDeleted: false,
     }).distinct("patientId");
 
+    // If 'all' parameter is provided, return all patients without pagination
+    if (all === "true") {
+      const patients = await Patient.find({
+        _id: { $in: appointments },
+        isDeleted: false,
+      })
+        .populate("userId", "name email phone isActive")
+        .sort({ createdAt: -1 });
+
+      return res.json({
+        success: true,
+        data: patients,
+      });
+    }
+
+    // Otherwise, return paginated results
+    const skip = (page - 1) * limit;
+
     const patients = await Patient.find({
       _id: { $in: appointments },
       isDeleted: false,
     })
-      .populate("userId", "name email phone")
+      .populate("userId", "name email phone isActive")
       .skip(skip)
-      .limit(limit);
+      .limit(parseInt(limit))
+      .sort({ createdAt: -1 });
 
     const total = await Patient.countDocuments({
       _id: { $in: appointments },
@@ -223,10 +265,10 @@ export const getPatientsList = async (req, res) => {
     res.json({
       success: true,
       data: patients,
-      currentPage: page,
+      currentPage: parseInt(page),
       totalPages: Math.ceil(total / limit),
       totalItems: total,
-      itemsPerPage: limit,
+      itemsPerPage: parseInt(limit),
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

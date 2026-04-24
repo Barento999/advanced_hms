@@ -3,12 +3,14 @@ import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
 import EmptyState from "../../components/EmptyState";
 import Pagination from "../../components/Pagination";
+import ExportButton from "../../components/ExportButton";
 import { TableSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
 
 const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
+  const [allAppointments, setAllAppointments] = useState([]); // For export
   const [filter, setFilter] = useState("all");
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState({
@@ -21,11 +23,24 @@ const Appointments = () => {
   useEffect(() => {
     setPagination((prev) => ({ ...prev, currentPage: 1 }));
     fetchAppointments(1);
+    fetchAllAppointments(); // Fetch all for export
   }, [filter]);
 
   useEffect(() => {
     fetchAppointments();
   }, [pagination.currentPage]);
+
+  const fetchAllAppointments = async () => {
+    try {
+      const statusParam = filter === "all" ? "" : `&status=${filter}`;
+      const { data } = await api.get(
+        `/admin/appointments?all=true${statusParam}`,
+      );
+      setAllAppointments(data.data || []);
+    } catch (error) {
+      console.error("Failed to fetch all appointments for export");
+    }
+  };
 
   const fetchAppointments = async (page = pagination.currentPage) => {
     setLoading(true);
@@ -68,9 +83,22 @@ const Appointments = () => {
                 All Appointments
               </h2>
 
-              <div className="flex gap-2">
-                {["all", "pending", "confirmed", "completed", "cancelled"].map(
-                  (status) => (
+              <div className="flex items-center gap-4">
+                <ExportButton
+                  data={allAppointments}
+                  type="appointments"
+                  title={`${filter === "all" ? "All" : filter.charAt(0).toUpperCase() + filter.slice(1)} Appointments Report`}
+                  filename={`appointments_${filter}_report`}
+                />
+
+                <div className="flex gap-2">
+                  {[
+                    "all",
+                    "pending",
+                    "confirmed",
+                    "completed",
+                    "cancelled",
+                  ].map((status) => (
                     <button
                       key={status}
                       onClick={() => setFilter(status)}
@@ -81,8 +109,8 @@ const Appointments = () => {
                       }`}>
                       {status.charAt(0).toUpperCase() + status.slice(1)}
                     </button>
-                  ),
-                )}
+                  ))}
+                </div>
               </div>
             </div>
 

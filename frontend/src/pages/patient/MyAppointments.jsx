@@ -6,12 +6,14 @@ import Navbar from "../../components/Navbar";
 import EmptyState from "../../components/EmptyState";
 import ConfirmationModal from "../../components/ConfirmationModal";
 import Pagination from "../../components/Pagination";
+import ExportButton from "../../components/ExportButton";
 import { TableSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
 
 const MyAppointments = () => {
   const [appointments, setAppointments] = useState([]);
+  const [allAppointments, setAllAppointments] = useState([]); // For export
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [pagination, setPagination] = useState({
@@ -28,7 +30,17 @@ const MyAppointments = () => {
 
   useEffect(() => {
     fetchAppointments();
+    fetchAllAppointments(); // Fetch all for export
   }, [pagination.currentPage]);
+
+  const fetchAllAppointments = async () => {
+    try {
+      const { data } = await api.get("/patient/appointments?all=true");
+      setAllAppointments(data.data || []);
+    } catch (error) {
+      console.error("Failed to fetch all appointments for export");
+    }
+  };
 
   const fetchAppointments = async (page = pagination.currentPage) => {
     setLoading(true);
@@ -69,6 +81,7 @@ const MyAppointments = () => {
       );
       toast.success("Appointment cancelled");
       fetchAppointments();
+      fetchAllAppointments(); // Refresh export data
       setConfirmModal({ isOpen: false, appointment: null, loading: false });
     } catch (error) {
       toast.error("Failed to cancel appointment");
@@ -94,9 +107,17 @@ const MyAppointments = () => {
 
         <div className="p-8 mt-20">
           <div className="card">
-            <h2 className="text-2xl font-bold text-dark dark:text-slate-100 mb-6">
-              My Appointments
-            </h2>
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
+                My Appointments
+              </h2>
+              <ExportButton
+                data={allAppointments}
+                type="patientAppointments"
+                title="My Appointments Report"
+                filename="my_appointments_report"
+              />
+            </div>
 
             {loading ? (
               <TableSkeleton rows={8} />

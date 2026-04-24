@@ -1,15 +1,17 @@
 import { useState, useEffect } from "react";
-import { User, Phone, Mail } from "lucide-react";
+import { Phone, Mail } from "lucide-react";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
 import EmptyState from "../../components/EmptyState";
 import Pagination from "../../components/Pagination";
+import ExportButton from "../../components/ExportButton";
 import { CardSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
 
 const Patients = () => {
   const [patients, setPatients] = useState([]);
+  const [allPatients, setAllPatients] = useState([]); // For export
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState({
     currentPage: 1,
@@ -20,7 +22,17 @@ const Patients = () => {
 
   useEffect(() => {
     fetchPatients();
+    fetchAllPatients(); // Fetch all for export
   }, [pagination.currentPage]);
+
+  const fetchAllPatients = async () => {
+    try {
+      const { data } = await api.get("/doctor/patients?all=true");
+      setAllPatients(data.data || []);
+    } catch (error) {
+      console.error("Failed to fetch all patients for export");
+    }
+  };
 
   const fetchPatients = async (page = pagination.currentPage) => {
     setLoading(true);
@@ -56,9 +68,17 @@ const Patients = () => {
 
         <div className="p-8 mt-20">
           <div className="card">
-            <h2 className="text-2xl font-bold text-dark dark:text-slate-100 mb-6">
-              My Patients
-            </h2>
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
+                My Patients
+              </h2>
+              <ExportButton
+                data={allPatients}
+                type="patients"
+                title="My Patients Report"
+                filename="my_patients_report"
+              />
+            </div>
 
             {loading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

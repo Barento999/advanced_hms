@@ -4,6 +4,7 @@ import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
 import EmptyState from "../../components/EmptyState";
 import Pagination from "../../components/Pagination";
+import ExportButton from "../../components/ExportButton";
 import {
   TableSkeleton,
   StatCardSkeleton,
@@ -162,9 +163,17 @@ const Payments = () => {
               </div>
 
               <div className="card">
-                <h2 className="text-2xl font-bold text-dark dark:text-slate-100 mb-6">
-                  Payment History
-                </h2>
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
+                    Payment History
+                  </h2>
+                  <ExportButton
+                    data={allPayments.length > 0 ? allPayments : payments}
+                    type="payments"
+                    title="Payment History Report"
+                    filename="payment_history"
+                  />
+                </div>
 
                 {payments.length === 0 ? (
                   <EmptyState type="payments" className="py-8" />

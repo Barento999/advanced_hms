@@ -5,12 +5,14 @@ import Navbar from "../../components/Navbar";
 import EmptyState from "../../components/EmptyState";
 import ConfirmationModal from "../../components/ConfirmationModal";
 import Pagination from "../../components/Pagination";
+import ExportButton from "../../components/ExportButton";
 import { TableSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
 
 const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
+  const [allAppointments, setAllAppointments] = useState([]); // For export
   const [filter, setFilter] = useState("all");
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState({
@@ -29,11 +31,24 @@ const Appointments = () => {
   useEffect(() => {
     setPagination((prev) => ({ ...prev, currentPage: 1 }));
     fetchAppointments(1);
+    fetchAllAppointments(); // Fetch all for export
   }, [filter]);
 
   useEffect(() => {
     fetchAppointments();
   }, [pagination.currentPage]);
+
+  const fetchAllAppointments = async () => {
+    try {
+      const statusParam = filter === "all" ? "" : `&status=${filter}`;
+      const { data } = await api.get(
+        `/doctor/appointments?all=true${statusParam}`,
+      );
+      setAllAppointments(data.data || []);
+    } catch (error) {
+      console.error("Failed to fetch all appointments for export");
+    }
+  };
 
   const fetchAppointments = async (page = pagination.currentPage) => {
     setLoading(true);
@@ -88,6 +103,7 @@ const Appointments = () => {
       );
       toast.success("Status updated successfully");
       fetchAppointments();
+      fetchAllAppointments(); // Refresh export data
       setConfirmModal({
         isOpen: false,
         type: "",
@@ -128,19 +144,30 @@ const Appointments = () => {
                 Appointments
               </h2>
 
-              <div className="flex gap-2">
-                {["all", "pending", "confirmed", "completed"].map((status) => (
-                  <button
-                    key={status}
-                    onClick={() => setFilter(status)}
-                    className={`px-4 py-2 rounded-xl font-medium transition-colors ${
-                      filter === status
-                        ? "bg-primary text-white"
-                        : "bg-gray-200 dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-gray-300 dark:hover:bg-slate-600"
-                    }`}>
-                    {status.charAt(0).toUpperCase() + status.slice(1)}
-                  </button>
-                ))}
+              <div className="flex items-center gap-4">
+                <ExportButton
+                  data={allAppointments}
+                  type="doctorAppointments"
+                  title="My Appointments Report"
+                  filename="my_appointments_report"
+                />
+
+                <div className="flex gap-2">
+                  {["all", "pending", "confirmed", "completed"].map(
+                    (status) => (
+                      <button
+                        key={status}
+                        onClick={() => setFilter(status)}
+                        className={`px-4 py-2 rounded-xl font-medium transition-colors ${
+                          filter === status
+                            ? "bg-primary text-white"
+                            : "bg-gray-200 dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-gray-300 dark:hover:bg-slate-600"
+                        }`}>
+                        {status.charAt(0).toUpperCase() + status.slice(1)}
+                      </button>
+                    ),
+                  )}
+                </div>
               </div>
             </div>
 

@@ -4,6 +4,7 @@ import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
 import EmptyState from "../../components/EmptyState";
 import Pagination from "../../components/Pagination";
+import ExportButton from "../../components/ExportButton";
 import {
   ReviewCardSkeleton,
   StatCardSkeleton,
@@ -211,12 +212,22 @@ const Reviews = () => {
 
         <div className="p-8 mt-20">
           <div className="mb-6">
-            <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
-              All Doctor Reviews
-            </h2>
-            <p className="text-gray-600 dark:text-slate-400 mt-1">
-              View and manage all reviews across the platform
-            </p>
+            <div className="flex justify-between items-center">
+              <div>
+                <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
+                  All Doctor Reviews
+                </h2>
+                <p className="text-gray-600 dark:text-slate-400 mt-1">
+                  View and manage all reviews across the platform
+                </p>
+              </div>
+              <ExportButton
+                data={allReviews}
+                type="reviews"
+                title="Reviews Report"
+                filename="reviews_report"
+              />
+            </div>
           </div>
 
           {/* Summary Stats */}

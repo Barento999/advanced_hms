@@ -5,12 +5,14 @@ import Navbar from "../../components/Navbar";
 import EmptyState from "../../components/EmptyState";
 import ConfirmationModal from "../../components/ConfirmationModal";
 import Pagination from "../../components/Pagination";
+import ExportButton from "../../components/ExportButton";
 import { TableSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
+  const [allUsers, setAllUsers] = useState([]); // For export
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState({
     currentPage: 1,
@@ -27,7 +29,17 @@ const UserManagement = () => {
 
   useEffect(() => {
     fetchUsers();
+    fetchAllUsers(); // Fetch all for export
   }, [pagination.currentPage]);
+
+  const fetchAllUsers = async () => {
+    try {
+      const { data } = await api.get("/admin/users?all=true");
+      setAllUsers(data.data || []);
+    } catch (error) {
+      console.error("Failed to fetch all users for export");
+    }
+  };
 
   const fetchUsers = async (page = pagination.currentPage) => {
     setLoading(true);
@@ -120,9 +132,17 @@ const UserManagement = () => {
 
         <div className="p-8 mt-20">
           <div className="card">
-            <h2 className="text-2xl font-bold text-dark dark:text-slate-100 mb-6">
-              User Management
-            </h2>
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
+                User Management
+              </h2>
+              <ExportButton
+                data={allUsers}
+                type="users"
+                title="Users Report"
+                filename="users_report"
+              />
+            </div>
 
             {loading ? (
               <TableSkeleton rows={8} />
