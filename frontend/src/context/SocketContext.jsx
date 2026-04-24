@@ -16,16 +16,20 @@ export const NotificationProvider = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
   const [lastCount, setLastCount] = useState(0);
 
-  const fetchNotifications = async () => {
+  const fetchNotifications = async (page = 1, limit = 10) => {
     if (!user) return;
 
     try {
-      const { data } = await api.get("/notifications");
+      const { data } = await api.get(
+        `/notifications?page=${page}&limit=${limit}`,
+      );
       setNotifications(data.data);
-      setUnreadCount(data.unreadCount);
+      setUnreadCount(
+        data.unreadCount || data.data.filter((n) => !n.isRead).length,
+      );
 
-      // Show toast for new notifications
-      if (data.unreadCount > lastCount && lastCount > 0) {
+      // Show toast for new notifications (only on first page)
+      if (page === 1 && data.unreadCount > lastCount && lastCount > 0) {
         const newNotifications = data.data.filter((n) => !n.isRead);
         if (newNotifications.length > 0) {
           toast.success(newNotifications[0].message, {
@@ -34,9 +38,16 @@ export const NotificationProvider = ({ children }) => {
           });
         }
       }
-      setLastCount(data.unreadCount);
+      if (page === 1) {
+        setLastCount(
+          data.unreadCount || data.data.filter((n) => !n.isRead).length,
+        );
+      }
+
+      return data;
     } catch (error) {
       console.error("Failed to fetch notifications:", error);
+      return { data: [], unreadCount: 0 };
     }
   };
 

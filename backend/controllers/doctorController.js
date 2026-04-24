@@ -198,6 +198,10 @@ export const getPatientsList = async (req, res) => {
         .json({ success: false, message: "Doctor profile not found" });
     }
 
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 9;
+    const skip = (page - 1) * limit;
+
     const appointments = await Appointment.find({
       doctorId: doctor._id,
       isDeleted: false,
@@ -206,9 +210,24 @@ export const getPatientsList = async (req, res) => {
     const patients = await Patient.find({
       _id: { $in: appointments },
       isDeleted: false,
-    }).populate("userId", "name email phone");
+    })
+      .populate("userId", "name email phone")
+      .skip(skip)
+      .limit(limit);
 
-    res.json({ success: true, data: patients });
+    const total = await Patient.countDocuments({
+      _id: { $in: appointments },
+      isDeleted: false,
+    });
+
+    res.json({
+      success: true,
+      data: patients,
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+      totalItems: total,
+      itemsPerPage: limit,
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

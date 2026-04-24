@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AlertCircle, Search, Filter, Star } from "lucide-react";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
+import Pagination from "../../components/Pagination";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
 
@@ -13,6 +14,12 @@ const BookAppointment = () => {
   const [availableSlots, setAvailableSlots] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSpecialization, setSelectedSpecialization] = useState("");
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    totalItems: 0,
+    itemsPerPage: 20,
+  });
   const [formData, setFormData] = useState({
     doctorId: "",
     appointmentDate: "",
@@ -40,11 +47,12 @@ const BookAppointment = () => {
 
   useEffect(() => {
     fetchDoctors();
-  }, []);
+  }, [pagination.currentPage]);
 
   useEffect(() => {
-    filterDoctors();
-  }, [searchTerm, selectedSpecialization, doctors]);
+    setPagination((prev) => ({ ...prev, currentPage: 1 }));
+    fetchDoctors(1);
+  }, [searchTerm, selectedSpecialization]);
 
   useEffect(() => {
     if (formData.doctorId) {
@@ -54,43 +62,36 @@ const BookAppointment = () => {
     }
   }, [formData.doctorId, doctors]);
 
-  const fetchDoctors = async () => {
+  const fetchDoctors = async (page = pagination.currentPage) => {
     try {
-      const { data } = await api.get("/patient/doctors?limit=50");
+      const specializationParam =
+        selectedSpecialization &&
+        selectedSpecialization !== "All Specializations"
+          ? `&specialization=${encodeURIComponent(selectedSpecialization)}`
+          : "";
+      const searchParam = searchTerm
+        ? `&search=${encodeURIComponent(searchTerm)}`
+        : "";
+
+      const { data } = await api.get(
+        `/patient/doctors?page=${page}&limit=${pagination.itemsPerPage}${specializationParam}${searchParam}`,
+      );
+
       setDoctors(data.data);
       setFilteredDoctors(data.data);
+      setPagination((prev) => ({
+        ...prev,
+        currentPage: data.currentPage || page,
+        totalPages: data.totalPages || 1,
+        totalItems: data.totalItems || data.data.length,
+      }));
     } catch (error) {
       toast.error("Failed to fetch doctors");
     }
   };
 
-  const filterDoctors = () => {
-    let filtered = [...doctors];
-
-    // Filter by specialization
-    if (
-      selectedSpecialization &&
-      selectedSpecialization !== "All Specializations"
-    ) {
-      filtered = filtered.filter(
-        (doctor) => doctor.specialization === selectedSpecialization,
-      );
-    }
-
-    // Filter by search term (name or specialization)
-    if (searchTerm) {
-      filtered = filtered.filter(
-        (doctor) =>
-          doctor.userId?.name
-            ?.toLowerCase()
-            .includes(searchTerm.toLowerCase()) ||
-          doctor.specialization
-            ?.toLowerCase()
-            .includes(searchTerm.toLowerCase()),
-      );
-    }
-
-    setFilteredDoctors(filtered);
+  const handlePageChange = (page) => {
+    setPagination((prev) => ({ ...prev, currentPage: page }));
   };
 
   const isDateAvailable = (date) => {
@@ -178,8 +179,28 @@ const BookAppointment = () => {
                 </div>
               </div>
               <div className="mt-3 text-sm text-gray-600 dark:text-slate-400">
-                Showing {filteredDoctors.length} of {doctors.length} doctors
+                Showing{" "}
+                {(pagination.currentPage - 1) * pagination.itemsPerPage + 1} to{" "}
+                {Math.min(
+                  pagination.currentPage * pagination.itemsPerPage,
+                  pagination.totalItems,
+                )}{" "}
+                of {pagination.totalItems} doctors
               </div>
+
+              {/* Pagination */}
+              {pagination.totalPages > 1 && (
+                <div className="mt-4">
+                  <Pagination
+                    currentPage={pagination.currentPage}
+                    totalPages={pagination.totalPages}
+                    totalItems={pagination.totalItems}
+                    itemsPerPage={pagination.itemsPerPage}
+                    onPageChange={handlePageChange}
+                    showInfo={false}
+                  />
+                </div>
+              )}
             </div>
 
             {/* Appointment Form */}

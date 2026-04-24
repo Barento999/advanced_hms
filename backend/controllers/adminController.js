@@ -49,7 +49,7 @@ export const getDashboardStats = async (req, res) => {
 export const getAllUsers = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 50;
+    const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
     const { role } = req.query;
 
@@ -119,7 +119,7 @@ export const toggleUserStatus = async (req, res) => {
 
 export const getAllAppointments = async (req, res) => {
   try {
-    const { status, page = 1, limit = 50 } = req.query;
+    const { status, page = 1, limit = 10 } = req.query;
     const skip = (page - 1) * limit;
 
     const query = { isDeleted: false };

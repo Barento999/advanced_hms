@@ -9,12 +9,22 @@ router.use(protect);
 // Get user's notifications
 router.get("/", async (req, res) => {
   try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
     const notifications = await Notification.find({
       userId: req.user._id,
       isDeleted: false,
     })
       .sort({ createdAt: -1 })
-      .limit(20);
+      .skip(skip)
+      .limit(limit);
+
+    const total = await Notification.countDocuments({
+      userId: req.user._id,
+      isDeleted: false,
+    });
 
     const unreadCount = await Notification.countDocuments({
       userId: req.user._id,
@@ -25,6 +35,10 @@ router.get("/", async (req, res) => {
     res.json({
       success: true,
       data: notifications,
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+      totalItems: total,
+      itemsPerPage: limit,
       unreadCount,
     });
   } catch (error) {
@@ -67,8 +81,6 @@ router.patch("/mark-all-read", async (req, res) => {
   }
 });
 
-export default router;
-
 // Delete notification
 router.delete("/:id", async (req, res) => {
   try {
@@ -89,3 +101,5 @@ router.delete("/:id", async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 });
+
+export default router;

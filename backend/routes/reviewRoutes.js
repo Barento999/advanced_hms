@@ -12,6 +12,26 @@ router.use(protect);
 // Get reviews for a doctor
 router.get("/doctor/:doctorId", async (req, res) => {
   try {
+    const { page = 1, limit = 6, all } = req.query;
+
+    // If 'all' parameter is provided, return all reviews for stats calculation
+    if (all === "true") {
+      const reviews = await Review.find({
+        doctorId: req.params.doctorId,
+        isDeleted: false,
+      })
+        .populate({
+          path: "patientId",
+          populate: { path: "userId", select: "name" },
+        })
+        .sort({ createdAt: -1 });
+
+      return res.json({ success: true, data: reviews });
+    }
+
+    // Otherwise, return paginated results
+    const skip = (page - 1) * limit;
+
     const reviews = await Review.find({
       doctorId: req.params.doctorId,
       isDeleted: false,
@@ -20,9 +40,23 @@ router.get("/doctor/:doctorId", async (req, res) => {
         path: "patientId",
         populate: { path: "userId", select: "name" },
       })
+      .skip(skip)
+      .limit(parseInt(limit))
       .sort({ createdAt: -1 });
 
-    res.json({ success: true, data: reviews });
+    const total = await Review.countDocuments({
+      doctorId: req.params.doctorId,
+      isDeleted: false,
+    });
+
+    res.json({
+      success: true,
+      data: reviews,
+      currentPage: parseInt(page),
+      totalPages: Math.ceil(total / limit),
+      totalItems: total,
+      itemsPerPage: parseInt(limit),
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -31,6 +65,10 @@ router.get("/doctor/:doctorId", async (req, res) => {
 // Get all reviews (admin only)
 router.get("/all", authorize("admin"), async (req, res) => {
   try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 50;
+    const skip = (page - 1) * limit;
+
     const reviews = await Review.find({ isDeleted: false })
       .populate({
         path: "doctorId",
@@ -40,9 +78,20 @@ router.get("/all", authorize("admin"), async (req, res) => {
         path: "patientId",
         populate: { path: "userId", select: "name email" },
       })
+      .skip(skip)
+      .limit(limit)
       .sort({ createdAt: -1 });
 
-    res.json({ success: true, data: reviews });
+    const total = await Review.countDocuments({ isDeleted: false });
+
+    res.json({
+      success: true,
+      data: reviews,
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+      totalItems: total,
+      itemsPerPage: limit,
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

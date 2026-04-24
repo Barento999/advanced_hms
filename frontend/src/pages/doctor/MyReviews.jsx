@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Star, User } from "lucide-react";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
+import EmptyState from "../../components/EmptyState";
+import Pagination from "../../components/Pagination";
 import {
   ReviewCardSkeleton,
   StatCardSkeleton,
@@ -11,24 +13,45 @@ import toast from "react-hot-toast";
 
 const MyReviews = () => {
   const [reviews, setReviews] = useState([]);
+  const [allReviews, setAllReviews] = useState([]); // For stats calculation
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    totalItems: 0,
+    itemsPerPage: 6,
+  });
 
   useEffect(() => {
     fetchProfileAndReviews();
-  }, []);
+  }, [pagination.currentPage]);
 
-  const fetchProfileAndReviews = async () => {
+  const fetchProfileAndReviews = async (page = pagination.currentPage) => {
+    setLoading(true);
     try {
       // Get doctor profile
       const profileRes = await api.get("/doctor/profile");
       setProfile(profileRes.data.data);
 
-      // Get reviews for this doctor
-      const reviewsRes = await api.get(
-        `/reviews/doctor/${profileRes.data.data._id}`,
+      // Get all reviews for stats calculation (without pagination)
+      const allReviewsRes = await api.get(
+        `/reviews/doctor/${profileRes.data.data._id}?all=true`,
       );
-      setReviews(reviewsRes.data.data);
+      setAllReviews(allReviewsRes.data.data || []);
+
+      // Get paginated reviews
+      const reviewsRes = await api.get(
+        `/reviews/doctor/${profileRes.data.data._id}?page=${page}&limit=${pagination.itemsPerPage}`,
+      );
+      setReviews(reviewsRes.data.data || []);
+      setPagination((prev) => ({
+        ...prev,
+        currentPage: reviewsRes.data.currentPage || 1,
+        totalPages: reviewsRes.data.totalPages || 1,
+        totalItems: reviewsRes.data.totalItems || 0,
+      }));
+
       // Delay to show skeleton
       await new Promise((resolve) => setTimeout(resolve, 1000));
     } catch (error) {
@@ -36,6 +59,10 @@ const MyReviews = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handlePageChange = (page) => {
+    setPagination((prev) => ({ ...prev, currentPage: page }));
   };
 
   const renderStars = (rating) => {
@@ -110,7 +137,8 @@ const MyReviews = () => {
                   {renderStars(Math.round(profile?.rating || 0))}
                 </div>
                 <p className="text-sm text-gray-600 dark:text-slate-400 mt-2">
-                  {reviews.length} {reviews.length === 1 ? "review" : "reviews"}
+                  {allReviews.length}{" "}
+                  {allReviews.length === 1 ? "review" : "reviews"}
                 </p>
               </div>
               <div className="flex-1 border-l dark:border-slate-700 pl-6">
@@ -118,9 +146,13 @@ const MyReviews = () => {
                   Rating Breakdown
                 </h3>
                 {[5, 4, 3, 2, 1].map((star) => {
-                  const count = reviews.filter((r) => r.rating === star).length;
+                  const count = allReviews.filter(
+                    (r) => r.rating === star,
+                  ).length;
                   const percentage =
-                    reviews.length > 0 ? (count / reviews.length) * 100 : 0;
+                    allReviews.length > 0
+                      ? (count / allReviews.length) * 100
+                      : 0;
                   return (
                     <div key={star} className="flex items-center gap-3 mb-2">
                       <span className="text-sm text-gray-600 dark:text-slate-400 w-12">
@@ -144,47 +176,56 @@ const MyReviews = () => {
 
           {/* Reviews List */}
           <div className="space-y-4">
-            {reviews.map((review) => (
-              <div key={review._id} className="card">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center flex-shrink-0">
-                    <User size={24} className="text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <h4 className="font-semibold text-dark dark:text-slate-100">
-                          {review.patientId?.userId?.name || "Anonymous"}
-                        </h4>
-                        <div className="flex items-center gap-2 mt-1">
-                          {renderStars(review.rating)}
-                          <span className="text-sm text-gray-500 dark:text-slate-400">
-                            {new Date(review.createdAt).toLocaleDateString()}
-                          </span>
+            {reviews.length === 0 ? (
+              <EmptyState
+                type="reviews"
+                title="No reviews yet"
+                description="Your reviews will appear here once patients rate your service"
+                className="py-12"
+              />
+            ) : (
+              <>
+                {reviews.map((review) => (
+                  <div key={review._id} className="card">
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center flex-shrink-0">
+                        <User size={24} className="text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <h4 className="font-semibold text-dark dark:text-slate-100">
+                              {review.patientId?.userId?.name || "Anonymous"}
+                            </h4>
+                            <div className="flex items-center gap-2 mt-1">
+                              {renderStars(review.rating)}
+                              <span className="text-sm text-gray-500 dark:text-slate-400">
+                                {new Date(
+                                  review.createdAt,
+                                ).toLocaleDateString()}
+                              </span>
+                            </div>
+                          </div>
                         </div>
+                        <p className="text-gray-700 dark:text-slate-300 mt-3">
+                          {review.comment}
+                        </p>
                       </div>
                     </div>
-                    <p className="text-gray-700 dark:text-slate-300 mt-3">
-                      {review.comment}
-                    </p>
                   </div>
-                </div>
-              </div>
-            ))}
+                ))}
 
-            {reviews.length === 0 && (
-              <div className="card text-center py-12">
-                <Star
-                  size={48}
-                  className="mx-auto text-gray-300 dark:text-slate-600 mb-3"
-                />
-                <h3 className="text-lg font-semibold text-gray-600 dark:text-slate-400 mb-2">
-                  No reviews yet
-                </h3>
-                <p className="text-gray-500 dark:text-slate-400">
-                  Your reviews will appear here once patients rate your service
-                </p>
-              </div>
+                {/* Pagination */}
+                <div className="mt-6">
+                  <Pagination
+                    currentPage={pagination.currentPage}
+                    totalPages={pagination.totalPages}
+                    totalItems={pagination.totalItems}
+                    itemsPerPage={pagination.itemsPerPage}
+                    onPageChange={handlePageChange}
+                  />
+                </div>
+              </>
             )}
           </div>
         </div>

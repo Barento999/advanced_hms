@@ -29,7 +29,18 @@ const Notifications = () => {
 
   useEffect(() => {
     const loadNotifications = async () => {
-      await fetchNotifications(pagination.currentPage, pagination.itemsPerPage);
+      const result = await fetchNotifications(
+        pagination.currentPage,
+        pagination.itemsPerPage,
+      );
+      if (result) {
+        setPagination((prev) => ({
+          ...prev,
+          currentPage: result.currentPage || pagination.currentPage,
+          totalPages: result.totalPages || 1,
+          totalItems: result.totalItems || result.data.length,
+        }));
+      }
       // Delay to show skeleton
       await new Promise((resolve) => setTimeout(resolve, 1000));
       setLoading(false);
@@ -236,19 +247,19 @@ const Notifications = () => {
                 </div>
               )}
             </div>
+          )}
 
-            {/* Pagination */}
-            {notifications.length > 0 && (
-              <div className="mt-6">
-                <Pagination
-                  currentPage={pagination.currentPage}
-                  totalPages={pagination.totalPages}
-                  totalItems={pagination.totalItems}
-                  itemsPerPage={pagination.itemsPerPage}
-                  onPageChange={handlePageChange}
-                />
-              </div>
-            )}
+          {/* Pagination */}
+          {!loading && notifications.length > 0 && (
+            <div className="mt-6">
+              <Pagination
+                currentPage={pagination.currentPage}
+                totalPages={pagination.totalPages}
+                totalItems={pagination.totalItems}
+                itemsPerPage={pagination.itemsPerPage}
+                onPageChange={handlePageChange}
+              />
+            </div>
           )}
         </div>
       </div>

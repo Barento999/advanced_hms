@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
+import EmptyState from "../../components/EmptyState";
+import Pagination from "../../components/Pagination";
 import { TableSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
@@ -9,29 +11,49 @@ const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [filter, setFilter] = useState("all");
   const [loading, setLoading] = useState(true);
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    totalItems: 0,
+    itemsPerPage: 10,
+  });
+
+  useEffect(() => {
+    setPagination((prev) => ({ ...prev, currentPage: 1 }));
+    fetchAppointments(1);
+  }, [filter]);
 
   useEffect(() => {
     fetchAppointments();
-  }, [filter]);
+  }, [pagination.currentPage]);
 
-  const fetchAppointments = async () => {
+  const fetchAppointments = async (page = pagination.currentPage) => {
+    setLoading(true);
     try {
-      // Admin can view all appointments
-      const { data } = await api.get("/admin/appointments");
+      const statusParam = filter === "all" ? "" : `&status=${filter}`;
+      const { data } = await api.get(
+        `/admin/appointments?page=${page}&limit=${pagination.itemsPerPage}${statusParam}`,
+      );
       setAppointments(data.data || []);
+      setPagination((prev) => ({
+        ...prev,
+        currentPage: data.currentPage,
+        totalPages: data.totalPages,
+        totalItems: data.totalItems,
+      }));
       // Delay to show skeleton
       await new Promise((resolve) => setTimeout(resolve, 1000));
     } catch (error) {
+      console.error("Fetch appointments error:", error); // Debug log
       toast.error("Failed to fetch appointments");
     } finally {
       setLoading(false);
     }
   };
 
-  const filteredAppointments =
-    filter === "all"
-      ? appointments
-      : appointments.filter((apt) => apt.status === filter);
+  const handlePageChange = (page) => {
+    setPagination((prev) => ({ ...prev, currentPage: page }));
+  };
 
   return (
     <div className="flex min-h-screen">
@@ -66,6 +88,21 @@ const Appointments = () => {
 
             {loading ? (
               <TableSkeleton rows={10} />
+            ) : appointments.length === 0 ? (
+              <EmptyState
+                type="appointments"
+                title={
+                  filter === "all"
+                    ? "No appointments found"
+                    : `No ${filter} appointments`
+                }
+                description={
+                  filter === "all"
+                    ? "No appointments have been scheduled yet. Appointments will appear here once patients book with doctors."
+                    : `No ${filter} appointments found. Try checking other status filters.`
+                }
+                className="py-12"
+              />
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full">
@@ -92,44 +129,50 @@ const Appointments = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredAppointments.length === 0 ? (
-                      <tr>
-                        <td
-                          colSpan="6"
-                          className="text-center py-8 text-gray-500 dark:text-slate-400">
-                          No appointments found
+                    {appointments.map((apt) => (
+                      <tr
+                        key={apt._id}
+                        className="border-b border-gray-100 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
+                        <td className="py-3 px-4 text-dark dark:text-slate-100">
+                          {apt.patientId?.userId?.name || "N/A"}
+                        </td>
+                        <td className="py-3 px-4 text-dark dark:text-slate-100">
+                          {apt.doctorId?.userId?.name || "N/A"}
+                        </td>
+                        <td className="py-3 px-4 text-dark dark:text-slate-100">
+                          {new Date(apt.appointmentDate).toLocaleDateString()}
+                        </td>
+                        <td className="py-3 px-4 text-dark dark:text-slate-100">
+                          {apt.timeSlot?.startTime} - {apt.timeSlot?.endTime}
+                        </td>
+                        <td className="py-3 px-4 text-dark dark:text-slate-100">
+                          {apt.reason}
+                        </td>
+                        <td className="py-3 px-4">
+                          <span className={`badge badge-${apt.status}`}>
+                            {apt.status}
+                          </span>
                         </td>
                       </tr>
-                    ) : (
-                      filteredAppointments.map((apt) => (
-                        <tr
-                          key={apt._id}
-                          className="border-b border-gray-100 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
-                          <td className="py-3 px-4 text-dark dark:text-slate-100">
-                            {apt.patientId?.userId?.name || "N/A"}
-                          </td>
-                          <td className="py-3 px-4 text-dark dark:text-slate-100">
-                            {apt.doctorId?.userId?.name || "N/A"}
-                          </td>
-                          <td className="py-3 px-4 text-dark dark:text-slate-100">
-                            {new Date(apt.appointmentDate).toLocaleDateString()}
-                          </td>
-                          <td className="py-3 px-4 text-dark dark:text-slate-100">
-                            {apt.timeSlot?.startTime} - {apt.timeSlot?.endTime}
-                          </td>
-                          <td className="py-3 px-4 text-dark dark:text-slate-100">
-                            {apt.reason}
-                          </td>
-                          <td className="py-3 px-4">
-                            <span className={`badge badge-${apt.status}`}>
-                              {apt.status}
-                            </span>
-                          </td>
-                        </tr>
-                      ))
-                    )}
+                    ))}
                   </tbody>
                 </table>
+
+                {/* Pagination */}
+                <div className="mt-6">
+                  {console.log(
+                    "Admin Appointments Pagination state:",
+                    pagination,
+                  )}{" "}
+                  {/* Debug log */}
+                  <Pagination
+                    currentPage={pagination.currentPage}
+                    totalPages={pagination.totalPages}
+                    totalItems={pagination.totalItems}
+                    itemsPerPage={pagination.itemsPerPage}
+                    onPageChange={handlePageChange}
+                  />
+                </div>
               </div>
             )}
           </div>

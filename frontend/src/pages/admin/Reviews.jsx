@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Star, User, Search, Filter } from "lucide-react";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
+import EmptyState from "../../components/EmptyState";
+import Pagination from "../../components/Pagination";
 import {
   ReviewCardSkeleton,
   StatCardSkeleton,
@@ -16,14 +18,25 @@ const Reviews = () => {
   const [allReviews, setAllReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    totalItems: 0,
+    itemsPerPage: 6,
+  });
 
   useEffect(() => {
     fetchDoctorsAndReviews();
   }, []);
 
   useEffect(() => {
+    setPagination((prev) => ({ ...prev, currentPage: 1 }));
     filterReviews();
   }, [selectedDoctor, searchTerm, allReviews]);
+
+  useEffect(() => {
+    paginateReviews();
+  }, [pagination.currentPage]);
 
   const fetchDoctorsAndReviews = async () => {
     try {
@@ -32,14 +45,18 @@ const Reviews = () => {
 
       // Fetch all reviews in one call
       const reviewsRes = await api.get("/reviews/all");
-      const reviewsData = reviewsRes.data.data;
-      setAllReviews(reviewsData);
-      setReviews(reviewsData);
+      const reviewsData = reviewsRes.data.data || [];
+
+      // Filter out reviews with null doctorId to prevent errors
+      const validReviews = reviewsData.filter(
+        (review) => review.doctorId && review.doctorId._id,
+      );
+      setAllReviews(validReviews);
 
       // Extract unique doctors from reviews
       const uniqueDoctors = [];
       const doctorIds = new Set();
-      reviewsData.forEach((review) => {
+      validReviews.forEach((review) => {
         if (review.doctorId && !doctorIds.has(review.doctorId._id)) {
           doctorIds.add(review.doctorId._id);
           uniqueDoctors.push(review.doctorId);
@@ -47,6 +64,7 @@ const Reviews = () => {
       });
       setDoctors(uniqueDoctors);
     } catch (error) {
+      console.error("Error fetching reviews:", error);
       toast.error("Failed to fetch reviews");
     } finally {
       setLoading(false);
@@ -59,7 +77,7 @@ const Reviews = () => {
     // Filter by selected doctor
     if (selectedDoctor) {
       filtered = filtered.filter(
-        (review) => review.doctorId._id === selectedDoctor,
+        (review) => review.doctorId && review.doctorId._id === selectedDoctor,
       );
     }
 
@@ -74,7 +92,50 @@ const Reviews = () => {
       );
     }
 
-    setReviews(filtered);
+    // Update pagination info
+    const totalItems = filtered.length;
+    const totalPages = Math.ceil(totalItems / pagination.itemsPerPage);
+    setPagination((prev) => ({
+      ...prev,
+      totalItems,
+      totalPages,
+      currentPage: 1,
+    }));
+
+    // Paginate the filtered results
+    const startIndex = 0;
+    const endIndex = pagination.itemsPerPage;
+    setReviews(filtered.slice(startIndex, endIndex));
+  };
+
+  const paginateReviews = () => {
+    let filtered = [...allReviews];
+
+    // Apply filters
+    if (selectedDoctor) {
+      filtered = filtered.filter(
+        (review) => review.doctorId && review.doctorId._id === selectedDoctor,
+      );
+    }
+
+    if (searchTerm) {
+      filtered = filtered.filter(
+        (review) =>
+          review.patientId?.userId?.name
+            ?.toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
+          review.comment?.toLowerCase().includes(searchTerm.toLowerCase()),
+      );
+    }
+
+    // Paginate
+    const startIndex = (pagination.currentPage - 1) * pagination.itemsPerPage;
+    const endIndex = startIndex + pagination.itemsPerPage;
+    setReviews(filtered.slice(startIndex, endIndex));
+  };
+
+  const handlePageChange = (page) => {
+    setPagination((prev) => ({ ...prev, currentPage: page }));
   };
 
   const renderStars = (rating) => {
@@ -96,9 +157,13 @@ const Reviews = () => {
   };
 
   const getAverageRating = () => {
-    if (reviews.length === 0) return 0;
-    const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
-    return (sum / reviews.length).toFixed(1);
+    if (!reviews || reviews.length === 0) return 0;
+    const validReviews = reviews.filter(
+      (review) => review && typeof review.rating === "number",
+    );
+    if (validReviews.length === 0) return 0;
+    const sum = validReviews.reduce((acc, review) => acc + review.rating, 0);
+    return (sum / validReviews.length).toFixed(1);
   };
 
   if (loading) {
@@ -161,7 +226,7 @@ const Reviews = () => {
                 Total Reviews
               </p>
               <p className="text-3xl font-bold text-primary">
-                {allReviews.length}
+                {allReviews?.length || 0}
               </p>
             </div>
             <div className="card">
@@ -180,7 +245,13 @@ const Reviews = () => {
                 Doctors with Reviews
               </p>
               <p className="text-3xl font-bold text-primary">
-                {new Set(allReviews.map((r) => r.doctorId._id)).size}
+                {
+                  new Set(
+                    allReviews
+                      .filter((r) => r.doctorId)
+                      .map((r) => r.doctorId._id),
+                  ).size
+                }
               </p>
             </div>
             <div className="card">
@@ -188,7 +259,7 @@ const Reviews = () => {
                 5-Star Reviews
               </p>
               <p className="text-3xl font-bold text-primary">
-                {allReviews.filter((r) => r.rating === 5).length}
+                {allReviews?.filter((r) => r.rating === 5)?.length || 0}
               </p>
             </div>
           </div>
@@ -236,7 +307,13 @@ const Reviews = () => {
               </div>
             </div>
             <div className="mt-3 text-sm text-gray-600 dark:text-slate-400">
-              Showing {reviews.length} of {allReviews.length} reviews
+              Showing{" "}
+              {(pagination.currentPage - 1) * pagination.itemsPerPage + 1} to{" "}
+              {Math.min(
+                pagination.currentPage * pagination.itemsPerPage,
+                pagination.totalItems,
+              )}{" "}
+              of {pagination.totalItems} reviews
             </div>
           </div>
 
@@ -277,23 +354,32 @@ const Reviews = () => {
               </div>
             ))}
 
-            {reviews.length === 0 && (
-              <div className="card text-center py-12">
-                <Star
-                  size={48}
-                  className="mx-auto text-gray-300 dark:text-slate-600 mb-3"
-                />
-                <h3 className="text-lg font-semibold text-gray-600 dark:text-slate-400 mb-2">
-                  No reviews found
-                </h3>
-                <p className="text-gray-500 dark:text-slate-400">
-                  {selectedDoctor || searchTerm
-                    ? "Try adjusting your filters"
-                    : "Reviews will appear here once patients start rating doctors"}
-                </p>
-              </div>
+            {reviews.length === 0 && !loading && (
+              <EmptyState
+                type="reviews"
+                title="No reviews found"
+                description={
+                  selectedDoctor || searchTerm
+                    ? "No reviews match your current filters. Try adjusting your search criteria."
+                    : "No reviews have been submitted yet. Reviews will appear here once patients start rating doctors."
+                }
+                className="py-8"
+              />
             )}
           </div>
+
+          {/* Pagination */}
+          {!loading && reviews.length > 0 && pagination.totalPages > 1 && (
+            <div className="mt-6">
+              <Pagination
+                currentPage={pagination.currentPage}
+                totalPages={pagination.totalPages}
+                totalItems={pagination.totalItems}
+                itemsPerPage={pagination.itemsPerPage}
+                onPageChange={handlePageChange}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -47,11 +47,19 @@ export const updatePatientProfile = async (req, res) => {
 
 export const getAllDoctors = async (req, res) => {
   try {
-    const { specialization, page = 1, limit = 10 } = req.query;
+    const { specialization, search, page = 1, limit = 10 } = req.query;
     const skip = (page - 1) * limit;
 
     const query = { isDeleted: false };
     if (specialization) query.specialization = specialization;
+
+    // Add search functionality
+    if (search) {
+      query.$or = [
+        { specialization: { $regex: search, $options: "i" } },
+        { "userId.name": { $regex: search, $options: "i" } },
+      ];
+    }
 
     const doctors = await Doctor.find(query)
       .populate("userId", "name email phone avatar")
@@ -64,12 +72,10 @@ export const getAllDoctors = async (req, res) => {
     res.json({
       success: true,
       data: doctors,
-      pagination: {
-        page: parseInt(page),
-        limit: parseInt(limit),
-        total,
-        pages: Math.ceil(total / limit),
-      },
+      currentPage: parseInt(page),
+      totalPages: Math.ceil(total / limit),
+      totalItems: total,
+      itemsPerPage: parseInt(limit),
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -303,6 +309,9 @@ export const getMedicalRecords = async (req, res) => {
         .json({ success: false, message: "Patient profile not found" });
     }
 
+    const { page = 1, limit = 5 } = req.query;
+    const skip = (page - 1) * limit;
+
     const records = await MedicalRecord.find({
       patientId: patient._id,
       isDeleted: false,
@@ -311,9 +320,23 @@ export const getMedicalRecords = async (req, res) => {
         path: "doctorId",
         populate: { path: "userId", select: "name" },
       })
+      .skip(skip)
+      .limit(parseInt(limit))
       .sort({ createdAt: -1 });
 
-    res.json({ success: true, data: records });
+    const total = await MedicalRecord.countDocuments({
+      patientId: patient._id,
+      isDeleted: false,
+    });
+
+    res.json({
+      success: true,
+      data: records,
+      currentPage: parseInt(page),
+      totalPages: Math.ceil(total / limit),
+      totalItems: total,
+      itemsPerPage: parseInt(limit),
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -332,14 +355,45 @@ export const getPaymentHistory = async (req, res) => {
         .json({ success: false, message: "Patient profile not found" });
     }
 
+    const { page = 1, limit = 10, all } = req.query;
+
+    // If 'all' parameter is provided, return all payments for stats calculation
+    if (all === "true") {
+      const payments = await Payment.find({
+        patientId: patient._id,
+        isDeleted: false,
+      })
+        .populate("appointmentId")
+        .sort({ createdAt: -1 });
+
+      return res.json({ success: true, data: payments });
+    }
+
+    // Otherwise, return paginated results
+    const skip = (page - 1) * limit;
+
     const payments = await Payment.find({
       patientId: patient._id,
       isDeleted: false,
     })
       .populate("appointmentId")
+      .skip(skip)
+      .limit(parseInt(limit))
       .sort({ createdAt: -1 });
 
-    res.json({ success: true, data: payments });
+    const total = await Payment.countDocuments({
+      patientId: patient._id,
+      isDeleted: false,
+    });
+
+    res.json({
+      success: true,
+      data: payments,
+      currentPage: parseInt(page),
+      totalPages: Math.ceil(total / limit),
+      totalItems: total,
+      itemsPerPage: parseInt(limit),
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
