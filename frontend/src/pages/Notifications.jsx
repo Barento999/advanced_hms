@@ -4,6 +4,7 @@ import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 import EmptyState from "../components/EmptyState";
 import ConfirmationModal from "../components/ConfirmationModal";
+import Pagination from "../components/Pagination";
 import { ListSkeleton } from "../components/LoadingSkeleton";
 import { NotificationContext } from "../context/SocketContext";
 import api from "../utils/api";
@@ -13,6 +14,12 @@ const Notifications = () => {
   const { notifications, fetchNotifications, markAsRead } =
     useContext(NotificationContext);
   const [loading, setLoading] = useState(true);
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    totalItems: 0,
+    itemsPerPage: 10,
+  });
   const [confirmModal, setConfirmModal] = useState({
     isOpen: false,
     type: "",
@@ -22,13 +29,17 @@ const Notifications = () => {
 
   useEffect(() => {
     const loadNotifications = async () => {
-      await fetchNotifications();
+      await fetchNotifications(pagination.currentPage, pagination.itemsPerPage);
       // Delay to show skeleton
       await new Promise((resolve) => setTimeout(resolve, 1000));
       setLoading(false);
     };
     loadNotifications();
-  }, []);
+  }, [pagination.currentPage]);
+
+  const handlePageChange = (page) => {
+    setPagination((prev) => ({ ...prev, currentPage: page }));
+  };
 
   const handleMarkAsRead = async (notificationId) => {
     await markAsRead(notificationId);
@@ -225,6 +236,19 @@ const Notifications = () => {
                 </div>
               )}
             </div>
+
+            {/* Pagination */}
+            {notifications.length > 0 && (
+              <div className="mt-6">
+                <Pagination
+                  currentPage={pagination.currentPage}
+                  totalPages={pagination.totalPages}
+                  totalItems={pagination.totalItems}
+                  itemsPerPage={pagination.itemsPerPage}
+                  onPageChange={handlePageChange}
+                />
+              </div>
+            )}
           )}
         </div>
       </div>

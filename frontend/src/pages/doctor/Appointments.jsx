@@ -4,6 +4,7 @@ import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
 import EmptyState from "../../components/EmptyState";
 import ConfirmationModal from "../../components/ConfirmationModal";
+import Pagination from "../../components/Pagination";
 import { TableSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
@@ -12,6 +13,12 @@ const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [filter, setFilter] = useState("all");
   const [loading, setLoading] = useState(true);
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    totalItems: 0,
+    itemsPerPage: 10,
+  });
   const [confirmModal, setConfirmModal] = useState({
     isOpen: false,
     type: "",
@@ -20,17 +27,28 @@ const Appointments = () => {
   });
 
   useEffect(() => {
-    fetchAppointments();
+    setPagination((prev) => ({ ...prev, currentPage: 1 }));
+    fetchAppointments(1);
   }, [filter]);
 
-  const fetchAppointments = async () => {
+  useEffect(() => {
+    fetchAppointments();
+  }, [pagination.currentPage]);
+
+  const fetchAppointments = async (page = pagination.currentPage) => {
+    setLoading(true);
     try {
-      const url =
-        filter === "all"
-          ? "/doctor/appointments"
-          : `/doctor/appointments?status=${filter}`;
-      const { data } = await api.get(url);
+      const statusParam = filter === "all" ? "" : `&status=${filter}`;
+      const { data } = await api.get(
+        `/doctor/appointments?page=${page}&limit=${pagination.itemsPerPage}${statusParam}`,
+      );
       setAppointments(data.data);
+      setPagination((prev) => ({
+        ...prev,
+        currentPage: data.currentPage,
+        totalPages: data.totalPages,
+        totalItems: data.totalItems,
+      }));
       // Delay to show skeleton
       await new Promise((resolve) => setTimeout(resolve, 1000));
     } catch (error) {
@@ -80,6 +98,10 @@ const Appointments = () => {
       toast.error("Failed to update status");
       setConfirmModal((prev) => ({ ...prev, loading: false }));
     }
+  };
+
+  const handlePageChange = (page) => {
+    setPagination((prev) => ({ ...prev, currentPage: page }));
   };
 
   const closeModal = () => {
@@ -207,6 +229,17 @@ const Appointments = () => {
                     ))}
                   </tbody>
                 </table>
+
+                {/* Pagination */}
+                <div className="mt-6">
+                  <Pagination
+                    currentPage={pagination.currentPage}
+                    totalPages={pagination.totalPages}
+                    totalItems={pagination.totalItems}
+                    itemsPerPage={pagination.itemsPerPage}
+                    onPageChange={handlePageChange}
+                  />
+                </div>
               </div>
             )}
           </div>

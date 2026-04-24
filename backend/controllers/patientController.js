@@ -223,12 +223,10 @@ export const getMyAppointments = async (req, res) => {
     res.json({
       success: true,
       data: appointments,
-      pagination: {
-        page: parseInt(page),
-        limit: parseInt(limit),
-        total,
-        pages: Math.ceil(total / limit),
-      },
+      currentPage: parseInt(page),
+      totalPages: Math.ceil(total / limit),
+      totalItems: total,
+      itemsPerPage: parseInt(limit),
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

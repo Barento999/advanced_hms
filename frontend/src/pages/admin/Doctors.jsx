@@ -4,6 +4,7 @@ import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
 import EmptyState from "../../components/EmptyState";
 import ConfirmationModal from "../../components/ConfirmationModal";
+import Pagination from "../../components/Pagination";
 import { TableSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
@@ -11,6 +12,12 @@ import toast from "react-hot-toast";
 const Doctors = () => {
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    totalItems: 0,
+    itemsPerPage: 10,
+  });
   const [confirmModal, setConfirmModal] = useState({
     isOpen: false,
     type: "",
@@ -20,12 +27,21 @@ const Doctors = () => {
 
   useEffect(() => {
     fetchDoctors();
-  }, []);
+  }, [pagination.currentPage]);
 
-  const fetchDoctors = async () => {
+  const fetchDoctors = async (page = pagination.currentPage) => {
+    setLoading(true);
     try {
-      const { data } = await api.get("/admin/users?role=doctor&limit=50");
+      const { data } = await api.get(
+        `/admin/users?role=doctor&page=${page}&limit=${pagination.itemsPerPage}`,
+      );
       setDoctors(data.data);
+      setPagination((prev) => ({
+        ...prev,
+        currentPage: data.currentPage,
+        totalPages: data.totalPages,
+        totalItems: data.totalItems,
+      }));
       // Delay to show skeleton
       await new Promise((resolve) => setTimeout(resolve, 1000));
     } catch (error) {
@@ -81,6 +97,10 @@ const Doctors = () => {
       toast.error(`Failed to ${confirmModal.type} doctor`);
       setConfirmModal((prev) => ({ ...prev, loading: false }));
     }
+  };
+
+  const handlePageChange = (page) => {
+    setPagination((prev) => ({ ...prev, currentPage: page }));
   };
 
   const closeModal = () => {
@@ -174,6 +194,17 @@ const Doctors = () => {
                     ))}
                   </tbody>
                 </table>
+
+                {/* Pagination */}
+                <div className="mt-6">
+                  <Pagination
+                    currentPage={pagination.currentPage}
+                    totalPages={pagination.totalPages}
+                    totalItems={pagination.totalItems}
+                    itemsPerPage={pagination.itemsPerPage}
+                    onPageChange={handlePageChange}
+                  />
+                </div>
               </div>
             )}
           </div>
