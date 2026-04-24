@@ -5,7 +5,11 @@ import {
   exportToExcel,
   EXPORT_COLUMNS,
   formatDataForExport,
+  exportAnalyticsToPDF,
+  exportAnalyticsToExcel,
+  formatAnalyticsForExport,
 } from "../utils/exportUtils";
+import toast from "react-hot-toast";
 
 const ExportButton = ({
   data,
@@ -21,13 +25,15 @@ const ExportButton = ({
 
   const columns = customColumns || EXPORT_COLUMNS[type];
 
-  if (!columns) {
+  // Analytics doesn't need columns validation
+  if (type !== "analytics" && !columns) {
     console.error(`No export columns defined for type: ${type}`);
     return null;
   }
 
   const handleExport = async (format) => {
-    if (!data || data.length === 0) {
+    if (!data || (Array.isArray(data) && data.length === 0)) {
+      toast.error("No data available to export");
       return;
     }
 
@@ -35,27 +41,43 @@ const ExportButton = ({
     setIsOpen(false);
 
     try {
-      const formattedData = formatDataForExport(data, type);
       const exportTitle =
         title || `${type.charAt(0).toUpperCase() + type.slice(1)} Report`;
       const exportFilename =
         filename || `${type}_${new Date().toISOString().split("T")[0]}`;
+
+      // Handle analytics data specially
+      if (type === "analytics") {
+        if (format === "pdf") {
+          exportAnalyticsToPDF(data, exportTitle, exportFilename);
+        } else if (format === "excel") {
+          exportAnalyticsToExcel(data, exportFilename);
+        }
+        toast.success(`Analytics report exported as ${format.toUpperCase()}`);
+        return;
+      }
+
+      // Handle regular data
+      const formattedData = formatDataForExport(data, type);
 
       if (format === "pdf") {
         exportToPDF(formattedData, columns, exportTitle, exportFilename);
       } else if (format === "excel") {
         exportToExcel(formattedData, columns, exportTitle, exportFilename);
       }
+
+      toast.success(`Data exported as ${format.toUpperCase()}`);
     } catch (error) {
       console.error("Export failed:", error);
-      // You can add a toast notification here if you have toast available
-      alert(`Export failed: ${error.message || "Unknown error occurred"}`);
+      toast.error(
+        `Export failed: ${error.message || "Unknown error occurred"}`,
+      );
     } finally {
       setIsExporting(false);
     }
   };
 
-  if (disabled || !data || data.length === 0) {
+  if (disabled || !data || (Array.isArray(data) && data.length === 0)) {
     return (
       <button
         disabled

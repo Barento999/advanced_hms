@@ -21,6 +21,8 @@ import Doctors from "./pages/admin/Doctors";
 import Patients from "./pages/admin/Patients";
 import AdminAppointments from "./pages/admin/Appointments";
 import AdminReviews from "./pages/admin/Reviews";
+import Analytics from "./pages/admin/Analytics";
+import Reports from "./pages/admin/Reports";
 
 // Doctor Pages
 import DoctorDashboard from "./pages/doctor/DoctorDashboard";
@@ -148,6 +150,22 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={["admin"]}>
               <AdminReviews />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/analytics"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <Analytics />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/reports"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <Reports />
             </ProtectedRoute>
           }
         />

@@ -3,6 +3,8 @@ import Doctor from "../models/Doctor.js";
 import Patient from "../models/Patient.js";
 import Appointment from "../models/Appointment.js";
 import Payment from "../models/Payment.js";
+import MedicalRecord from "../models/MedicalRecord.js";
+import Review from "../models/Review.js";
 
 export const getDashboardStats = async (req, res) => {
   try {
@@ -229,6 +231,365 @@ export const getAllAppointments = async (req, res) => {
       totalPages: Math.ceil(total / limit),
       totalItems: total,
       itemsPerPage: parseInt(limit),
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Analytics endpoints
+export const getAnalytics = async (req, res) => {
+  try {
+    const { period = "month" } = req.query; // month, quarter, year
+
+    // Calculate date range based on period
+    const now = new Date();
+    let startDate;
+
+    switch (period) {
+      case "week":
+        startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        break;
+      case "month":
+        startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+        break;
+      case "quarter":
+        const quarterStart = Math.floor(now.getMonth() / 3) * 3;
+        startDate = new Date(now.getFullYear(), quarterStart, 1);
+        break;
+      case "year":
+        startDate = new Date(now.getFullYear(), 0, 1);
+        break;
+      default:
+        startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+    }
+
+    // User registration trends
+    const userTrends = await User.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: startDate },
+          isDeleted: false,
+        },
+      },
+      {
+        $group: {
+          _id: {
+            date: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+            role: "$role",
+          },
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { "_id.date": 1 } },
+    ]);
+
+    // Appointment trends
+    const appointmentTrends = await Appointment.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: startDate },
+          isDeleted: false,
+        },
+      },
+      {
+        $group: {
+          _id: {
+            date: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+            status: "$status",
+          },
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { "_id.date": 1 } },
+    ]);
+
+    // Revenue trends
+    const revenueTrends = await Payment.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: startDate },
+          status: "completed",
+          isDeleted: false,
+        },
+      },
+      {
+        $group: {
+          _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+          revenue: { $sum: "$amount" },
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { _id: 1 } },
+    ]);
+
+    // Doctor specialization distribution
+    const specializationStats = await Doctor.aggregate([
+      { $match: { isDeleted: false } },
+      {
+        $group: {
+          _id: "$specialization",
+          count: { $sum: 1 },
+          avgRating: { $avg: "$rating" },
+          avgFee: { $avg: "$consultationFee" },
+        },
+      },
+      { $sort: { count: -1 } },
+    ]);
+
+    // Appointment status distribution
+    const appointmentStatusStats = await Appointment.aggregate([
+      { $match: { isDeleted: false } },
+      {
+        $group: {
+          _id: "$status",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    // Top performing doctors
+    const topDoctors = await Doctor.aggregate([
+      { $match: { isDeleted: false } },
+      {
+        $lookup: {
+          from: "appointments",
+          localField: "_id",
+          foreignField: "doctorId",
+          as: "appointments",
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+      {
+        $project: {
+          name: { $arrayElemAt: ["$user.name", 0] },
+          specialization: 1,
+          rating: 1,
+          appointmentCount: { $size: "$appointments" },
+          completedAppointments: {
+            $size: {
+              $filter: {
+                input: "$appointments",
+                cond: { $eq: ["$$this.status", "completed"] },
+              },
+            },
+          },
+        },
+      },
+      { $sort: { appointmentCount: -1 } },
+      { $limit: 10 },
+    ]);
+
+    // Monthly revenue comparison (current vs previous period)
+    const currentPeriodRevenue = await Payment.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: startDate },
+          status: "completed",
+          isDeleted: false,
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          total: { $sum: "$amount" },
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    const previousPeriodStart = new Date(
+      startDate.getTime() - (now.getTime() - startDate.getTime()),
+    );
+    const previousPeriodRevenue = await Payment.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: previousPeriodStart, $lt: startDate },
+          status: "completed",
+          isDeleted: false,
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          total: { $sum: "$amount" },
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    res.json({
+      success: true,
+      data: {
+        period,
+        userTrends,
+        appointmentTrends,
+        revenueTrends,
+        specializationStats,
+        appointmentStatusStats,
+        topDoctors,
+        revenueComparison: {
+          current: currentPeriodRevenue[0] || { total: 0, count: 0 },
+          previous: previousPeriodRevenue[0] || { total: 0, count: 0 },
+        },
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const getDetailedReports = async (req, res) => {
+  try {
+    const { type, startDate, endDate } = req.query;
+
+    const dateFilter = {};
+    if (startDate && endDate) {
+      dateFilter.createdAt = {
+        $gte: new Date(startDate),
+        $lte: new Date(endDate),
+      };
+    }
+
+    let reportData = {};
+
+    switch (type) {
+      case "users":
+        reportData = await User.aggregate([
+          { $match: { ...dateFilter, isDeleted: false } },
+          {
+            $group: {
+              _id: "$role",
+              count: { $sum: 1 },
+              active: { $sum: { $cond: ["$isActive", 1, 0] } },
+              inactive: { $sum: { $cond: ["$isActive", 0, 1] } },
+            },
+          },
+        ]);
+        break;
+
+      case "appointments":
+        reportData = await Appointment.aggregate([
+          { $match: { ...dateFilter, isDeleted: false } },
+          {
+            $group: {
+              _id: {
+                status: "$status",
+                month: { $month: "$createdAt" },
+                year: { $year: "$createdAt" },
+              },
+              count: { $sum: 1 },
+            },
+          },
+          { $sort: { "_id.year": 1, "_id.month": 1 } },
+        ]);
+        break;
+
+      case "revenue":
+        reportData = await Payment.aggregate([
+          {
+            $match: {
+              ...dateFilter,
+              status: "completed",
+              isDeleted: false,
+            },
+          },
+          {
+            $group: {
+              _id: {
+                month: { $month: "$createdAt" },
+                year: { $year: "$createdAt" },
+              },
+              totalRevenue: { $sum: "$amount" },
+              transactionCount: { $sum: 1 },
+              avgTransaction: { $avg: "$amount" },
+            },
+          },
+          { $sort: { "_id.year": 1, "_id.month": 1 } },
+        ]);
+        break;
+
+      case "doctors":
+        reportData = await Doctor.aggregate([
+          { $match: { isDeleted: false } },
+          {
+            $lookup: {
+              from: "appointments",
+              let: { doctorId: "$_id" },
+              pipeline: [
+                {
+                  $match: {
+                    $expr: { $eq: ["$doctorId", "$$doctorId"] },
+                    ...dateFilter,
+                    isDeleted: false,
+                  },
+                },
+              ],
+              as: "appointments",
+            },
+          },
+          {
+            $lookup: {
+              from: "reviews",
+              localField: "_id",
+              foreignField: "doctorId",
+              as: "reviews",
+            },
+          },
+          {
+            $lookup: {
+              from: "users",
+              localField: "userId",
+              foreignField: "_id",
+              as: "user",
+            },
+          },
+          {
+            $project: {
+              name: { $arrayElemAt: ["$user.name", 0] },
+              specialization: 1,
+              experience: 1,
+              consultationFee: 1,
+              rating: 1,
+              totalAppointments: { $size: "$appointments" },
+              completedAppointments: {
+                $size: {
+                  $filter: {
+                    input: "$appointments",
+                    cond: { $eq: ["$$this.status", "completed"] },
+                  },
+                },
+              },
+              totalReviews: { $size: "$reviews" },
+              avgReviewRating: { $avg: "$reviews.rating" },
+            },
+          },
+          { $sort: { totalAppointments: -1 } },
+        ]);
+        break;
+
+      default:
+        return res.status(400).json({
+          success: false,
+          message:
+            "Invalid report type. Use: users, appointments, revenue, or doctors",
+        });
+    }
+
+    res.json({
+      success: true,
+      data: {
+        type,
+        dateRange: { startDate, endDate },
+        report: reportData,
+      },
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

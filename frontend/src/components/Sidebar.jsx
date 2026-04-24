@@ -10,6 +10,8 @@ import {
   LogOut,
   Bell,
   Star,
+  BarChart3,
+  FileBarChart,
 } from "lucide-react";
 import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
@@ -29,6 +31,8 @@ const Sidebar = () => {
         { icon: Users, label: "Patients", path: "/admin/patients" },
         { icon: Calendar, label: "Appointments", path: "/admin/appointments" },
         { icon: Star, label: "Reviews", path: "/admin/reviews" },
+        { icon: BarChart3, label: "Analytics", path: "/admin/analytics" },
+        { icon: FileBarChart, label: "Reports", path: "/admin/reports" },
         { icon: Bell, label: "Notifications", path: "/admin/notifications" },
       ];
     } else if (user?.role === "doctor") {

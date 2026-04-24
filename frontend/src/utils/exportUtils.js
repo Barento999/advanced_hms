@@ -281,6 +281,13 @@ export const EXPORT_COLUMNS = {
     { header: "Status", accessor: "isActive" },
     { header: "Created Date", accessor: "createdAt" },
   ],
+
+  analytics: [
+    { header: "Metric", accessor: "metric" },
+    { header: "Value", accessor: "value" },
+    { header: "Period", accessor: "period" },
+    { header: "Change", accessor: "change" },
+  ],
 };
 
 // Helper function to format data for export
@@ -326,4 +333,248 @@ export const formatDataForExport = (data, type) => {
 
     return formatted;
   });
+};
+
+// Special formatter for analytics data
+export const formatAnalyticsForExport = (data) => {
+  const exportData = [];
+
+  // Revenue comparison
+  if (data.revenueComparison) {
+    exportData.push({
+      metric: "Current Period Revenue",
+      value: `$${data.revenueComparison.current.total || 0}`,
+      period: data.period || "N/A",
+      change: "N/A",
+    });
+    exportData.push({
+      metric: "Previous Period Revenue",
+      value: `$${data.revenueComparison.previous.total || 0}`,
+      period: data.period || "N/A",
+      change: "N/A",
+    });
+  }
+
+  // Top doctors summary
+  if (data.topDoctors && data.topDoctors.length > 0) {
+    exportData.push({
+      metric: "Top Doctor",
+      value: data.topDoctors[0].name,
+      period: data.period || "N/A",
+      change: `${data.topDoctors[0].appointmentCount} appointments`,
+    });
+  }
+
+  // Specialization stats
+  if (data.specializationStats && data.specializationStats.length > 0) {
+    data.specializationStats.forEach((spec) => {
+      exportData.push({
+        metric: `${spec._id} Doctors`,
+        value: spec.count,
+        period: data.period || "N/A",
+        change: `Avg Rating: ${spec.avgRating?.toFixed(1) || "N/A"}`,
+      });
+    });
+  }
+
+  return exportData;
+};
+
+// Analytics-specific export functions
+export const exportAnalyticsToPDF = (data, title, filename) => {
+  try {
+    const doc = new jsPDF();
+
+    // Header
+    doc.setFontSize(20);
+    doc.setTextColor(30, 58, 138);
+    doc.text(title, 105, 20, { align: "center" });
+
+    doc.setFontSize(12);
+    doc.setTextColor(100);
+    doc.text(`Generated on: ${new Date().toLocaleString()}`, 105, 30, {
+      align: "center",
+    });
+
+    let yPos = 50;
+
+    // Revenue comparison
+    if (data.revenueComparison) {
+      doc.setFontSize(16);
+      doc.setTextColor(0);
+      doc.text("Revenue Analysis", 20, yPos);
+      yPos += 15;
+
+      doc.setFontSize(12);
+      doc.text(
+        `Current Period: $${data.revenueComparison.current.total || 0}`,
+        20,
+        yPos,
+      );
+      yPos += 8;
+      doc.text(
+        `Previous Period: $${data.revenueComparison.previous.total || 0}`,
+        20,
+        yPos,
+      );
+      yPos += 8;
+      doc.text(
+        `Transactions: ${data.revenueComparison.current.count || 0}`,
+        20,
+        yPos,
+      );
+      yPos += 20;
+    }
+
+    // Top doctors
+    if (data.topDoctors && data.topDoctors.length > 0) {
+      doc.setFontSize(16);
+      doc.setTextColor(0);
+      doc.text("Top Performing Doctors", 20, yPos);
+      yPos += 15;
+
+      // Table headers
+      doc.setFontSize(10);
+      doc.setFont(undefined, "bold");
+      doc.text("Doctor", 20, yPos);
+      doc.text("Specialization", 70, yPos);
+      doc.text("Appointments", 120, yPos);
+      doc.text("Rating", 160, yPos);
+      yPos += 8;
+
+      doc.setFont(undefined, "normal");
+      data.topDoctors.slice(0, 15).forEach((doctor) => {
+        if (yPos > 270) {
+          doc.addPage();
+          yPos = 20;
+        }
+        doc.text(doctor.name || "N/A", 20, yPos);
+        doc.text(doctor.specialization || "N/A", 70, yPos);
+        doc.text(doctor.appointmentCount?.toString() || "0", 120, yPos);
+        doc.text(doctor.rating?.toFixed(1) || "N/A", 160, yPos);
+        yPos += 6;
+      });
+      yPos += 15;
+    }
+
+    // Specialization distribution
+    if (data.specializationStats && data.specializationStats.length > 0) {
+      if (yPos > 200) {
+        doc.addPage();
+        yPos = 20;
+      }
+
+      doc.setFontSize(16);
+      doc.setTextColor(0);
+      doc.text("Specialization Distribution", 20, yPos);
+      yPos += 15;
+
+      doc.setFontSize(10);
+      doc.setFont(undefined, "bold");
+      doc.text("Specialization", 20, yPos);
+      doc.text("Count", 100, yPos);
+      doc.text("Avg Rating", 130, yPos);
+      doc.text("Avg Fee", 160, yPos);
+      yPos += 8;
+
+      doc.setFont(undefined, "normal");
+      data.specializationStats.forEach((spec) => {
+        if (yPos > 270) {
+          doc.addPage();
+          yPos = 20;
+        }
+        doc.text(spec._id || "N/A", 20, yPos);
+        doc.text(spec.count?.toString() || "0", 100, yPos);
+        doc.text(spec.avgRating?.toFixed(1) || "N/A", 130, yPos);
+        doc.text(`$${spec.avgFee?.toFixed(0) || "0"}`, 160, yPos);
+        yPos += 6;
+      });
+    }
+
+    doc.save(`${filename}.pdf`);
+  } catch (error) {
+    console.error("Analytics PDF Export Error:", error);
+    throw new Error(`Analytics PDF export failed: ${error.message}`);
+  }
+};
+
+export const exportAnalyticsToExcel = (data, filename) => {
+  try {
+    const workbook = XLSX.utils.book_new();
+
+    // Summary sheet
+    const summaryData = [];
+    if (data.revenueComparison) {
+      summaryData.push(
+        ["Metric", "Current Period", "Previous Period"],
+        [
+          "Revenue",
+          data.revenueComparison.current.total || 0,
+          data.revenueComparison.previous.total || 0,
+        ],
+        [
+          "Transactions",
+          data.revenueComparison.current.count || 0,
+          data.revenueComparison.previous.count || 0,
+        ],
+      );
+    }
+
+    if (summaryData.length > 0) {
+      const summarySheet = XLSX.utils.aoa_to_sheet(summaryData);
+      XLSX.utils.book_append_sheet(workbook, summarySheet, "Summary");
+    }
+
+    // Top doctors sheet
+    if (data.topDoctors && data.topDoctors.length > 0) {
+      const doctorsData = data.topDoctors.map((doctor) => ({
+        Name: doctor.name,
+        Specialization: doctor.specialization,
+        "Total Appointments": doctor.appointmentCount,
+        "Completed Appointments": doctor.completedAppointments,
+        Rating: doctor.rating,
+        "Success Rate":
+          doctor.appointmentCount > 0
+            ? (
+                (doctor.completedAppointments / doctor.appointmentCount) *
+                100
+              ).toFixed(1) + "%"
+            : "0%",
+      }));
+      const doctorsSheet = XLSX.utils.json_to_sheet(doctorsData);
+      XLSX.utils.book_append_sheet(workbook, doctorsSheet, "Top Doctors");
+    }
+
+    // Specialization stats sheet
+    if (data.specializationStats && data.specializationStats.length > 0) {
+      const specializationData = data.specializationStats.map((item) => ({
+        Specialization: item._id,
+        Count: item.count,
+        "Average Rating": item.avgRating?.toFixed(1) || "N/A",
+        "Average Fee": item.avgFee?.toFixed(0) || "N/A",
+      }));
+      const specializationSheet = XLSX.utils.json_to_sheet(specializationData);
+      XLSX.utils.book_append_sheet(
+        workbook,
+        specializationSheet,
+        "Specializations",
+      );
+    }
+
+    // Revenue trends sheet
+    if (data.revenueTrends && data.revenueTrends.length > 0) {
+      const revenueData = data.revenueTrends.map((item) => ({
+        Date: item._id,
+        Revenue: item.revenue,
+        Transactions: item.count,
+      }));
+      const revenueSheet = XLSX.utils.json_to_sheet(revenueData);
+      XLSX.utils.book_append_sheet(workbook, revenueSheet, "Revenue Trends");
+    }
+
+    XLSX.writeFile(workbook, `${filename}.xlsx`);
+  } catch (error) {
+    console.error("Analytics Excel Export Error:", error);
+    throw new Error(`Analytics Excel export failed: ${error.message}`);
+  }
 };
