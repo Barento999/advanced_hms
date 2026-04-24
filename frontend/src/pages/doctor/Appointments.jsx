@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Check, X } from "lucide-react";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
+import EmptyState from "../../components/EmptyState";
 import { TableSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
@@ -73,6 +74,21 @@ const Appointments = () => {
 
             {loading ? (
               <TableSkeleton rows={8} />
+            ) : appointments.length === 0 ? (
+              <EmptyState
+                type="doctorAppointments"
+                title={
+                  filter === "all"
+                    ? "No appointments found"
+                    : `No ${filter} appointments`
+                }
+                description={
+                  filter === "all"
+                    ? "You don't have any appointments scheduled. Patients can book appointments with you through the system."
+                    : `You don't have any ${filter} appointments. Check other status filters to see more appointments.`
+                }
+                className="py-12"
+              />
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full">

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { DollarSign, Calendar, CreditCard } from "lucide-react";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
+import EmptyState from "../../components/EmptyState";
 import {
   TableSkeleton,
   StatCardSkeleton,
@@ -130,15 +131,7 @@ const Payments = () => {
                 </h2>
 
                 {payments.length === 0 ? (
-                  <div className="text-center py-12">
-                    <DollarSign
-                      size={48}
-                      className="mx-auto text-gray-400 dark:text-slate-600 mb-4"
-                    />
-                    <p className="text-gray-500 dark:text-slate-400">
-                      No payment history yet
-                    </p>
-                  </div>
+                  <EmptyState type="payments" className="py-8" />
                 ) : (
                   <div className="overflow-x-auto">
                     <table className="w-full">

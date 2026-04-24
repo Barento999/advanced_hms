@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Trash2, ToggleLeft, ToggleRight } from "lucide-react";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
+import EmptyState from "../../components/EmptyState";
 import { TableSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
@@ -63,6 +64,8 @@ const Patients = () => {
 
             {loading ? (
               <TableSkeleton rows={8} />
+            ) : patients.length === 0 ? (
+              <EmptyState type="patients" className="py-12" />
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full">
@@ -86,55 +89,45 @@ const Patients = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {patients.length === 0 ? (
-                      <tr>
-                        <td
-                          colSpan="5"
-                          className="text-center py-8 text-gray-500 dark:text-slate-400">
-                          No patients found
+                    {patients.map((patient) => (
+                      <tr
+                        key={patient._id}
+                        className="border-b border-gray-100 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
+                        <td className="py-3 px-4 text-dark dark:text-slate-100">
+                          {patient.name}
+                        </td>
+                        <td className="py-3 px-4 text-dark dark:text-slate-100">
+                          {patient.email}
+                        </td>
+                        <td className="py-3 px-4 text-dark dark:text-slate-100">
+                          {patient.phone}
+                        </td>
+                        <td className="py-3 px-4">
+                          <span
+                            className={`badge ${patient.isActive ? "badge-completed" : "badge-cancelled"}`}>
+                            {patient.isActive ? "Active" : "Inactive"}
+                          </span>
+                        </td>
+                        <td className="py-3 px-4">
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => handleToggleStatus(patient._id)}
+                              className="p-2 hover:bg-gray-200 dark:hover:bg-slate-700 text-gray-600 dark:text-slate-400 rounded-lg transition-colors">
+                              {patient.isActive ? (
+                                <ToggleRight size={20} />
+                              ) : (
+                                <ToggleLeft size={20} />
+                              )}
+                            </button>
+                            <button
+                              onClick={() => handleDelete(patient._id)}
+                              className="p-2 hover:bg-red-100 dark:hover:bg-red-900/30 text-danger dark:text-red-400 rounded-lg transition-colors">
+                              <Trash2 size={20} />
+                            </button>
+                          </div>
                         </td>
                       </tr>
-                    ) : (
-                      patients.map((patient) => (
-                        <tr
-                          key={patient._id}
-                          className="border-b border-gray-100 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
-                          <td className="py-3 px-4 text-dark dark:text-slate-100">
-                            {patient.name}
-                          </td>
-                          <td className="py-3 px-4 text-dark dark:text-slate-100">
-                            {patient.email}
-                          </td>
-                          <td className="py-3 px-4 text-dark dark:text-slate-100">
-                            {patient.phone}
-                          </td>
-                          <td className="py-3 px-4">
-                            <span
-                              className={`badge ${patient.isActive ? "badge-completed" : "badge-cancelled"}`}>
-                              {patient.isActive ? "Active" : "Inactive"}
-                            </span>
-                          </td>
-                          <td className="py-3 px-4">
-                            <div className="flex gap-2">
-                              <button
-                                onClick={() => handleToggleStatus(patient._id)}
-                                className="p-2 hover:bg-gray-200 dark:hover:bg-slate-700 text-gray-600 dark:text-slate-400 rounded-lg transition-colors">
-                                {patient.isActive ? (
-                                  <ToggleRight size={20} />
-                                ) : (
-                                  <ToggleLeft size={20} />
-                                )}
-                              </button>
-                              <button
-                                onClick={() => handleDelete(patient._id)}
-                                className="p-2 hover:bg-red-100 dark:hover:bg-red-900/30 text-danger dark:text-red-400 rounded-lg transition-colors">
-                                <Trash2 size={20} />
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))
-                    )}
+                    ))}
                   </tbody>
                 </table>
               </div>

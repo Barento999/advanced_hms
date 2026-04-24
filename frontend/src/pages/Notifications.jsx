@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { Bell, Check, CheckCheck, Trash2 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
+import EmptyState from "../components/EmptyState";
 import { ListSkeleton } from "../components/LoadingSkeleton";
 import { NotificationContext } from "../context/SocketContext";
 import api from "../utils/api";
@@ -96,17 +97,8 @@ const Notifications = () => {
               <ListSkeleton items={6} />
             </div>
           ) : notifications.length === 0 ? (
-            <div className="card text-center py-16">
-              <Bell
-                size={64}
-                className="mx-auto mb-4 text-gray-300 dark:text-slate-600"
-              />
-              <h3 className="text-xl font-semibold text-gray-600 dark:text-slate-400 mb-2">
-                No notifications yet
-              </h3>
-              <p className="text-gray-500 dark:text-slate-400">
-                You'll see notifications here when you have updates
-              </p>
+            <div className="card">
+              <EmptyState type="notifications" className="py-12" />
             </div>
           ) : (
             <div className="space-y-6">

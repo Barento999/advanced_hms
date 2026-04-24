@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Star, Edit2, Trash2, Plus } from "lucide-react";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
+import EmptyState from "../../components/EmptyState";
 import { ListSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
@@ -118,11 +119,12 @@ const Reviews = () => {
             )}
 
             {!loading && appointments.length === 0 && (
-              <div className="card text-center py-12">
-                <p className="text-gray-500 dark:text-slate-400">
-                  No completed appointments to review
-                </p>
-              </div>
+              <EmptyState
+                type="reviews"
+                title="No appointments to review"
+                description="You need to complete appointments before you can write reviews. Book an appointment with a doctor to get started."
+                className="py-8"
+              />
             )}
           </div>
         </div>

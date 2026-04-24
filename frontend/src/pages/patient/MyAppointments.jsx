@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
+import EmptyState from "../../components/EmptyState";
 import { TableSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
@@ -9,6 +11,7 @@ import toast from "react-hot-toast";
 const MyAppointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchAppointments();
@@ -53,6 +56,13 @@ const MyAppointments = () => {
 
             {loading ? (
               <TableSkeleton rows={8} />
+            ) : appointments.length === 0 ? (
+              <EmptyState
+                type="myAppointments"
+                actionText="Book Appointment"
+                onAction={() => navigate("/patient/doctors")}
+                className="py-12"
+              />
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full">

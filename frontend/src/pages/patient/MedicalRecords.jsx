@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { FileText, Calendar, User } from "lucide-react";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
+import EmptyState from "../../components/EmptyState";
 import { ListSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
@@ -43,15 +44,7 @@ const MedicalRecords = () => {
             {loading ? (
               <ListSkeleton items={3} />
             ) : records.length === 0 ? (
-              <div className="text-center py-12">
-                <FileText
-                  size={48}
-                  className="mx-auto text-gray-400 dark:text-slate-600 mb-4"
-                />
-                <p className="text-gray-500 dark:text-slate-400">
-                  No medical records yet
-                </p>
-              </div>
+              <EmptyState type="medicalRecords" className="py-8" />
             ) : (
               <div className="space-y-4">
                 {records.map((record) => (
