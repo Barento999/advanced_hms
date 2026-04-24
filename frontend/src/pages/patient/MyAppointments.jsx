@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
 import EmptyState from "../../components/EmptyState";
+import ConfirmationModal from "../../components/ConfirmationModal";
 import { TableSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
@@ -12,6 +13,11 @@ const MyAppointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const [confirmModal, setConfirmModal] = useState({
+    isOpen: false,
+    appointment: null,
+    loading: false,
+  });
 
   useEffect(() => {
     fetchAppointments();
@@ -30,15 +36,33 @@ const MyAppointments = () => {
     }
   };
 
-  const cancelAppointment = async (id) => {
-    if (window.confirm("Are you sure you want to cancel this appointment?")) {
-      try {
-        await api.patch(`/patient/appointments/${id}/cancel`);
-        toast.success("Appointment cancelled");
-        fetchAppointments();
-      } catch (error) {
-        toast.error("Failed to cancel appointment");
-      }
+  const cancelAppointment = async (appointment) => {
+    setConfirmModal({
+      isOpen: true,
+      appointment: appointment,
+      loading: false,
+    });
+  };
+
+  const handleConfirmCancel = async () => {
+    setConfirmModal((prev) => ({ ...prev, loading: true }));
+
+    try {
+      await api.patch(
+        `/patient/appointments/${confirmModal.appointment._id}/cancel`,
+      );
+      toast.success("Appointment cancelled");
+      fetchAppointments();
+      setConfirmModal({ isOpen: false, appointment: null, loading: false });
+    } catch (error) {
+      toast.error("Failed to cancel appointment");
+      setConfirmModal((prev) => ({ ...prev, loading: false }));
+    }
+  };
+
+  const closeModal = () => {
+    if (!confirmModal.loading) {
+      setConfirmModal({ isOpen: false, appointment: null, loading: false });
     }
   };
 
@@ -113,7 +137,7 @@ const MyAppointments = () => {
                         <td className="py-3 px-4">
                           {apt.status === "pending" && (
                             <button
-                              onClick={() => cancelAppointment(apt._id)}
+                              onClick={() => cancelAppointment(apt)}
                               className="p-2 bg-red-100 dark:bg-red-900/30 text-danger dark:text-red-400 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors">
                               <X size={18} />
                             </button>
@@ -128,6 +152,16 @@ const MyAppointments = () => {
           </div>
         </div>
       </div>
+
+      {/* Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={confirmModal.isOpen}
+        onClose={closeModal}
+        onConfirm={handleConfirmCancel}
+        type="cancel"
+        itemName={`Appointment with Dr. ${confirmModal.appointment?.doctorId?.userId?.name}`}
+        loading={confirmModal.loading}
+      />
     </div>
   );
 };

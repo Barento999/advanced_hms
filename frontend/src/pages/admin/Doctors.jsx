@@ -3,6 +3,7 @@ import { Trash2, ToggleLeft, ToggleRight } from "lucide-react";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
 import EmptyState from "../../components/EmptyState";
+import ConfirmationModal from "../../components/ConfirmationModal";
 import { TableSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
@@ -10,6 +11,12 @@ import toast from "react-hot-toast";
 const Doctors = () => {
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [confirmModal, setConfirmModal] = useState({
+    isOpen: false,
+    type: "",
+    doctor: null,
+    loading: false,
+  });
 
   useEffect(() => {
     fetchDoctors();
@@ -28,25 +35,62 @@ const Doctors = () => {
     }
   };
 
-  const handleToggleStatus = async (userId) => {
+  const handleToggleStatus = async (doctor) => {
+    setConfirmModal({
+      isOpen: true,
+      type: doctor.isActive ? "deactivate" : "activate",
+      doctor: doctor,
+      loading: false,
+    });
+  };
+
+  const handleDelete = async (doctor) => {
+    setConfirmModal({
+      isOpen: true,
+      type: "delete",
+      doctor: doctor,
+      loading: false,
+    });
+  };
+
+  const handleConfirmAction = async () => {
+    setConfirmModal((prev) => ({ ...prev, loading: true }));
+
     try {
-      await api.patch(`/admin/users/${userId}/toggle-status`);
-      toast.success("Doctor status updated");
+      if (confirmModal.type === "delete") {
+        await api.delete(`/admin/users/${confirmModal.doctor._id}`);
+        toast.success("Doctor deleted successfully");
+      } else if (
+        confirmModal.type === "deactivate" ||
+        confirmModal.type === "activate"
+      ) {
+        await api.patch(
+          `/admin/users/${confirmModal.doctor._id}/toggle-status`,
+        );
+        toast.success(`Doctor ${confirmModal.type}d successfully`);
+      }
+
       fetchDoctors();
+      setConfirmModal({
+        isOpen: false,
+        type: "",
+        doctor: null,
+        loading: false,
+      });
     } catch (error) {
-      toast.error("Failed to update status");
+      toast.error(`Failed to ${confirmModal.type} doctor`);
+      setConfirmModal((prev) => ({ ...prev, loading: false }));
     }
   };
 
-  const handleDelete = async (userId) => {
-    if (window.confirm("Are you sure you want to delete this doctor?")) {
-      try {
-        await api.delete(`/admin/users/${userId}`);
-        toast.success("Doctor deleted successfully");
-        fetchDoctors();
-      } catch (error) {
-        toast.error("Failed to delete doctor");
-      }
+  const closeModal = () => {
+    if (!confirmModal.loading) {
+      setConfirmModal({
+        isOpen: false,
+        type: "",
+        doctor: null,
+        loading: false,
+      });
     }
   };
 
@@ -111,7 +155,7 @@ const Doctors = () => {
                         <td className="py-3 px-4">
                           <div className="flex gap-2">
                             <button
-                              onClick={() => handleToggleStatus(doctor._id)}
+                              onClick={() => handleToggleStatus(doctor)}
                               className="p-2 hover:bg-gray-200 dark:hover:bg-slate-700 text-gray-600 dark:text-slate-400 rounded-lg transition-colors">
                               {doctor.isActive ? (
                                 <ToggleRight size={20} />
@@ -120,7 +164,7 @@ const Doctors = () => {
                               )}
                             </button>
                             <button
-                              onClick={() => handleDelete(doctor._id)}
+                              onClick={() => handleDelete(doctor)}
                               className="p-2 hover:bg-red-100 dark:hover:bg-red-900/30 text-danger dark:text-red-400 rounded-lg transition-colors">
                               <Trash2 size={20} />
                             </button>
@@ -135,6 +179,16 @@ const Doctors = () => {
           </div>
         </div>
       </div>
+
+      {/* Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={confirmModal.isOpen}
+        onClose={closeModal}
+        onConfirm={handleConfirmAction}
+        type={confirmModal.type}
+        itemName={`Doctor (${confirmModal.doctor?.name})`}
+        loading={confirmModal.loading}
+      />
     </div>
   );
 };

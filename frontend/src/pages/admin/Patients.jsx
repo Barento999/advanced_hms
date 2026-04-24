@@ -3,6 +3,7 @@ import { Trash2, ToggleLeft, ToggleRight } from "lucide-react";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
 import EmptyState from "../../components/EmptyState";
+import ConfirmationModal from "../../components/ConfirmationModal";
 import { TableSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
@@ -10,6 +11,12 @@ import toast from "react-hot-toast";
 const Patients = () => {
   const [patients, setPatients] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [confirmModal, setConfirmModal] = useState({
+    isOpen: false,
+    type: "",
+    patient: null,
+    loading: false,
+  });
 
   useEffect(() => {
     fetchPatients();
@@ -28,25 +35,62 @@ const Patients = () => {
     }
   };
 
-  const handleToggleStatus = async (userId) => {
+  const handleToggleStatus = async (patient) => {
+    setConfirmModal({
+      isOpen: true,
+      type: patient.isActive ? "deactivate" : "activate",
+      patient: patient,
+      loading: false,
+    });
+  };
+
+  const handleDelete = async (patient) => {
+    setConfirmModal({
+      isOpen: true,
+      type: "delete",
+      patient: patient,
+      loading: false,
+    });
+  };
+
+  const handleConfirmAction = async () => {
+    setConfirmModal((prev) => ({ ...prev, loading: true }));
+
     try {
-      await api.patch(`/admin/users/${userId}/toggle-status`);
-      toast.success("Patient status updated");
+      if (confirmModal.type === "delete") {
+        await api.delete(`/admin/users/${confirmModal.patient._id}`);
+        toast.success("Patient deleted successfully");
+      } else if (
+        confirmModal.type === "deactivate" ||
+        confirmModal.type === "activate"
+      ) {
+        await api.patch(
+          `/admin/users/${confirmModal.patient._id}/toggle-status`,
+        );
+        toast.success(`Patient ${confirmModal.type}d successfully`);
+      }
+
       fetchPatients();
+      setConfirmModal({
+        isOpen: false,
+        type: "",
+        patient: null,
+        loading: false,
+      });
     } catch (error) {
-      toast.error("Failed to update status");
+      toast.error(`Failed to ${confirmModal.type} patient`);
+      setConfirmModal((prev) => ({ ...prev, loading: false }));
     }
   };
 
-  const handleDelete = async (userId) => {
-    if (window.confirm("Are you sure you want to delete this patient?")) {
-      try {
-        await api.delete(`/admin/users/${userId}`);
-        toast.success("Patient deleted successfully");
-        fetchPatients();
-      } catch (error) {
-        toast.error("Failed to delete patient");
-      }
+  const closeModal = () => {
+    if (!confirmModal.loading) {
+      setConfirmModal({
+        isOpen: false,
+        type: "",
+        patient: null,
+        loading: false,
+      });
     }
   };
 
@@ -111,7 +155,7 @@ const Patients = () => {
                         <td className="py-3 px-4">
                           <div className="flex gap-2">
                             <button
-                              onClick={() => handleToggleStatus(patient._id)}
+                              onClick={() => handleToggleStatus(patient)}
                               className="p-2 hover:bg-gray-200 dark:hover:bg-slate-700 text-gray-600 dark:text-slate-400 rounded-lg transition-colors">
                               {patient.isActive ? (
                                 <ToggleRight size={20} />
@@ -120,7 +164,7 @@ const Patients = () => {
                               )}
                             </button>
                             <button
-                              onClick={() => handleDelete(patient._id)}
+                              onClick={() => handleDelete(patient)}
                               className="p-2 hover:bg-red-100 dark:hover:bg-red-900/30 text-danger dark:text-red-400 rounded-lg transition-colors">
                               <Trash2 size={20} />
                             </button>
@@ -135,6 +179,16 @@ const Patients = () => {
           </div>
         </div>
       </div>
+
+      {/* Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={confirmModal.isOpen}
+        onClose={closeModal}
+        onConfirm={handleConfirmAction}
+        type={confirmModal.type}
+        itemName={`Patient (${confirmModal.patient?.name})`}
+        loading={confirmModal.loading}
+      />
     </div>
   );
 };

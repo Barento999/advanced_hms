@@ -3,6 +3,7 @@ import { Check, X } from "lucide-react";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
 import EmptyState from "../../components/EmptyState";
+import ConfirmationModal from "../../components/ConfirmationModal";
 import { TableSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
@@ -11,6 +12,12 @@ const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [filter, setFilter] = useState("all");
   const [loading, setLoading] = useState(true);
+  const [confirmModal, setConfirmModal] = useState({
+    isOpen: false,
+    type: "",
+    appointment: null,
+    loading: false,
+  });
 
   useEffect(() => {
     fetchAppointments();
@@ -33,13 +40,56 @@ const Appointments = () => {
     }
   };
 
-  const updateStatus = async (id, status) => {
+  const updateStatus = async (appointment, status) => {
+    const actionType =
+      status === "confirmed"
+        ? "confirm"
+        : status === "cancelled"
+          ? "reject"
+          : status === "completed"
+            ? "complete"
+            : "update";
+
+    setConfirmModal({
+      isOpen: true,
+      type: actionType,
+      appointment: { ...appointment, newStatus: status },
+      loading: false,
+    });
+  };
+
+  const handleConfirmAction = async () => {
+    setConfirmModal((prev) => ({ ...prev, loading: true }));
+
     try {
-      await api.patch(`/doctor/appointments/${id}/status`, { status });
+      await api.patch(
+        `/doctor/appointments/${confirmModal.appointment._id}/status`,
+        {
+          status: confirmModal.appointment.newStatus,
+        },
+      );
       toast.success("Status updated successfully");
       fetchAppointments();
+      setConfirmModal({
+        isOpen: false,
+        type: "",
+        appointment: null,
+        loading: false,
+      });
     } catch (error) {
       toast.error("Failed to update status");
+      setConfirmModal((prev) => ({ ...prev, loading: false }));
+    }
+  };
+
+  const closeModal = () => {
+    if (!confirmModal.loading) {
+      setConfirmModal({
+        isOpen: false,
+        type: "",
+        appointment: null,
+        loading: false,
+      });
     }
   };
 
@@ -134,16 +184,12 @@ const Appointments = () => {
                           {apt.status === "pending" && (
                             <div className="flex gap-2">
                               <button
-                                onClick={() =>
-                                  updateStatus(apt._id, "confirmed")
-                                }
+                                onClick={() => updateStatus(apt, "confirmed")}
                                 className="p-2 bg-green-100 dark:bg-green-900/30 text-accent dark:text-green-400 rounded-lg hover:bg-green-200 dark:hover:bg-green-900/50 transition-colors">
                                 <Check size={18} />
                               </button>
                               <button
-                                onClick={() =>
-                                  updateStatus(apt._id, "cancelled")
-                                }
+                                onClick={() => updateStatus(apt, "cancelled")}
                                 className="p-2 bg-red-100 dark:bg-red-900/30 text-danger dark:text-red-400 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors">
                                 <X size={18} />
                               </button>
@@ -151,7 +197,7 @@ const Appointments = () => {
                           )}
                           {apt.status === "confirmed" && (
                             <button
-                              onClick={() => updateStatus(apt._id, "completed")}
+                              onClick={() => updateStatus(apt, "completed")}
                               className="btn-primary text-sm">
                               Complete
                             </button>
@@ -166,6 +212,16 @@ const Appointments = () => {
           </div>
         </div>
       </div>
+
+      {/* Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={confirmModal.isOpen}
+        onClose={closeModal}
+        onConfirm={handleConfirmAction}
+        type={confirmModal.type}
+        itemName={`Appointment with ${confirmModal.appointment?.patientId?.userId?.name}`}
+        loading={confirmModal.loading}
+      />
     </div>
   );
 };

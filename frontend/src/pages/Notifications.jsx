@@ -3,6 +3,7 @@ import { Bell, Check, CheckCheck, Trash2 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 import EmptyState from "../components/EmptyState";
+import ConfirmationModal from "../components/ConfirmationModal";
 import { ListSkeleton } from "../components/LoadingSkeleton";
 import { NotificationContext } from "../context/SocketContext";
 import api from "../utils/api";
@@ -12,6 +13,12 @@ const Notifications = () => {
   const { notifications, fetchNotifications, markAsRead } =
     useContext(NotificationContext);
   const [loading, setLoading] = useState(true);
+  const [confirmModal, setConfirmModal] = useState({
+    isOpen: false,
+    type: "",
+    notification: null,
+    loading: false,
+  });
 
   useEffect(() => {
     const loadNotifications = async () => {
@@ -28,24 +35,58 @@ const Notifications = () => {
   };
 
   const handleMarkAllAsRead = async () => {
+    setConfirmModal({
+      isOpen: true,
+      type: "markAllRead",
+      notification: null,
+      loading: false,
+    });
+  };
+
+  const handleDelete = async (notification) => {
+    setConfirmModal({
+      isOpen: true,
+      type: "delete",
+      notification: notification,
+      loading: false,
+    });
+  };
+
+  const handleConfirmAction = async () => {
+    setConfirmModal((prev) => ({ ...prev, loading: true }));
+
     try {
-      await api.patch("/notifications/mark-all-read");
-      toast.success("All notifications marked as read");
+      if (confirmModal.type === "delete") {
+        await api.delete(`/notifications/${confirmModal.notification._id}`);
+        toast.success("Notification deleted");
+      } else if (confirmModal.type === "markAllRead") {
+        await api.patch("/notifications/mark-all-read");
+        toast.success("All notifications marked as read");
+      }
+
       fetchNotifications();
+      setConfirmModal({
+        isOpen: false,
+        type: "",
+        notification: null,
+        loading: false,
+      });
     } catch (error) {
-      toast.error("Failed to mark all as read");
+      toast.error(
+        `Failed to ${confirmModal.type === "delete" ? "delete notification" : "mark all as read"}`,
+      );
+      setConfirmModal((prev) => ({ ...prev, loading: false }));
     }
   };
 
-  const handleDelete = async (notificationId) => {
-    if (window.confirm("Are you sure you want to delete this notification?")) {
-      try {
-        await api.delete(`/notifications/${notificationId}`);
-        toast.success("Notification deleted");
-        fetchNotifications();
-      } catch (error) {
-        toast.error("Failed to delete notification");
-      }
+  const closeModal = () => {
+    if (!confirmModal.loading) {
+      setConfirmModal({
+        isOpen: false,
+        type: "",
+        notification: null,
+        loading: false,
+      });
     }
   };
 
@@ -135,7 +176,7 @@ const Notifications = () => {
                             <Check size={18} />
                           </button>
                           <button
-                            onClick={() => handleDelete(notification._id)}
+                            onClick={() => handleDelete(notification)}
                             className="p-2 hover:bg-red-100 text-red-600 rounded-lg transition-colors"
                             title="Delete">
                             <Trash2 size={18} />
@@ -173,7 +214,7 @@ const Notifications = () => {
                           </p>
                         </div>
                         <button
-                          onClick={() => handleDelete(notification._id)}
+                          onClick={() => handleDelete(notification)}
                           className="p-2 hover:bg-red-100 text-red-600 rounded-lg transition-colors"
                           title="Delete">
                           <Trash2 size={18} />
@@ -187,6 +228,26 @@ const Notifications = () => {
           )}
         </div>
       </div>
+
+      {/* Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={confirmModal.isOpen}
+        onClose={closeModal}
+        onConfirm={handleConfirmAction}
+        type={
+          confirmModal.type === "markAllRead" ? "default" : confirmModal.type
+        }
+        title={
+          confirmModal.type === "markAllRead" ? "Mark All as Read" : undefined
+        }
+        message={
+          confirmModal.type === "markAllRead"
+            ? "Are you sure you want to mark all notifications as read? This action cannot be undone."
+            : undefined
+        }
+        itemName={confirmModal.type === "delete" ? "Notification" : ""}
+        loading={confirmModal.loading}
+      />
     </div>
   );
 };

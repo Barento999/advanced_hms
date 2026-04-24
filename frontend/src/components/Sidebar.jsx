@@ -11,12 +11,15 @@ import {
   Bell,
   Star,
 } from "lucide-react";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
+import ConfirmationModal from "./ConfirmationModal";
 
 const Sidebar = () => {
   const location = useLocation();
   const { user, logout } = useContext(AuthContext);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [logoutLoading, setLogoutLoading] = useState(false);
 
   const getMenuItems = () => {
     if (user?.role === "admin") {
@@ -52,6 +55,22 @@ const Sidebar = () => {
         { icon: Star, label: "Reviews", path: "/patient/reviews" },
         { icon: Bell, label: "Notifications", path: "/patient/notifications" },
       ];
+    }
+  };
+
+  const handleLogout = () => {
+    setShowLogoutModal(true);
+  };
+
+  const confirmLogout = async () => {
+    setLogoutLoading(true);
+    try {
+      await logout();
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      setLogoutLoading(false);
+      setShowLogoutModal(false);
     }
   };
 
@@ -118,13 +137,22 @@ const Sidebar = () => {
             </Link>
           )}
           <button
-            onClick={logout}
+            onClick={handleLogout}
             className="flex items-center gap-3 px-4 py-3 rounded-xl text-white/90 dark:text-slate-300 hover:bg-red-500 dark:hover:bg-red-600 hover:text-white dark:hover:text-white w-full transition-all duration-200">
             <LogOut size={20} />
             <span className="font-medium">Logout</span>
           </button>
         </div>
       </div>
+
+      {/* Logout Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={showLogoutModal}
+        onClose={() => !logoutLoading && setShowLogoutModal(false)}
+        onConfirm={confirmLogout}
+        type="logout"
+        loading={logoutLoading}
+      />
     </div>
   );
 };
