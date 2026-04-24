@@ -1,21 +1,19 @@
 import { useState, useEffect } from "react";
-import { FileText, Calendar, User } from "lucide-react";
+import { FileText, Calendar, User, Search } from "lucide-react";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
 import EmptyState from "../../components/EmptyState";
 import Pagination from "../../components/Pagination";
-import ExportButton from "../../components/ExportButton";
 import PrescriptionButton from "../../components/PrescriptionButton";
 import { ListSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
 
-const MedicalRecords = () => {
+const ViewMedicalRecords = () => {
   const [records, setRecords] = useState([]);
-  const [allRecords, setAllRecords] = useState([]); // For export
-  const [patientProfile, setPatientProfile] = useState(null); // For prescription
   const [loading, setLoading] = useState(true);
   const [selectedRecord, setSelectedRecord] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const [pagination, setPagination] = useState({
     currentPage: 1,
     totalPages: 1,
@@ -24,35 +22,17 @@ const MedicalRecords = () => {
   });
 
   useEffect(() => {
-    fetchPatientProfile();
     fetchRecords();
-    fetchAllRecords(); // Fetch all for export
-  }, [pagination.currentPage]);
-
-  const fetchPatientProfile = async () => {
-    try {
-      const { data } = await api.get("/patient/profile");
-      setPatientProfile(data.data);
-    } catch (error) {
-      console.error("Failed to fetch patient profile:", error);
-      toast.error("Failed to load patient profile");
-    }
-  };
-
-  const fetchAllRecords = async () => {
-    try {
-      const { data } = await api.get("/patient/medical-records?all=true");
-      setAllRecords(data.data || []);
-    } catch (error) {
-      console.error("Failed to fetch all medical records for export");
-    }
-  };
+  }, [pagination.currentPage, searchTerm]);
 
   const fetchRecords = async (page = pagination.currentPage) => {
     setLoading(true);
     try {
+      const searchParam = searchTerm
+        ? `&search=${encodeURIComponent(searchTerm)}`
+        : "";
       const { data } = await api.get(
-        `/patient/medical-records?page=${page}&limit=${pagination.itemsPerPage}`,
+        `/doctor/medical-records?page=${page}&limit=${pagination.itemsPerPage}${searchParam}`,
       );
       setRecords(data.data || []);
       setPagination((prev) => ({
@@ -75,6 +55,13 @@ const MedicalRecords = () => {
     setSelectedRecord(null); // Close any open record when changing pages
   };
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setPagination((prev) => ({ ...prev, currentPage: 1 }));
+    setSelectedRecord(null); // Close any open record when searching
+    fetchRecords(1);
+  };
+
   return (
     <div className="flex min-h-screen">
       <Sidebar />
@@ -85,20 +72,45 @@ const MedicalRecords = () => {
           <div className="card">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
-                My Medical Records
+                Medical Records
               </h2>
-              <ExportButton
-                data={allRecords.length > 0 ? allRecords : records}
-                type="medicalRecords"
-                title="Medical Records Report"
-                filename="medical_records"
-              />
+
+              {/* Search */}
+              <form onSubmit={handleSearch} className="flex gap-2">
+                <div className="relative">
+                  <Search
+                    size={20}
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Search by patient name or diagnosis..."
+                    className="pl-10 pr-4 py-2 border border-gray-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-dark dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-transparent"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-primary text-white rounded-xl hover:bg-blue-700 transition-colors">
+                  Search
+                </button>
+              </form>
             </div>
 
             {loading ? (
               <ListSkeleton items={5} />
             ) : records.length === 0 ? (
-              <EmptyState type="medicalRecords" className="py-8" />
+              <EmptyState
+                type="medicalRecords"
+                title={searchTerm ? "No records found" : "No medical records"}
+                description={
+                  searchTerm
+                    ? "No records match your search criteria."
+                    : "No medical records have been created yet."
+                }
+                className="py-8"
+              />
             ) : (
               <>
                 <div className="space-y-4">
@@ -119,7 +131,10 @@ const MedicalRecords = () => {
                           <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-slate-400">
                             <div className="flex items-center gap-2">
                               <User size={16} />
-                              <span>{record.doctorId?.userId?.name}</span>
+                              <span>
+                                {record.patientId?.userId?.name ||
+                                  "Unknown Patient"}
+                              </span>
                             </div>
                             <div className="flex items-center gap-2">
                               <Calendar size={16} />
@@ -135,12 +150,12 @@ const MedicalRecords = () => {
                           <PrescriptionButton
                             medicalRecord={record}
                             patientInfo={{
-                              name: patientProfile?.userId?.name || "Patient",
-                              email: patientProfile?.userId?.email || "",
-                              phone: patientProfile?.userId?.phone || "",
-                              gender: patientProfile?.gender || "",
-                              bloodGroup: patientProfile?.bloodGroup || "",
-                              dateOfBirth: patientProfile?.dateOfBirth || "",
+                              name: record.patientId?.userId?.name || "Patient",
+                              email: record.patientId?.userId?.email || "",
+                              phone: record.patientId?.userId?.phone || "",
+                              gender: record.patientId?.gender || "",
+                              bloodGroup: record.patientId?.bloodGroup || "",
+                              dateOfBirth: record.patientId?.dateOfBirth || "",
                             }}
                             doctorInfo={{
                               name: record.doctorId?.userId?.name || "Doctor",
@@ -239,4 +254,4 @@ const MedicalRecords = () => {
   );
 };
 
-export default MedicalRecords;
+export default ViewMedicalRecords;

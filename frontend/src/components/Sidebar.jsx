@@ -36,7 +36,12 @@ const Sidebar = () => {
         { icon: Home, label: "Dashboard", path: "/doctor" },
         { icon: Calendar, label: "Appointments", path: "/doctor/appointments" },
         { icon: Users, label: "Patients", path: "/doctor/patients" },
-        { icon: FileText, label: "Medical Records", path: "/doctor/records" },
+        {
+          icon: FileText,
+          label: "Add Medical Record",
+          path: "/doctor/records",
+        },
+        { icon: FileText, label: "View Records", path: "/doctor/view-records" },
         { icon: Settings, label: "Schedule", path: "/doctor/schedule" },
         { icon: Star, label: "Reviews", path: "/doctor/reviews" },
         { icon: Bell, label: "Notifications", path: "/doctor/notifications" },

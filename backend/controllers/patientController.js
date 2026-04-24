@@ -336,7 +336,13 @@ export const getMedicalRecords = async (req, res) => {
       })
         .populate({
           path: "doctorId",
-          populate: { path: "userId", select: "name" },
+          populate: { path: "userId", select: "name email phone" },
+          select: "specialization experience rating",
+        })
+        .populate({
+          path: "patientId",
+          populate: { path: "userId", select: "name email phone" },
+          select: "gender bloodGroup dateOfBirth",
         })
         .sort({ createdAt: -1 });
 
@@ -352,7 +358,13 @@ export const getMedicalRecords = async (req, res) => {
     })
       .populate({
         path: "doctorId",
-        populate: { path: "userId", select: "name" },
+        populate: { path: "userId", select: "name email phone" },
+        select: "specialization experience rating",
+      })
+      .populate({
+        path: "patientId",
+        populate: { path: "userId", select: "name email phone" },
+        select: "gender bloodGroup dateOfBirth",
       })
       .skip(skip)
       .limit(parseInt(limit))

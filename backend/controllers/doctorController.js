@@ -324,3 +324,137 @@ export const getSchedule = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+export const getDoctorMedicalRecords = async (req, res) => {
+  try {
+    const doctor = await Doctor.findOne({
+      userId: req.user._id,
+      isDeleted: false,
+    });
+
+    if (!doctor) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Doctor profile not found" });
+    }
+
+    const { page = 1, limit = 5, search } = req.query;
+    const skip = (page - 1) * limit;
+
+    let query = { doctorId: doctor._id, isDeleted: false };
+    let aggregationPipeline = [];
+
+    if (search) {
+      // Use aggregation pipeline for searching across populated fields
+      aggregationPipeline = [
+        { $match: query },
+        {
+          $lookup: {
+            from: "patients",
+            localField: "patientId",
+            foreignField: "_id",
+            as: "patient",
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "patient.userId",
+            foreignField: "_id",
+            as: "patientUser",
+          },
+        },
+        {
+          $lookup: {
+            from: "doctors",
+            localField: "doctorId",
+            foreignField: "_id",
+            as: "doctor",
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "doctor.userId",
+            foreignField: "_id",
+            as: "doctorUser",
+          },
+        },
+        {
+          $match: {
+            $or: [
+              { diagnosis: { $regex: search, $options: "i" } },
+              { notes: { $regex: search, $options: "i" } },
+              { "patientUser.name": { $regex: search, $options: "i" } },
+            ],
+          },
+        },
+        { $sort: { createdAt: -1 } },
+        { $skip: skip },
+        { $limit: parseInt(limit) },
+      ];
+
+      const records = await MedicalRecord.aggregate(aggregationPipeline);
+
+      // Get total count for pagination
+      const countPipeline = aggregationPipeline.slice(0, -2); // Remove skip and limit
+      const totalResult = await MedicalRecord.aggregate([
+        ...countPipeline,
+        { $count: "total" },
+      ]);
+      const total = totalResult.length > 0 ? totalResult[0].total : 0;
+
+      // Populate the aggregated results manually
+      const populatedRecords = await MedicalRecord.populate(records, [
+        {
+          path: "patientId",
+          populate: { path: "userId", select: "name email phone" },
+          select: "gender bloodGroup dateOfBirth",
+        },
+        {
+          path: "doctorId",
+          populate: { path: "userId", select: "name email phone" },
+          select: "specialization experience rating",
+        },
+      ]);
+
+      return res.json({
+        success: true,
+        data: populatedRecords,
+        currentPage: parseInt(page),
+        totalPages: Math.ceil(total / limit),
+        totalItems: total,
+        itemsPerPage: parseInt(limit),
+      });
+    }
+
+    // Regular query without search
+    const records = await MedicalRecord.find(query)
+      .populate({
+        path: "patientId",
+        populate: { path: "userId", select: "name email phone" },
+        select: "gender bloodGroup dateOfBirth",
+      })
+      .populate({
+        path: "doctorId",
+        populate: { path: "userId", select: "name email phone" },
+        select: "specialization experience rating",
+      })
+      .skip(skip)
+      .limit(parseInt(limit))
+      .sort({ createdAt: -1 });
+
+    const total = await MedicalRecord.countDocuments(query);
+
+    res.json({
+      success: true,
+      data: records,
+      currentPage: parseInt(page),
+      totalPages: Math.ceil(total / limit),
+      totalItems: total,
+      itemsPerPage: parseInt(limit),
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
