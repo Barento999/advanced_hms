@@ -68,7 +68,9 @@ const Patients = () => {
   };
 
   const handleViewDetails = (patient) => {
-    navigate(`/admin/patients/${patient._id}`);
+    // Use patientId if available (Patient document ID), otherwise use _id (User ID)
+    const id = patient.patientId || patient._id;
+    navigate(`/admin/patients/${id}`);
   };
 
   const handleAddPatient = () => {

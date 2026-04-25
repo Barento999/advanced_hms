@@ -106,6 +106,7 @@ export const getAllUsers = async (req, res) => {
           );
           return {
             ...user.toObject(),
+            patientId: patientProfile?._id || null, // Add the Patient document ID
             dateOfBirth: patientProfile?.dateOfBirth || null,
             gender: patientProfile?.gender || "N/A",
             bloodGroup: patientProfile?.bloodGroup || "N/A",
@@ -167,6 +168,7 @@ export const getAllUsers = async (req, res) => {
         );
         return {
           ...user.toObject(),
+          patientId: patientProfile?._id || null, // Add the Patient document ID
           dateOfBirth: patientProfile?.dateOfBirth || null,
           gender: patientProfile?.gender || "N/A",
           bloodGroup: patientProfile?.bloodGroup || "N/A",
@@ -996,9 +998,17 @@ export const getPatientProfile = async (req, res) => {
   try {
     const { patientId } = req.params;
 
-    const patient = await Patient.findById(patientId)
+    let patient = await Patient.findById(patientId)
       .populate("userId", "-password")
       .where({ isDeleted: false });
+
+    // If not found by _id, try to find by userId for backward compatibility
+    if (!patient) {
+      patient = await Patient.findOne({
+        userId: patientId,
+        isDeleted: false,
+      }).populate("userId", "-password");
+    }
 
     if (!patient) {
       return res.status(404).json({

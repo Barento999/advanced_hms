@@ -212,7 +212,7 @@ const DoctorProfile = () => {
                 </div>
                 <div>
                   <h1 className="text-3xl font-bold mb-2">
-                    Dr. {doctor.userId?.name || "Unknown"}
+                    {doctor.userId?.name || "Unknown"}
                   </h1>
                   <div className="flex items-center space-x-4 mb-2">
                     <span className="flex items-center gap-2">

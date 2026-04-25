@@ -261,7 +261,7 @@ const Profile = () => {
                 </div>
                 <div>
                   <h1 className="text-3xl font-bold mb-2">
-                    Dr. {basicInfo.name || "Doctor Name"}
+                    {basicInfo.name || "Doctor Name"}
                   </h1>
                   <div className="flex items-center space-x-4 text-blue-100">
                     <span className="flex items-center gap-2">
