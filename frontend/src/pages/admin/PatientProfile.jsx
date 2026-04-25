@@ -16,6 +16,9 @@ import {
   Home,
   FileText,
   AlertCircle,
+  Edit3,
+  Save,
+  X,
 } from "lucide-react";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
@@ -28,6 +31,32 @@ const PatientProfile = () => {
   const navigate = useNavigate();
   const [patient, setPatient] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [editForm, setEditForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    dateOfBirth: "",
+    gender: "",
+    bloodGroup: "",
+    address: {
+      street: "",
+      city: "",
+      state: "",
+      zipCode: "",
+    },
+    emergencyContact: {
+      name: "",
+      phone: "",
+      relation: "",
+    },
+    allergies: [],
+  });
+
+  const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
+  const genders = ["male", "female", "other"];
+  const relations = ["Parent", "Spouse", "Sibling", "Child", "Friend", "Other"];
 
   useEffect(() => {
     fetchPatientProfile();
@@ -40,6 +69,29 @@ const PatientProfile = () => {
 
       if (data.success) {
         setPatient(data.data);
+        // Initialize edit form with current data
+        setEditForm({
+          name: data.data.userId?.name || "",
+          email: data.data.userId?.email || "",
+          phone: data.data.userId?.phone || "",
+          dateOfBirth: data.data.dateOfBirth
+            ? new Date(data.data.dateOfBirth).toISOString().split("T")[0]
+            : "",
+          gender: data.data.gender || "",
+          bloodGroup: data.data.bloodGroup || "",
+          address: {
+            street: data.data.address?.street || "",
+            city: data.data.address?.city || "",
+            state: data.data.address?.state || "",
+            zipCode: data.data.address?.zipCode || "",
+          },
+          emergencyContact: {
+            name: data.data.emergencyContact?.name || "",
+            phone: data.data.emergencyContact?.phone || "",
+            relation: data.data.emergencyContact?.relation || "",
+          },
+          allergies: data.data.allergies || [],
+        });
       } else {
         toast.error("Patient not found");
         navigate("/admin/patients");
@@ -72,6 +124,90 @@ const PatientProfile = () => {
   const formatDate = (date) => {
     if (!date) return "N/A";
     return new Date(date).toLocaleDateString();
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    if (name.includes(".")) {
+      const [parent, child] = name.split(".");
+      setEditForm((prev) => ({
+        ...prev,
+        [parent]: {
+          ...prev[parent],
+          [child]: value,
+        },
+      }));
+    } else {
+      setEditForm((prev) => ({ ...prev, [name]: value }));
+    }
+  };
+
+  const handleAllergyChange = (index, value) => {
+    setEditForm((prev) => ({
+      ...prev,
+      allergies: prev.allergies.map((allergy, i) =>
+        i === index ? value : allergy,
+      ),
+    }));
+  };
+
+  const addAllergy = () => {
+    setEditForm((prev) => ({
+      ...prev,
+      allergies: [...prev.allergies, ""],
+    }));
+  };
+
+  const removeAllergy = (index) => {
+    setEditForm((prev) => ({
+      ...prev,
+      allergies: prev.allergies.filter((_, i) => i !== index),
+    }));
+  };
+
+  const handleEditToggle = () => {
+    if (isEditing) {
+      // Reset form to original values when canceling
+      setEditForm({
+        name: patient.userId?.name || "",
+        email: patient.userId?.email || "",
+        phone: patient.userId?.phone || "",
+        dateOfBirth: patient.dateOfBirth
+          ? new Date(patient.dateOfBirth).toISOString().split("T")[0]
+          : "",
+        gender: patient.gender || "",
+        bloodGroup: patient.bloodGroup || "",
+        address: {
+          street: patient.address?.street || "",
+          city: patient.address?.city || "",
+          state: patient.address?.state || "",
+          zipCode: patient.address?.zipCode || "",
+        },
+        emergencyContact: {
+          name: patient.emergencyContact?.name || "",
+          phone: patient.emergencyContact?.phone || "",
+          relation: patient.emergencyContact?.relation || "",
+        },
+        allergies: patient.allergies || [],
+      });
+    }
+    setIsEditing(!isEditing);
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      const { data } = await api.put(`/admin/patients/${id}`, editForm);
+      if (data.success) {
+        toast.success("Patient profile updated successfully");
+        setIsEditing(false);
+        fetchPatientProfile();
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to update profile");
+    } finally {
+      setSaving(false);
+    }
   };
 
   if (loading) {
@@ -133,7 +269,9 @@ const PatientProfile = () => {
                 Patient Profile Management
               </h1>
               <p className="text-gray-600 dark:text-slate-400">
-                Complete patient profile and medical information
+                {isEditing
+                  ? "Edit patient information"
+                  : "Complete patient profile and medical information"}
               </p>
             </div>
           </div>
@@ -266,6 +404,35 @@ const PatientProfile = () => {
             </div>
           </div>
 
+          {/* Edit Controls */}
+          <div className="flex justify-end">
+            {isEditing ? (
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={handleEditToggle}
+                  disabled={saving}
+                  className="btn-secondary flex items-center gap-2">
+                  <X size={16} />
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSave}
+                  disabled={saving}
+                  className="btn-primary flex items-center gap-2">
+                  <Save size={16} />
+                  {saving ? "Saving..." : "Save Changes"}
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={handleEditToggle}
+                className="btn-primary flex items-center gap-2">
+                <Edit3 size={16} />
+                Edit Profile
+              </button>
+            )}
+          </div>
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Personal Information */}
             <div className="lg:col-span-2 space-y-6">
@@ -273,32 +440,351 @@ const PatientProfile = () => {
                 <h3 className="text-xl font-bold text-gray-900 dark:text-slate-100 mb-6 flex items-center gap-2">
                   <User size={24} className="text-primary" />
                   Personal Information
+                  {isEditing && (
+                    <span className="text-sm text-primary bg-primary/10 px-2 py-1 rounded-md">
+                      Editing Mode
+                    </span>
+                  )}
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                {isEditing ? (
+                  <div className="space-y-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
+                        Full Name
+                      </label>
+                      <input
+                        type="text"
+                        name="name"
+                        value={editForm.name}
+                        onChange={handleInputChange}
+                        className="input"
+                        placeholder="Patient full name"
+                      />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
+                          Email Address
+                        </label>
+                        <input
+                          type="email"
+                          name="email"
+                          value={editForm.email}
+                          onChange={handleInputChange}
+                          className="input"
+                          placeholder="patient@example.com"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
+                          Phone Number
+                        </label>
+                        <input
+                          type="tel"
+                          name="phone"
+                          value={editForm.phone}
+                          onChange={handleInputChange}
+                          className="input"
+                          placeholder="+1-234-567-8900"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
+                          Date of Birth
+                        </label>
+                        <input
+                          type="date"
+                          name="dateOfBirth"
+                          value={editForm.dateOfBirth}
+                          onChange={handleInputChange}
+                          className="input"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
+                          Gender
+                        </label>
+                        <select
+                          name="gender"
+                          value={editForm.gender}
+                          onChange={handleInputChange}
+                          className="input">
+                          <option value="">Select Gender</option>
+                          {genders.map((gender) => (
+                            <option key={gender} value={gender}>
+                              {gender.charAt(0).toUpperCase() + gender.slice(1)}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
+                          Blood Group
+                        </label>
+                        <select
+                          name="bloodGroup"
+                          value={editForm.bloodGroup}
+                          onChange={handleInputChange}
+                          className="input">
+                          <option value="">Select Blood Group</option>
+                          {bloodGroups.map((group) => (
+                            <option key={group} value={group}>
+                              {group}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-500 dark:text-slate-400 mb-1">
+                          Full Name
+                        </label>
+                        <div className="flex items-center gap-2">
+                          <User size={16} className="text-primary" />
+                          <span className="text-gray-900 dark:text-slate-100 font-medium">
+                            {patient.userId?.name ||
+                              patient.name ||
+                              "Not available"}
+                          </span>
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-500 dark:text-slate-400 mb-1">
+                          Email Address
+                        </label>
+                        <div className="flex items-center gap-2">
+                          <Mail size={16} className="text-primary" />
+                          <span className="text-gray-900 dark:text-slate-100 font-medium">
+                            {patient.userId?.email ||
+                              patient.email ||
+                              "Not available"}
+                          </span>
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-500 dark:text-slate-400 mb-1">
+                          Phone Number
+                        </label>
+                        <div className="flex items-center gap-2">
+                          <Phone size={16} className="text-primary" />
+                          <span className="text-gray-900 dark:text-slate-100 font-medium">
+                            {patient.userId?.phone ||
+                              patient.phone ||
+                              "Not available"}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-500 dark:text-slate-400 mb-1">
+                          Date of Birth
+                        </label>
+                        <div className="flex items-center gap-2">
+                          <Calendar size={16} className="text-primary" />
+                          <span className="text-gray-900 dark:text-slate-100 font-medium">
+                            {formatDate(patient.dateOfBirth)}
+                          </span>
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-500 dark:text-slate-400 mb-1">
+                          Gender
+                        </label>
+                        <div className="flex items-center gap-2">
+                          <User size={16} className="text-primary" />
+                          <span className="text-gray-900 dark:text-slate-100 font-medium">
+                            {patient.gender
+                              ? patient.gender.charAt(0).toUpperCase() +
+                                patient.gender.slice(1)
+                              : "Not specified"}
+                          </span>
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-500 dark:text-slate-400 mb-1">
+                          Blood Group
+                        </label>
+                        <div className="flex items-center gap-2">
+                          <Droplets size={16} className="text-primary" />
+                          <span className="text-gray-900 dark:text-slate-100 font-medium">
+                            {patient.bloodGroup || "Not specified"}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Address Information */}
+              <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-slate-700">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-slate-100 mb-6 flex items-center gap-2">
+                  <Home size={24} className="text-primary" />
+                  Address Information
+                  {isEditing && (
+                    <span className="text-sm text-primary bg-primary/10 px-2 py-1 rounded-md">
+                      Editing Mode
+                    </span>
+                  )}
+                </h3>
+
+                {isEditing ? (
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
+                        Street Address
+                      </label>
+                      <input
+                        type="text"
+                        name="address.street"
+                        value={editForm.address.street}
+                        onChange={handleInputChange}
+                        className="input"
+                        placeholder="123 Main Street"
+                      />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
+                          City
+                        </label>
+                        <input
+                          type="text"
+                          name="address.city"
+                          value={editForm.address.city}
+                          onChange={handleInputChange}
+                          className="input"
+                          placeholder="City"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
+                          State
+                        </label>
+                        <input
+                          type="text"
+                          name="address.state"
+                          value={editForm.address.state}
+                          onChange={handleInputChange}
+                          className="input"
+                          placeholder="State"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
+                          ZIP Code
+                        </label>
+                        <input
+                          type="text"
+                          name="address.zipCode"
+                          value={editForm.address.zipCode}
+                          onChange={handleInputChange}
+                          className="input"
+                          placeholder="12345"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ) : (
                   <div className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-500 dark:text-slate-400 mb-1">
-                        Full Name
+                        Current Address
+                      </label>
+                      <div className="flex items-start gap-2">
+                        <MapPin size={16} className="text-primary mt-1" />
+                        <div className="text-gray-900 dark:text-slate-100 font-medium">
+                          {patient.address?.street ? (
+                            <>
+                              {patient.address.street}
+                              <br />
+                              {patient.address.city}, {patient.address.state}{" "}
+                              {patient.address.zipCode}
+                            </>
+                          ) : (
+                            "No address on file"
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Emergency Contact */}
+              <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-slate-700">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-slate-100 mb-6 flex items-center gap-2">
+                  <Users size={24} className="text-primary" />
+                  Emergency Contact
+                  {isEditing && (
+                    <span className="text-sm text-primary bg-primary/10 px-2 py-1 rounded-md">
+                      Editing Mode
+                    </span>
+                  )}
+                </h3>
+
+                {isEditing ? (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
+                        Contact Name
+                      </label>
+                      <input
+                        type="text"
+                        name="emergencyContact.name"
+                        value={editForm.emergencyContact.name}
+                        onChange={handleInputChange}
+                        className="input"
+                        placeholder="Emergency contact name"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
+                        Phone Number
+                      </label>
+                      <input
+                        type="tel"
+                        name="emergencyContact.phone"
+                        value={editForm.emergencyContact.phone}
+                        onChange={handleInputChange}
+                        className="input"
+                        placeholder="+1-234-567-8900"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
+                        Relationship
+                      </label>
+                      <select
+                        name="emergencyContact.relation"
+                        value={editForm.emergencyContact.relation}
+                        onChange={handleInputChange}
+                        className="input">
+                        <option value="">Select Relationship</option>
+                        {relations.map((relation) => (
+                          <option key={relation} value={relation}>
+                            {relation}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-500 dark:text-slate-400 mb-1">
+                        Contact Name
                       </label>
                       <div className="flex items-center gap-2">
                         <User size={16} className="text-primary" />
                         <span className="text-gray-900 dark:text-slate-100 font-medium">
-                          {patient.userId?.name ||
-                            patient.name ||
-                            "Not available"}
-                        </span>
-                      </div>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-500 dark:text-slate-400 mb-1">
-                        Email Address
-                      </label>
-                      <div className="flex items-center gap-2">
-                        <Mail size={16} className="text-primary" />
-                        <span className="text-gray-900 dark:text-slate-100 font-medium">
-                          {patient.userId?.email ||
-                            patient.email ||
-                            "Not available"}
+                          {patient.emergencyContact?.name || "Not specified"}
                         </span>
                       </div>
                     </div>
@@ -309,125 +795,24 @@ const PatientProfile = () => {
                       <div className="flex items-center gap-2">
                         <Phone size={16} className="text-primary" />
                         <span className="text-gray-900 dark:text-slate-100 font-medium">
-                          {patient.userId?.phone ||
-                            patient.phone ||
-                            "Not available"}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-500 dark:text-slate-400 mb-1">
-                        Date of Birth
-                      </label>
-                      <div className="flex items-center gap-2">
-                        <Calendar size={16} className="text-primary" />
-                        <span className="text-gray-900 dark:text-slate-100 font-medium">
-                          {formatDate(patient.dateOfBirth)}
+                          {patient.emergencyContact?.phone || "Not specified"}
                         </span>
                       </div>
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-500 dark:text-slate-400 mb-1">
-                        Gender
+                        Relationship
                       </label>
                       <div className="flex items-center gap-2">
-                        <User size={16} className="text-primary" />
+                        <Users size={16} className="text-primary" />
                         <span className="text-gray-900 dark:text-slate-100 font-medium">
-                          {patient.gender
-                            ? patient.gender.charAt(0).toUpperCase() +
-                              patient.gender.slice(1)
-                            : "Not specified"}
-                        </span>
-                      </div>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-500 dark:text-slate-400 mb-1">
-                        Blood Group
-                      </label>
-                      <div className="flex items-center gap-2">
-                        <Droplets size={16} className="text-primary" />
-                        <span className="text-gray-900 dark:text-slate-100 font-medium">
-                          {patient.bloodGroup || "Not specified"}
+                          {patient.emergencyContact?.relation ||
+                            "Not specified"}
                         </span>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-
-              {/* Address Information */}
-              <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-slate-700">
-                <h3 className="text-xl font-bold text-gray-900 dark:text-slate-100 mb-6 flex items-center gap-2">
-                  <Home size={24} className="text-primary" />
-                  Address Information
-                </h3>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-500 dark:text-slate-400 mb-1">
-                      Current Address
-                    </label>
-                    <div className="flex items-start gap-2">
-                      <MapPin size={16} className="text-primary mt-1" />
-                      <div className="text-gray-900 dark:text-slate-100 font-medium">
-                        {patient.address?.street ? (
-                          <>
-                            {patient.address.street}
-                            <br />
-                            {patient.address.city}, {patient.address.state}{" "}
-                            {patient.address.zipCode}
-                          </>
-                        ) : (
-                          "No address on file"
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Emergency Contact */}
-              <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-slate-700">
-                <h3 className="text-xl font-bold text-gray-900 dark:text-slate-100 mb-6 flex items-center gap-2">
-                  <Users size={24} className="text-primary" />
-                  Emergency Contact
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-500 dark:text-slate-400 mb-1">
-                      Contact Name
-                    </label>
-                    <div className="flex items-center gap-2">
-                      <User size={16} className="text-primary" />
-                      <span className="text-gray-900 dark:text-slate-100 font-medium">
-                        {patient.emergencyContact?.name || "Not specified"}
-                      </span>
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-500 dark:text-slate-400 mb-1">
-                      Phone Number
-                    </label>
-                    <div className="flex items-center gap-2">
-                      <Phone size={16} className="text-primary" />
-                      <span className="text-gray-900 dark:text-slate-100 font-medium">
-                        {patient.emergencyContact?.phone || "Not specified"}
-                      </span>
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-500 dark:text-slate-400 mb-1">
-                      Relationship
-                    </label>
-                    <div className="flex items-center gap-2">
-                      <Users size={16} className="text-primary" />
-                      <span className="text-gray-900 dark:text-slate-100 font-medium">
-                        {patient.emergencyContact?.relation || "Not specified"}
-                      </span>
-                    </div>
-                  </div>
-                </div>
+                )}
               </div>
             </div>
 
@@ -509,6 +894,11 @@ const PatientProfile = () => {
                 <h3 className="text-xl font-bold text-gray-900 dark:text-slate-100 mb-6 flex items-center gap-2">
                   <AlertCircle size={24} className="text-primary" />
                   Medical Details
+                  {isEditing && (
+                    <span className="text-sm text-primary bg-primary/10 px-2 py-1 rounded-md">
+                      Editing Mode
+                    </span>
+                  )}
                 </h3>
 
                 {/* Allergies */}
@@ -516,23 +906,59 @@ const PatientProfile = () => {
                   <h4 className="text-lg font-semibold text-gray-900 dark:text-slate-100 mb-2 flex items-center gap-2">
                     <AlertTriangle size={18} className="text-red-500" />
                     Allergies
-                  </h4>
-                  <div className="flex flex-wrap gap-2">
-                    {patient.allergies && patient.allergies.length > 0 ? (
-                      patient.allergies.map((allergy, index) => (
-                        <span
-                          key={index}
-                          className="inline-flex items-center px-2 py-1 rounded-md text-sm bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400">
-                          <AlertTriangle size={12} className="mr-1" />
-                          {allergy}
-                        </span>
-                      ))
-                    ) : (
-                      <span className="text-gray-500 dark:text-slate-400 italic">
-                        No known allergies
-                      </span>
+                    {isEditing && (
+                      <button
+                        onClick={addAllergy}
+                        className="ml-auto text-sm bg-primary text-white px-2 py-1 rounded hover:bg-primary/80">
+                        Add Allergy
+                      </button>
                     )}
-                  </div>
+                  </h4>
+
+                  {isEditing ? (
+                    <div className="space-y-2">
+                      {editForm.allergies.map((allergy, index) => (
+                        <div key={index} className="flex items-center gap-2">
+                          <input
+                            type="text"
+                            value={allergy}
+                            onChange={(e) =>
+                              handleAllergyChange(index, e.target.value)
+                            }
+                            className="input flex-1"
+                            placeholder="Enter allergy"
+                          />
+                          <button
+                            onClick={() => removeAllergy(index)}
+                            className="text-red-500 hover:text-red-700 p-1">
+                            <X size={16} />
+                          </button>
+                        </div>
+                      ))}
+                      {editForm.allergies.length === 0 && (
+                        <p className="text-gray-500 dark:text-slate-400 italic">
+                          No allergies added. Click "Add Allergy" to add one.
+                        </p>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="flex flex-wrap gap-2">
+                      {patient.allergies && patient.allergies.length > 0 ? (
+                        patient.allergies.map((allergy, index) => (
+                          <span
+                            key={index}
+                            className="inline-flex items-center px-2 py-1 rounded-md text-sm bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400">
+                            <AlertTriangle size={12} className="mr-1" />
+                            {allergy}
+                          </span>
+                        ))
+                      ) : (
+                        <span className="text-gray-500 dark:text-slate-400 italic">
+                          No known allergies
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 {/* Medical History */}
