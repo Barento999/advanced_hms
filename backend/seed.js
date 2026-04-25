@@ -8,6 +8,7 @@ import Appointment from "./models/Appointment.js";
 import MedicalRecord from "./models/MedicalRecord.js";
 import Payment from "./models/Payment.js";
 import Notification from "./models/Notification.js";
+import Review from "./models/Review.js";
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ const clearDatabase = async () => {
     await MedicalRecord.deleteMany({});
     await Payment.deleteMany({});
     await Notification.deleteMany({});
+    await Review.deleteMany({});
     console.log("✅ Database cleared");
   } catch (error) {
     console.error("Error clearing database:", error);
@@ -546,7 +548,7 @@ const seedDatabase = async () => {
         medicalHistory: [
           {
             condition: "Hypertension",
-            diagnosedDate: new Date("2020-01-15"),
+            diagnosedDate: new Date("2026-01-15"),
             notes: "Controlled with medication",
           },
         ],
@@ -590,7 +592,7 @@ const seedDatabase = async () => {
         medicalHistory: [
           {
             condition: "Diabetes Type 2",
-            diagnosedDate: new Date("2018-05-10"),
+            diagnosedDate: new Date("2026-05-10"),
             notes: "Managed with diet and medication",
           },
         ],
@@ -892,7 +894,7 @@ const seedDatabase = async () => {
       {
         patientId: patients[0]._id,
         doctorId: doctors[0]._id,
-        appointmentDate: new Date("2024-04-10T10:00:00"),
+        appointmentDate: new Date("2026-04-10T10:00:00"),
         timeSlot: { startTime: "10:00", endTime: "10:30" },
         status: "completed",
         reason: "Regular heart checkup",
@@ -900,7 +902,7 @@ const seedDatabase = async () => {
       {
         patientId: patients[1]._id,
         doctorId: doctors[1]._id,
-        appointmentDate: new Date("2024-04-12T11:00:00"),
+        appointmentDate: new Date("2026-04-12T11:00:00"),
         timeSlot: { startTime: "11:00", endTime: "11:30" },
         status: "completed",
         reason: "Child vaccination",
@@ -908,7 +910,7 @@ const seedDatabase = async () => {
       {
         patientId: patients[2]._id,
         doctorId: doctors[4]._id,
-        appointmentDate: new Date("2024-04-15T09:00:00"),
+        appointmentDate: new Date("2026-04-15T09:00:00"),
         timeSlot: { startTime: "09:00", endTime: "09:30" },
         status: "completed",
         reason: "Diabetes follow-up",
@@ -917,7 +919,7 @@ const seedDatabase = async () => {
       {
         patientId: patients[3]._id,
         doctorId: doctors[2]._id,
-        appointmentDate: new Date("2024-04-25T14:00:00"),
+        appointmentDate: new Date("2026-04-25T14:00:00"),
         timeSlot: { startTime: "14:00", endTime: "14:30" },
         status: "confirmed",
         reason: "Skin rash consultation",
@@ -925,7 +927,7 @@ const seedDatabase = async () => {
       {
         patientId: patients[4]._id,
         doctorId: doctors[3]._id,
-        appointmentDate: new Date("2024-04-26T10:00:00"),
+        appointmentDate: new Date("2026-04-26T10:00:00"),
         timeSlot: { startTime: "10:00", endTime: "10:30" },
         status: "confirmed",
         reason: "Knee pain evaluation",
@@ -933,7 +935,7 @@ const seedDatabase = async () => {
       {
         patientId: patients[5]._id,
         doctorId: doctors[0]._id,
-        appointmentDate: new Date("2024-04-27T15:00:00"),
+        appointmentDate: new Date("2026-04-27T15:00:00"),
         timeSlot: { startTime: "15:00", endTime: "15:30" },
         status: "confirmed",
         reason: "Chest pain consultation",
@@ -942,7 +944,7 @@ const seedDatabase = async () => {
       {
         patientId: patients[6]._id,
         doctorId: doctors[1]._id,
-        appointmentDate: new Date("2024-04-28T11:00:00"),
+        appointmentDate: new Date("2026-04-28T11:00:00"),
         timeSlot: { startTime: "11:00", endTime: "11:30" },
         status: "pending",
         reason: "General checkup",
@@ -950,7 +952,7 @@ const seedDatabase = async () => {
       {
         patientId: patients[7]._id,
         doctorId: doctors[4]._id,
-        appointmentDate: new Date("2024-04-29T09:30:00"),
+        appointmentDate: new Date("2026-04-29T09:30:00"),
         timeSlot: { startTime: "09:30", endTime: "10:00" },
         status: "pending",
         reason: "Fever and cough",
@@ -958,7 +960,7 @@ const seedDatabase = async () => {
       {
         patientId: patients[0]._id,
         doctorId: doctors[2]._id,
-        appointmentDate: new Date("2024-04-30T13:00:00"),
+        appointmentDate: new Date("2026-04-30T13:00:00"),
         timeSlot: { startTime: "13:00", endTime: "13:30" },
         status: "pending",
         reason: "Skin allergy",
@@ -967,7 +969,7 @@ const seedDatabase = async () => {
       {
         patientId: patients[1]._id,
         doctorId: doctors[3]._id,
-        appointmentDate: new Date("2024-04-20T10:00:00"),
+        appointmentDate: new Date("2026-04-20T10:00:00"),
         timeSlot: { startTime: "10:00", endTime: "10:30" },
         status: "cancelled",
         reason: "Back pain consultation",
@@ -976,7 +978,7 @@ const seedDatabase = async () => {
       {
         patientId: patients[2]._id,
         doctorId: doctors[0]._id,
-        appointmentDate: new Date("2024-05-01T09:00:00"),
+        appointmentDate: new Date("2026-05-01T09:00:00"),
         timeSlot: { startTime: "09:00", endTime: "09:30" },
         status: "confirmed",
         reason: "Heart checkup follow-up",
@@ -984,7 +986,7 @@ const seedDatabase = async () => {
       {
         patientId: patients[3]._id,
         doctorId: doctors[1]._id,
-        appointmentDate: new Date("2024-05-02T10:00:00"),
+        appointmentDate: new Date("2026-05-02T10:00:00"),
         timeSlot: { startTime: "10:00", endTime: "10:30" },
         status: "pending",
         reason: "Child vaccination",
@@ -992,7 +994,7 @@ const seedDatabase = async () => {
       {
         patientId: patients[4]._id,
         doctorId: doctors[2]._id,
-        appointmentDate: new Date("2024-05-03T11:00:00"),
+        appointmentDate: new Date("2026-05-03T11:00:00"),
         timeSlot: { startTime: "11:00", endTime: "11:30" },
         status: "completed",
         reason: "Skin rash treatment",
@@ -1000,7 +1002,7 @@ const seedDatabase = async () => {
       {
         patientId: patients[5]._id,
         doctorId: doctors[3]._id,
-        appointmentDate: new Date("2024-05-04T14:00:00"),
+        appointmentDate: new Date("2026-05-04T14:00:00"),
         timeSlot: { startTime: "14:00", endTime: "14:30" },
         status: "confirmed",
         reason: "Joint pain consultation",
@@ -1008,7 +1010,7 @@ const seedDatabase = async () => {
       {
         patientId: patients[6]._id,
         doctorId: doctors[4]._id,
-        appointmentDate: new Date("2024-05-05T15:00:00"),
+        appointmentDate: new Date("2026-05-05T15:00:00"),
         timeSlot: { startTime: "15:00", endTime: "15:30" },
         status: "pending",
         reason: "General health checkup",
@@ -1016,7 +1018,7 @@ const seedDatabase = async () => {
       {
         patientId: patients[7]._id,
         doctorId: doctors[0]._id,
-        appointmentDate: new Date("2024-05-06T16:00:00"),
+        appointmentDate: new Date("2026-05-06T16:00:00"),
         timeSlot: { startTime: "16:00", endTime: "16:30" },
         status: "completed",
         reason: "Cardiac consultation",
@@ -1024,7 +1026,7 @@ const seedDatabase = async () => {
       {
         patientId: patients[8]._id,
         doctorId: doctors[1]._id,
-        appointmentDate: new Date("2024-05-07T09:30:00"),
+        appointmentDate: new Date("2026-05-07T09:30:00"),
         timeSlot: { startTime: "09:30", endTime: "10:00" },
         status: "confirmed",
         reason: "Pediatric checkup",
@@ -1032,7 +1034,7 @@ const seedDatabase = async () => {
       {
         patientId: patients[9]._id,
         doctorId: doctors[2]._id,
-        appointmentDate: new Date("2024-05-08T10:30:00"),
+        appointmentDate: new Date("2026-05-08T10:30:00"),
         timeSlot: { startTime: "10:30", endTime: "11:00" },
         status: "pending",
         reason: "Dermatology consultation",
@@ -1040,7 +1042,7 @@ const seedDatabase = async () => {
       {
         patientId: patients[10]._id,
         doctorId: doctors[3]._id,
-        appointmentDate: new Date("2024-05-09T13:30:00"),
+        appointmentDate: new Date("2026-05-09T13:30:00"),
         timeSlot: { startTime: "13:30", endTime: "14:00" },
         status: "completed",
         reason: "Orthopedic follow-up",
@@ -1048,7 +1050,7 @@ const seedDatabase = async () => {
       {
         patientId: patients[11]._id,
         doctorId: doctors[4]._id,
-        appointmentDate: new Date("2024-05-10T14:30:00"),
+        appointmentDate: new Date("2026-05-10T14:30:00"),
         timeSlot: { startTime: "14:30", endTime: "15:00" },
         status: "cancelled",
         reason: "General medicine consultation",
@@ -1056,7 +1058,7 @@ const seedDatabase = async () => {
       {
         patientId: patients[12]._id,
         doctorId: doctors[0]._id,
-        appointmentDate: new Date("2024-05-11T08:00:00"),
+        appointmentDate: new Date("2026-05-11T08:00:00"),
         timeSlot: { startTime: "08:00", endTime: "08:30" },
         status: "confirmed",
         reason: "Heart rhythm check",
@@ -1064,7 +1066,7 @@ const seedDatabase = async () => {
       {
         patientId: patients[13]._id,
         doctorId: doctors[1]._id,
-        appointmentDate: new Date("2024-05-12T11:30:00"),
+        appointmentDate: new Date("2026-05-12T11:30:00"),
         timeSlot: { startTime: "11:30", endTime: "12:00" },
         status: "pending",
         reason: "Child development assessment",
@@ -1072,7 +1074,7 @@ const seedDatabase = async () => {
       {
         patientId: patients[14]._id,
         doctorId: doctors[2]._id,
-        appointmentDate: new Date("2024-05-13T12:00:00"),
+        appointmentDate: new Date("2026-05-13T12:00:00"),
         timeSlot: { startTime: "12:00", endTime: "12:30" },
         status: "completed",
         reason: "Acne treatment",
@@ -1080,7 +1082,7 @@ const seedDatabase = async () => {
       {
         patientId: patients[15]._id,
         doctorId: doctors[3]._id,
-        appointmentDate: new Date("2024-05-14T15:30:00"),
+        appointmentDate: new Date("2026-05-14T15:30:00"),
         timeSlot: { startTime: "15:30", endTime: "16:00" },
         status: "confirmed",
         reason: "Knee pain evaluation",
@@ -1088,7 +1090,7 @@ const seedDatabase = async () => {
       {
         patientId: patients[16]._id,
         doctorId: doctors[4]._id,
-        appointmentDate: new Date("2024-05-15T16:30:00"),
+        appointmentDate: new Date("2026-05-15T16:30:00"),
         timeSlot: { startTime: "16:30", endTime: "17:00" },
         status: "pending",
         reason: "Routine physical exam",
@@ -1124,7 +1126,7 @@ const seedDatabase = async () => {
           {
             testName: "Blood Pressure Monitoring",
             result: "140/90 mmHg",
-            date: new Date("2024-04-10"),
+            date: new Date("2026-04-10"),
           },
         ],
         notes:
@@ -1159,12 +1161,12 @@ const seedDatabase = async () => {
           {
             testName: "HbA1c",
             result: "6.5%",
-            date: new Date("2024-04-15"),
+            date: new Date("2026-04-15"),
           },
           {
             testName: "Fasting Blood Sugar",
             result: "110 mg/dL",
-            date: new Date("2024-04-15"),
+            date: new Date("2026-04-15"),
           },
         ],
         notes:
@@ -1228,7 +1230,7 @@ const seedDatabase = async () => {
         userId: patientUsers[0]._id,
         title: "Appointment Confirmed",
         message:
-          "Your appointment with Dr. Sarah Johnson has been confirmed for April 10, 2024",
+          "Your appointment with Dr. Sarah Johnson has been confirmed for April 10, 2026",
         type: "appointment",
         isRead: true,
       },
@@ -1236,7 +1238,7 @@ const seedDatabase = async () => {
         userId: patientUsers[3]._id,
         title: "Appointment Reminder",
         message:
-          "You have an upcoming appointment with Dr. Emily Rodriguez on April 25, 2024",
+          "You have an upcoming appointment with Dr. Emily Rodriguez on April 25, 2026",
         type: "appointment",
         isRead: false,
       },
@@ -1257,15 +1259,109 @@ const seedDatabase = async () => {
     ]);
     console.log("✅ 4 Notifications created");
 
+    // ==================== CREATE REVIEWS ====================
+    console.log("Creating reviews...");
+
+    // Create reviews for some appointments
+
+    const reviewsData = [
+      {
+        doctorId: doctors[0]._id,
+        patientId: patients[0]._id,
+        appointmentId: appointments[0]._id,
+        rating: 5,
+        comment:
+          "Excellent doctor! Very professional and caring. Highly recommend.",
+      },
+      {
+        doctorId: doctors[1]._id,
+        patientId: patients[1]._id,
+        appointmentId: appointments[1]._id,
+        rating: 4,
+        comment:
+          "Good experience overall. Doctor was knowledgeable and helpful.",
+      },
+      {
+        doctorId: doctors[2]._id,
+        patientId: patients[2]._id,
+        appointmentId: appointments[2]._id,
+        rating: 5,
+        comment: "Amazing doctor! Took time to explain everything clearly.",
+      },
+      {
+        doctorId: doctors[0]._id,
+        patientId: patients[3]._id,
+        appointmentId: appointments[3]._id,
+        rating: 4,
+        comment: "Very satisfied with the treatment. Professional service.",
+      },
+      {
+        doctorId: doctors[1]._id,
+        patientId: patients[4]._id,
+        appointmentId: appointments[4]._id,
+        rating: 5,
+        comment: "Outstanding care! Will definitely come back.",
+      },
+      {
+        doctorId: doctors[3]._id,
+        patientId: patients[5]._id,
+        appointmentId: appointments[5]._id,
+        rating: 4,
+        comment: "Good doctor, thorough examination and clear explanation.",
+      },
+      {
+        doctorId: doctors[4]._id,
+        patientId: patients[6]._id,
+        appointmentId: appointments[6]._id,
+        rating: 5,
+        comment: "Excellent service! Very professional and caring approach.",
+      },
+      {
+        doctorId: doctors[0]._id,
+        patientId: patients[7]._id,
+        appointmentId: appointments[7]._id,
+        rating: 3,
+        comment:
+          "Decent service, but could be more attentive to patient concerns.",
+      },
+    ];
+
+    await Review.insertMany(reviewsData);
+    console.log("✅ 8 Reviews created");
+
+    // ==================== UPDATE DOCTOR RATINGS ====================
+    console.log("Updating doctor ratings...");
+
+    // Calculate and update ratings for each doctor
+    for (const doctor of doctors) {
+      const doctorReviews = reviewsData.filter(
+        (review) => review.doctorId.toString() === doctor._id.toString(),
+      );
+
+      if (doctorReviews.length > 0) {
+        const totalRating = doctorReviews.reduce(
+          (sum, review) => sum + review.rating,
+          0,
+        );
+        const averageRating = totalRating / doctorReviews.length;
+
+        await Doctor.findByIdAndUpdate(doctor._id, {
+          rating: Math.round(averageRating * 10) / 10, // Round to 1 decimal place
+        });
+      }
+    }
+    console.log("✅ Doctor ratings updated");
+
     console.log("\n🎉 Database seeding completed successfully!");
     console.log("\n📊 Summary:");
     console.log("- 1 Admin user");
-    console.log("- 5 Doctors");
-    console.log("- 8 Patients");
-    console.log("- 10 Appointments");
+    console.log("- 13 Doctors");
+    console.log("- 18 Patients");
+    console.log("- 25 Appointments");
     console.log("- 3 Medical Records");
     console.log("- 5 Payments");
     console.log("- 4 Notifications");
+    console.log("- 8 Reviews");
     console.log("\n🔑 Login Credentials:");
     console.log("\nAdmin:");
     console.log("  Email: admin@healthcare.com");

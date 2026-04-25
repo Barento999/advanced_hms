@@ -8,6 +8,7 @@ import {
   cancelAppointment,
   getMedicalRecords,
   getPaymentHistory,
+  changePassword,
 } from "../controllers/patientController.js";
 import { protect, authorize } from "../middlewares/auth.js";
 import { appointmentValidation, validate } from "../middlewares/validator.js";
@@ -19,6 +20,7 @@ router.use(authorize("patient"));
 
 router.get("/profile", getPatientProfile);
 router.put("/profile", updatePatientProfile);
+router.put("/change-password", changePassword);
 router.get("/doctors", getAllDoctors);
 router.post("/appointments", appointmentValidation, validate, bookAppointment);
 router.get("/appointments", getMyAppointments);

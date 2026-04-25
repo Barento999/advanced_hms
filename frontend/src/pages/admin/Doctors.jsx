@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
-import { Trash2, ToggleLeft, ToggleRight } from "lucide-react";
+import { Trash2, ToggleLeft, ToggleRight, Eye, Plus } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
 import EmptyState from "../../components/EmptyState";
 import ConfirmationModal from "../../components/ConfirmationModal";
+import AddDoctorModal from "../../components/AddDoctorModal";
 import Pagination from "../../components/Pagination";
 import ExportButton from "../../components/ExportButton";
 import { TableSkeleton } from "../../components/LoadingSkeleton";
@@ -11,6 +13,7 @@ import api from "../../utils/api";
 import toast from "react-hot-toast";
 
 const Doctors = () => {
+  const navigate = useNavigate();
   const [doctors, setDoctors] = useState([]);
   const [allDoctors, setAllDoctors] = useState([]); // For export
   const [loading, setLoading] = useState(true);
@@ -26,6 +29,7 @@ const Doctors = () => {
     doctor: null,
     loading: false,
   });
+  const [addDoctorModal, setAddDoctorModal] = useState(false);
 
   useEffect(() => {
     fetchDoctors();
@@ -61,6 +65,22 @@ const Doctors = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleViewDetails = (doctor) => {
+    // Use doctorId if available, otherwise fall back to _id for backward compatibility
+    const id = doctor.doctorId || doctor._id;
+    navigate(`/admin/doctors/${id}`);
+  };
+
+  const handleAddDoctor = () => {
+    setAddDoctorModal(true);
+  };
+
+  const handleAddDoctorSuccess = () => {
+    toast.success("Doctor created successfully");
+    fetchDoctors();
+    fetchAllDoctors();
   };
 
   const handleToggleStatus = async (doctor) => {
@@ -138,12 +158,20 @@ const Doctors = () => {
               <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
                 Doctor Management
               </h2>
-              <ExportButton
-                data={allDoctors}
-                type="doctors"
-                title="Doctors Report"
-                filename="doctors_report"
-              />
+              <div className="flex gap-3">
+                <button
+                  onClick={handleAddDoctor}
+                  className="btn btn-primary flex items-center gap-2">
+                  <Plus size={20} />
+                  Add Doctor
+                </button>
+                <ExportButton
+                  data={allDoctors}
+                  type="doctors"
+                  title="Doctors Report"
+                  filename="doctors_report"
+                />
+              </div>
             </div>
 
             {loading ? (
@@ -162,7 +190,7 @@ const Doctors = () => {
                         Email
                       </th>
                       <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
-                        Phone
+                        Specialization
                       </th>
                       <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
                         Status
@@ -184,7 +212,9 @@ const Doctors = () => {
                           {doctor.email}
                         </td>
                         <td className="py-3 px-4 text-dark dark:text-slate-100">
-                          {doctor.phone}
+                          <span className="badge bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400">
+                            {doctor.specialization || "N/A"}
+                          </span>
                         </td>
                         <td className="py-3 px-4">
                           <span
@@ -195,8 +225,17 @@ const Doctors = () => {
                         <td className="py-3 px-4">
                           <div className="flex gap-2">
                             <button
+                              onClick={() => handleViewDetails(doctor)}
+                              className="p-2 hover:bg-blue-100 dark:hover:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg transition-colors"
+                              title="View Details">
+                              <Eye size={20} />
+                            </button>
+                            <button
                               onClick={() => handleToggleStatus(doctor)}
-                              className="p-2 hover:bg-gray-200 dark:hover:bg-slate-700 text-gray-600 dark:text-slate-400 rounded-lg transition-colors">
+                              className="p-2 hover:bg-gray-200 dark:hover:bg-slate-700 text-gray-600 dark:text-slate-400 rounded-lg transition-colors"
+                              title={
+                                doctor.isActive ? "Deactivate" : "Activate"
+                              }>
                               {doctor.isActive ? (
                                 <ToggleRight size={20} />
                               ) : (
@@ -205,7 +244,8 @@ const Doctors = () => {
                             </button>
                             <button
                               onClick={() => handleDelete(doctor)}
-                              className="p-2 hover:bg-red-100 dark:hover:bg-red-900/30 text-danger dark:text-red-400 rounded-lg transition-colors">
+                              className="p-2 hover:bg-red-100 dark:hover:bg-red-900/30 text-danger dark:text-red-400 rounded-lg transition-colors"
+                              title="Delete">
                               <Trash2 size={20} />
                             </button>
                           </div>
@@ -230,6 +270,13 @@ const Doctors = () => {
           </div>
         </div>
       </div>
+
+      {/* Add Doctor Modal */}
+      <AddDoctorModal
+        isOpen={addDoctorModal}
+        onClose={() => setAddDoctorModal(false)}
+        onSuccess={handleAddDoctorSuccess}
+      />
 
       {/* Confirmation Modal */}
       <ConfirmationModal

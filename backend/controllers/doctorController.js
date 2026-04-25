@@ -1,4 +1,5 @@
 import Doctor from "../models/Doctor.js";
+import User from "../models/User.js";
 import Appointment from "../models/Appointment.js";
 import MedicalRecord from "../models/MedicalRecord.js";
 import Patient from "../models/Patient.js";
@@ -18,7 +19,28 @@ export const getDoctorProfile = async (req, res) => {
         .json({ success: false, message: "Doctor profile not found" });
     }
 
-    res.json({ success: true, data: doctor });
+    // Get additional statistics
+    const totalPatients = await Patient.countDocuments({
+      _id: {
+        $in: await Appointment.distinct("patientId", {
+          doctorId: doctor._id,
+          isDeleted: false,
+        }),
+      },
+      isDeleted: false,
+    });
+
+    const totalAppointments = await Appointment.countDocuments({
+      doctorId: doctor._id,
+      isDeleted: false,
+    });
+
+    // Add statistics to the doctor profile
+    const doctorProfile = doctor.toObject();
+    doctorProfile.totalPatients = totalPatients;
+    doctorProfile.totalAppointments = totalAppointments;
+
+    res.json({ success: true, data: doctorProfile });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -26,9 +48,35 @@ export const getDoctorProfile = async (req, res) => {
 
 export const updateDoctorProfile = async (req, res) => {
   try {
+    const { phone, consultationFee, availableDays, availableTimeSlots } =
+      req.body;
+
+    // Healthcare compliance: Doctors can only modify limited fields
+    // Restricted fields (require admin verification): name, email, specialization, qualification, experience
+    // Allowed fields: phone, consultationFee, availableDays, availableTimeSlots
+
+    // Update User model fields (only phone is allowed)
+    const userUpdateData = {};
+    if (phone) userUpdateData.phone = phone;
+
+    if (Object.keys(userUpdateData).length > 0) {
+      await User.findByIdAndUpdate(req.user._id, userUpdateData, {
+        new: true,
+        runValidators: true,
+      });
+    }
+
+    // Update Doctor model fields (only practice settings and schedule)
+    const doctorUpdateData = {};
+    if (consultationFee !== undefined)
+      doctorUpdateData.consultationFee = consultationFee;
+    if (availableDays) doctorUpdateData.availableDays = availableDays;
+    if (availableTimeSlots)
+      doctorUpdateData.availableTimeSlots = availableTimeSlots;
+
     const doctor = await Doctor.findOneAndUpdate(
       { userId: req.user._id, isDeleted: false },
-      req.body,
+      doctorUpdateData,
       { new: true, runValidators: true },
     ).populate("userId", "-password");
 
@@ -38,7 +86,60 @@ export const updateDoctorProfile = async (req, res) => {
         .json({ success: false, message: "Doctor profile not found" });
     }
 
-    res.json({ success: true, data: doctor });
+    res.json({
+      success: true,
+      message: "Profile updated successfully",
+      data: doctor,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const changeDoctorPassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "Current password and new password are required",
+      });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({
+        success: false,
+        message: "New password must be at least 6 characters long",
+      });
+    }
+
+    // Get user with password field
+    const user = await User.findById(req.user._id).select("+password");
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // Check if current password is correct
+    const isCurrentPasswordValid = await user.comparePassword(currentPassword);
+    if (!isCurrentPasswordValid) {
+      return res.status(400).json({
+        success: false,
+        message: "Current password is incorrect",
+      });
+    }
+
+    // Update password (will be hashed by pre-save hook)
+    user.password = newPassword;
+    await user.save();
+
+    res.json({
+      success: true,
+      message: "Password changed successfully",
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

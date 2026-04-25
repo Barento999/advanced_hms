@@ -27,9 +27,29 @@ export const getPatientProfile = async (req, res) => {
 
 export const updatePatientProfile = async (req, res) => {
   try {
+    // Define fields that patients are allowed to modify
+    const allowedFields = ["address", "emergencyContact"];
+
+    // Filter the request body to only include allowed fields
+    const updateData = {};
+    allowedFields.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        updateData[field] = req.body[field];
+      }
+    });
+
+    // If no allowed fields are provided, return error
+    if (Object.keys(updateData).length === 0) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "No valid fields provided for update. Patients can only modify address and emergency contact information.",
+      });
+    }
+
     const patient = await Patient.findOneAndUpdate(
       { userId: req.user._id, isDeleted: false },
-      req.body,
+      updateData,
       { new: true, runValidators: true },
     ).populate("userId", "-password");
 
@@ -39,7 +59,12 @@ export const updatePatientProfile = async (req, res) => {
         .json({ success: false, message: "Patient profile not found" });
     }
 
-    res.json({ success: true, data: patient });
+    res.json({
+      success: true,
+      data: patient,
+      message:
+        "Profile updated successfully. Note: Critical medical information can only be modified by healthcare staff.",
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -439,6 +464,49 @@ export const getPaymentHistory = async (req, res) => {
       totalPages: Math.ceil(total / limit),
       totalItems: total,
       itemsPerPage: parseInt(limit),
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+export const changePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "Current password and new password are required",
+      });
+    }
+
+    // Get user with password field
+    const User = (await import("../models/User.js")).default;
+    const user = await User.findById(req.user._id).select("+password");
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // Check if current password is correct
+    const isCurrentPasswordValid = await user.comparePassword(currentPassword);
+    if (!isCurrentPasswordValid) {
+      return res.status(400).json({
+        success: false,
+        message: "Current password is incorrect",
+      });
+    }
+
+    // Update password
+    user.password = newPassword;
+    await user.save();
+
+    res.json({
+      success: true,
+      message: "Password changed successfully",
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

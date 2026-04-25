@@ -2,6 +2,7 @@ import express from "express";
 import {
   getDoctorProfile,
   updateDoctorProfile,
+  changeDoctorPassword,
   getDoctorAppointments,
   updateAppointmentStatus,
   addMedicalRecord,
@@ -19,6 +20,7 @@ router.use(authorize("doctor"));
 
 router.get("/profile", getDoctorProfile);
 router.put("/profile", updateDoctorProfile);
+router.put("/change-password", changeDoctorPassword);
 router.get("/appointments", getDoctorAppointments);
 router.patch("/appointments/:id/status", updateAppointmentStatus);
 router.post("/medical-records", addMedicalRecord);

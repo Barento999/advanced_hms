@@ -3,7 +3,6 @@ import Doctor from "../models/Doctor.js";
 import Patient from "../models/Patient.js";
 import Appointment from "../models/Appointment.js";
 import Payment from "../models/Payment.js";
-import MedicalRecord from "../models/MedicalRecord.js";
 import Review from "../models/Review.js";
 
 export const getDashboardStats = async (req, res) => {
@@ -83,10 +82,36 @@ export const getAllUsers = async (req, res) => {
           );
           return {
             ...user.toObject(),
+            doctorId: doctorProfile?._id || null, // Add the Doctor document ID
             specialization: doctorProfile?.specialization || "N/A",
             experience: doctorProfile?.experience || "N/A",
             rating: doctorProfile?.rating || 0,
             consultationFee: doctorProfile?.consultationFee || 0,
+          };
+        });
+      }
+
+      // If role is patient, populate with patient profile information
+      if (role === "patient") {
+        const userIds = users.map((user) => user._id);
+        const patients = await Patient.find({
+          userId: { $in: userIds },
+          isDeleted: false,
+        });
+
+        // Merge user and patient data
+        users = users.map((user) => {
+          const patientProfile = patients.find(
+            (pat) => pat.userId.toString() === user._id.toString(),
+          );
+          return {
+            ...user.toObject(),
+            dateOfBirth: patientProfile?.dateOfBirth || null,
+            gender: patientProfile?.gender || "N/A",
+            bloodGroup: patientProfile?.bloodGroup || "N/A",
+            address: patientProfile?.address || null,
+            emergencyContact: patientProfile?.emergencyContact || null,
+            allergies: patientProfile?.allergies || [],
           };
         });
       }
@@ -123,6 +148,31 @@ export const getAllUsers = async (req, res) => {
           experience: doctorProfile?.experience || "N/A",
           rating: doctorProfile?.rating || 0,
           consultationFee: doctorProfile?.consultationFee || 0,
+        };
+      });
+    }
+
+    // If role is patient, populate with patient profile information
+    if (role === "patient") {
+      const userIds = users.map((user) => user._id);
+      const patients = await Patient.find({
+        userId: { $in: userIds },
+        isDeleted: false,
+      });
+
+      // Merge user and patient data
+      users = users.map((user) => {
+        const patientProfile = patients.find(
+          (pat) => pat.userId.toString() === user._id.toString(),
+        );
+        return {
+          ...user.toObject(),
+          dateOfBirth: patientProfile?.dateOfBirth || null,
+          gender: patientProfile?.gender || "N/A",
+          bloodGroup: patientProfile?.bloodGroup || "N/A",
+          address: patientProfile?.address || null,
+          emergencyContact: patientProfile?.emergencyContact || null,
+          allergies: patientProfile?.allergies || [],
         };
       });
     }
@@ -236,110 +286,77 @@ export const getAllAppointments = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
-
-// Analytics endpoints
 export const getAnalytics = async (req, res) => {
   try {
-    const { period = "month" } = req.query; // month, quarter, year
+    const { startDate, endDate } = req.query;
 
-    // Calculate date range based on period
-    const now = new Date();
-    let startDate;
-
-    switch (period) {
-      case "week":
-        startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-        break;
-      case "month":
-        startDate = new Date(now.getFullYear(), now.getMonth(), 1);
-        break;
-      case "quarter":
-        const quarterStart = Math.floor(now.getMonth() / 3) * 3;
-        startDate = new Date(now.getFullYear(), quarterStart, 1);
-        break;
-      case "year":
-        startDate = new Date(now.getFullYear(), 0, 1);
-        break;
-      default:
-        startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+    // Build date filter
+    const dateFilter = {};
+    if (startDate && endDate) {
+      dateFilter.createdAt = {
+        $gte: new Date(startDate),
+        $lte: new Date(endDate + "T23:59:59.999Z"),
+      };
     }
 
     // User registration trends
     const userTrends = await User.aggregate([
-      {
-        $match: {
-          createdAt: { $gte: startDate },
-          isDeleted: false,
-        },
-      },
+      { $match: { isDeleted: false, ...dateFilter } },
       {
         $group: {
           _id: {
-            date: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
-            role: "$role",
+            year: { $year: "$createdAt" },
+            month: { $month: "$createdAt" },
           },
           count: { $sum: 1 },
         },
       },
-      { $sort: { "_id.date": 1 } },
-    ]);
-
-    // Appointment trends
-    const appointmentTrends = await Appointment.aggregate([
-      {
-        $match: {
-          createdAt: { $gte: startDate },
-          isDeleted: false,
-        },
-      },
-      {
-        $group: {
-          _id: {
-            date: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
-            status: "$status",
-          },
-          count: { $sum: 1 },
-        },
-      },
-      { $sort: { "_id.date": 1 } },
+      { $sort: { "_id.year": 1, "_id.month": 1 } },
     ]);
 
     // Revenue trends
     const revenueTrends = await Payment.aggregate([
       {
         $match: {
-          createdAt: { $gte: startDate },
           status: "completed",
           isDeleted: false,
+          ...(startDate && endDate
+            ? {
+                createdAt: {
+                  $gte: new Date(startDate),
+                  $lte: new Date(endDate + "T23:59:59.999Z"),
+                },
+              }
+            : {}),
         },
       },
       {
         $group: {
-          _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+          _id: {
+            year: { $year: "$createdAt" },
+            month: { $month: "$createdAt" },
+          },
           revenue: { $sum: "$amount" },
-          count: { $sum: 1 },
         },
       },
-      { $sort: { _id: 1 } },
-    ]);
-
-    // Doctor specialization distribution
-    const specializationStats = await Doctor.aggregate([
-      { $match: { isDeleted: false } },
-      {
-        $group: {
-          _id: "$specialization",
-          count: { $sum: 1 },
-          avgRating: { $avg: "$rating" },
-          avgFee: { $avg: "$consultationFee" },
-        },
-      },
-      { $sort: { count: -1 } },
+      { $sort: { "_id.year": 1, "_id.month": 1 } },
     ]);
 
     // Appointment status distribution
-    const appointmentStatusStats = await Appointment.aggregate([
-      { $match: { isDeleted: false } },
+    const appointmentStats = await Appointment.aggregate([
+      {
+        $match: {
+          isDeleted: false,
+          ...(startDate && endDate
+            ? {
+                createdAt: {
+                  $gte: new Date(startDate),
+                  $lte: new Date(endDate + "T23:59:59.999Z"),
+                },
+              }
+            : {}),
+        },
+      },
       {
         $group: {
           _id: "$status",
@@ -348,97 +365,32 @@ export const getAnalytics = async (req, res) => {
       },
     ]);
 
-    // Top performing doctors
-    const topDoctors = await Doctor.aggregate([
+    // Doctor specialization breakdown
+    const specializationStats = await Doctor.aggregate([
       { $match: { isDeleted: false } },
       {
-        $lookup: {
-          from: "appointments",
-          localField: "_id",
-          foreignField: "doctorId",
-          as: "appointments",
-        },
-      },
-      {
-        $lookup: {
-          from: "users",
-          localField: "userId",
-          foreignField: "_id",
-          as: "user",
-        },
-      },
-      {
-        $project: {
-          name: { $arrayElemAt: ["$user.name", 0] },
-          specialization: 1,
-          rating: 1,
-          appointmentCount: { $size: "$appointments" },
-          completedAppointments: {
-            $size: {
-              $filter: {
-                input: "$appointments",
-                cond: { $eq: ["$$this.status", "completed"] },
-              },
-            },
-          },
-        },
-      },
-      { $sort: { appointmentCount: -1 } },
-      { $limit: 10 },
-    ]);
-
-    // Monthly revenue comparison (current vs previous period)
-    const currentPeriodRevenue = await Payment.aggregate([
-      {
-        $match: {
-          createdAt: { $gte: startDate },
-          status: "completed",
-          isDeleted: false,
-        },
-      },
-      {
         $group: {
-          _id: null,
-          total: { $sum: "$amount" },
+          _id: "$specialization",
           count: { $sum: 1 },
         },
       },
     ]);
 
-    const previousPeriodStart = new Date(
-      startDate.getTime() - (now.getTime() - startDate.getTime()),
-    );
-    const previousPeriodRevenue = await Payment.aggregate([
-      {
-        $match: {
-          createdAt: { $gte: previousPeriodStart, $lt: startDate },
-          status: "completed",
-          isDeleted: false,
-        },
-      },
-      {
-        $group: {
-          _id: null,
-          total: { $sum: "$amount" },
-          count: { $sum: 1 },
-        },
-      },
-    ]);
+    // Top performing doctors
+    const topDoctors = await Doctor.find({ isDeleted: false })
+      .populate("userId", "name")
+      .sort({ rating: -1 })
+      .limit(5)
+      .select("specialization rating consultationFee");
 
     res.json({
       success: true,
       data: {
-        period,
         userTrends,
-        appointmentTrends,
         revenueTrends,
+        appointmentStats,
         specializationStats,
-        appointmentStatusStats,
         topDoctors,
-        revenueComparison: {
-          current: currentPeriodRevenue[0] || { total: 0, count: 0 },
-          previous: previousPeriodRevenue[0] || { total: 0, count: 0 },
-        },
       },
     });
   } catch (error) {
@@ -448,150 +400,650 @@ export const getAnalytics = async (req, res) => {
 
 export const getDetailedReports = async (req, res) => {
   try {
-    const { type, startDate, endDate } = req.query;
+    const { startDate, endDate, type } = req.query;
 
+    // Build date filter
     const dateFilter = {};
     if (startDate && endDate) {
       dateFilter.createdAt = {
         $gte: new Date(startDate),
-        $lte: new Date(endDate),
+        $lte: new Date(endDate + "T23:59:59.999Z"),
       };
     }
 
     let reportData = {};
 
-    switch (type) {
-      case "users":
-        reportData = await User.aggregate([
-          { $match: { ...dateFilter, isDeleted: false } },
-          {
-            $group: {
-              _id: "$role",
-              count: { $sum: 1 },
-              active: { $sum: { $cond: ["$isActive", 1, 0] } },
-              inactive: { $sum: { $cond: ["$isActive", 0, 1] } },
-            },
+    if (!type || type === "users") {
+      // User statistics
+      const userStats = await User.aggregate([
+        { $match: { isDeleted: false, ...dateFilter } },
+        {
+          $group: {
+            _id: "$role",
+            count: { $sum: 1 },
+            active: { $sum: { $cond: ["$isActive", 1, 0] } },
           },
-        ]);
-        break;
+        },
+      ]);
+      reportData.userStats = userStats;
+    }
 
-      case "appointments":
-        reportData = await Appointment.aggregate([
-          { $match: { ...dateFilter, isDeleted: false } },
-          {
-            $group: {
-              _id: {
-                status: "$status",
-                month: { $month: "$createdAt" },
-                year: { $year: "$createdAt" },
-              },
-              count: { $sum: 1 },
-            },
-          },
-          { $sort: { "_id.year": 1, "_id.month": 1 } },
-        ]);
-        break;
-
-      case "revenue":
-        reportData = await Payment.aggregate([
-          {
-            $match: {
-              ...dateFilter,
-              status: "completed",
-              isDeleted: false,
-            },
-          },
-          {
-            $group: {
-              _id: {
-                month: { $month: "$createdAt" },
-                year: { $year: "$createdAt" },
-              },
-              totalRevenue: { $sum: "$amount" },
-              transactionCount: { $sum: 1 },
-              avgTransaction: { $avg: "$amount" },
-            },
-          },
-          { $sort: { "_id.year": 1, "_id.month": 1 } },
-        ]);
-        break;
-
-      case "doctors":
-        reportData = await Doctor.aggregate([
-          { $match: { isDeleted: false } },
-          {
-            $lookup: {
-              from: "appointments",
-              let: { doctorId: "$_id" },
-              pipeline: [
-                {
-                  $match: {
-                    $expr: { $eq: ["$doctorId", "$$doctorId"] },
-                    ...dateFilter,
-                    isDeleted: false,
+    if (!type || type === "appointments") {
+      // Appointment trends
+      const appointmentTrends = await Appointment.aggregate([
+        {
+          $match: {
+            isDeleted: false,
+            ...(startDate && endDate
+              ? {
+                  appointmentDate: {
+                    $gte: new Date(startDate),
+                    $lte: new Date(endDate + "T23:59:59.999Z"),
                   },
-                },
-              ],
-              as: "appointments",
-            },
+                }
+              : {}),
           },
-          {
-            $lookup: {
-              from: "reviews",
-              localField: "_id",
-              foreignField: "doctorId",
-              as: "reviews",
+        },
+        {
+          $group: {
+            _id: {
+              year: { $year: "$appointmentDate" },
+              month: { $month: "$appointmentDate" },
+              status: "$status",
             },
+            count: { $sum: 1 },
           },
-          {
-            $lookup: {
-              from: "users",
-              localField: "userId",
-              foreignField: "_id",
-              as: "user",
-            },
-          },
-          {
-            $project: {
-              name: { $arrayElemAt: ["$user.name", 0] },
-              specialization: 1,
-              experience: 1,
-              consultationFee: 1,
-              rating: 1,
-              totalAppointments: { $size: "$appointments" },
-              completedAppointments: {
-                $size: {
-                  $filter: {
-                    input: "$appointments",
-                    cond: { $eq: ["$$this.status", "completed"] },
+        },
+        { $sort: { "_id.year": 1, "_id.month": 1 } },
+      ]);
+      reportData.appointmentTrends = appointmentTrends;
+    }
+
+    if (!type || type === "revenue") {
+      // Revenue analysis
+      const revenueAnalysis = await Payment.aggregate([
+        {
+          $match: {
+            status: "completed",
+            isDeleted: false,
+            ...(startDate && endDate
+              ? {
+                  createdAt: {
+                    $gte: new Date(startDate),
+                    $lte: new Date(endDate + "T23:59:59.999Z"),
                   },
+                }
+              : {}),
+          },
+        },
+        {
+          $group: {
+            _id: {
+              year: { $year: "$createdAt" },
+              month: { $month: "$createdAt" },
+            },
+            totalRevenue: { $sum: "$amount" },
+            transactionCount: { $sum: 1 },
+            avgAmount: { $avg: "$amount" },
+          },
+        },
+        { $sort: { "_id.year": 1, "_id.month": 1 } },
+      ]);
+      reportData.revenueAnalysis = revenueAnalysis;
+    }
+
+    if (!type || type === "doctors") {
+      // Doctor performance
+      const doctorPerformance = await Doctor.aggregate([
+        { $match: { isDeleted: false } },
+        {
+          $lookup: {
+            from: "users",
+            localField: "userId",
+            foreignField: "_id",
+            as: "user",
+          },
+        },
+        {
+          $lookup: {
+            from: "appointments",
+            localField: "_id",
+            foreignField: "doctorId",
+            as: "appointments",
+          },
+        },
+        {
+          $project: {
+            name: { $arrayElemAt: ["$user.name", 0] },
+            specialization: 1,
+            rating: 1,
+            consultationFee: 1,
+            totalAppointments: { $size: "$appointments" },
+            completedAppointments: {
+              $size: {
+                $filter: {
+                  input: "$appointments",
+                  cond: { $eq: ["$$this.status", "completed"] },
                 },
               },
-              totalReviews: { $size: "$reviews" },
-              avgReviewRating: { $avg: "$reviews.rating" },
             },
           },
-          { $sort: { totalAppointments: -1 } },
-        ]);
-        break;
-
-      default:
-        return res.status(400).json({
-          success: false,
-          message:
-            "Invalid report type. Use: users, appointments, revenue, or doctors",
-        });
+        },
+      ]);
+      reportData.doctorPerformance = doctorPerformance;
     }
 
     res.json({
       success: true,
+      data: reportData,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const getDataCounts = async (req, res) => {
+  try {
+    const totalUsers = await User.countDocuments({ isDeleted: false });
+    const totalDoctors = await Doctor.countDocuments({ isDeleted: false });
+    const totalPatients = await Patient.countDocuments({ isDeleted: false });
+    const totalAppointments = await Appointment.countDocuments({
+      isDeleted: false,
+    });
+    const totalRevenue = await Payment.aggregate([
+      { $match: { status: "completed", isDeleted: false } },
+      { $group: { _id: null, total: { $sum: "$amount" } } },
+    ]);
+
+    res.json({
+      success: true,
       data: {
-        type,
-        dateRange: { startDate, endDate },
-        report: reportData,
+        totalUsers,
+        totalDoctors,
+        totalPatients,
+        totalAppointments,
+        totalRevenue: totalRevenue[0]?.total || 0,
       },
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
+  }
+};
+export const createDoctor = async (req, res) => {
+  try {
+    const {
+      name,
+      email,
+      phone,
+      password,
+      specialization,
+      qualification,
+      experience,
+      consultationFee,
+    } = req.body;
+
+    // Check if user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({
+        success: false,
+        message: "A user with this email already exists",
+      });
+    }
+
+    // Create user account
+    const user = await User.create({
+      name,
+      email,
+      phone,
+      password, // Will be hashed by the pre-save hook
+      role: "doctor",
+      isActive: true,
+    });
+
+    // Create doctor profile
+    const doctor = await Doctor.create({
+      userId: user._id,
+      specialization,
+      qualification,
+      experience: parseInt(experience),
+      consultationFee: parseFloat(consultationFee),
+      rating: 0,
+      isAvailable: true,
+    });
+
+    // Populate user data for response
+    await doctor.populate("userId", "name email phone isActive createdAt");
+
+    res.status(201).json({
+      success: true,
+      message: "Doctor created successfully",
+      data: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        role: user.role,
+        isActive: user.isActive,
+        createdAt: user.createdAt,
+        specialization: doctor.specialization,
+        qualification: doctor.qualification,
+        experience: doctor.experience,
+        consultationFee: doctor.consultationFee,
+        rating: doctor.rating,
+      },
+    });
+  } catch (error) {
+    console.error("Create doctor error:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to create doctor",
+    });
+  }
+};
+export const createPatient = async (req, res) => {
+  try {
+    const {
+      name,
+      email,
+      phone,
+      password,
+      dateOfBirth,
+      gender,
+      bloodGroup,
+      address,
+      emergencyContact,
+      allergies,
+    } = req.body;
+
+    // Check if user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({
+        success: false,
+        message: "A user with this email already exists",
+      });
+    }
+
+    // Create user account
+    const user = await User.create({
+      name,
+      email,
+      phone,
+      password, // Will be hashed by the pre-save hook
+      role: "patient",
+      isActive: true,
+    });
+
+    // Create patient profile
+    const patient = await Patient.create({
+      userId: user._id,
+      dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null,
+      gender,
+      bloodGroup,
+      address:
+        address &&
+        (address.street || address.city || address.state || address.zipCode)
+          ? address
+          : null,
+      emergencyContact:
+        emergencyContact && (emergencyContact.name || emergencyContact.phone)
+          ? emergencyContact
+          : null,
+      allergies: allergies || [],
+    });
+
+    // Populate user data for response
+    await patient.populate("userId", "name email phone isActive createdAt");
+
+    res.status(201).json({
+      success: true,
+      message: "Patient created successfully",
+      data: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        role: user.role,
+        isActive: user.isActive,
+        createdAt: user.createdAt,
+        dateOfBirth: patient.dateOfBirth,
+        gender: patient.gender,
+        bloodGroup: patient.bloodGroup,
+        address: patient.address,
+        emergencyContact: patient.emergencyContact,
+        allergies: patient.allergies,
+      },
+    });
+  } catch (error) {
+    console.error("Create patient error:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to create patient",
+    });
+  }
+};
+// Admin function to update doctor profile (restricted fields)
+export const updateDoctorProfile = async (req, res) => {
+  try {
+    const { doctorId } = req.params;
+    const {
+      name,
+      email,
+      phone,
+      specialization,
+      qualification,
+      experience,
+      consultationFee,
+      availableDays,
+      availableTimeSlots,
+    } = req.body;
+
+    console.log("Updating doctor profile for ID:", doctorId);
+    console.log("Update data:", req.body);
+
+    // Find the doctor by _id first, then by userId for backward compatibility
+    let doctor = await Doctor.findById(doctorId).populate("userId");
+
+    // If not found by _id, try to find by userId
+    if (!doctor) {
+      console.log("Doctor not found by _id, trying userId...");
+      doctor = await Doctor.findOne({
+        userId: doctorId,
+        isDeleted: false,
+      }).populate("userId");
+    }
+
+    if (!doctor) {
+      console.log("Doctor not found with ID:", doctorId);
+      return res.status(404).json({
+        success: false,
+        message: "Doctor not found",
+      });
+    }
+
+    console.log("Found doctor:", doctor._id, "User:", doctor.userId._id);
+
+    // Update User model fields (admin can modify all user fields)
+    const userUpdateData = {};
+    if (name !== undefined) userUpdateData.name = name;
+    if (email !== undefined) userUpdateData.email = email;
+    if (phone !== undefined) userUpdateData.phone = phone;
+
+    if (Object.keys(userUpdateData).length > 0) {
+      // Check if email is being changed and if it already exists
+      if (email && email !== doctor.userId.email) {
+        const existingUser = await User.findOne({
+          email,
+          _id: { $ne: doctor.userId._id },
+          isDeleted: false,
+        });
+        if (existingUser) {
+          return res.status(400).json({
+            success: false,
+            message: "A user with this email already exists",
+          });
+        }
+      }
+
+      await User.findByIdAndUpdate(doctor.userId._id, userUpdateData, {
+        new: true,
+        runValidators: true,
+      });
+    }
+
+    // Update Doctor model fields (admin can modify all doctor fields)
+    const doctorUpdateData = {};
+    if (specialization !== undefined)
+      doctorUpdateData.specialization = specialization;
+    if (qualification !== undefined)
+      doctorUpdateData.qualification = qualification;
+    if (experience !== undefined) doctorUpdateData.experience = experience;
+    if (consultationFee !== undefined)
+      doctorUpdateData.consultationFee = consultationFee;
+    if (availableDays !== undefined)
+      doctorUpdateData.availableDays = availableDays;
+    if (availableTimeSlots !== undefined)
+      doctorUpdateData.availableTimeSlots = availableTimeSlots;
+
+    const updatedDoctor = await Doctor.findByIdAndUpdate(
+      doctor._id,
+      doctorUpdateData,
+      { new: true, runValidators: true },
+    ).populate("userId", "-password");
+
+    if (!updatedDoctor) {
+      return res.status(404).json({
+        success: false,
+        message: "Doctor profile not found",
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Doctor profile updated successfully",
+      data: updatedDoctor,
+    });
+  } catch (error) {
+    console.error("Update doctor profile error:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to update doctor profile",
+    });
+  }
+};
+
+// Admin function to get single doctor profile
+export const getDoctorProfile = async (req, res) => {
+  try {
+    const { doctorId } = req.params;
+
+    let doctor = await Doctor.findById(doctorId)
+      .populate("userId", "-password")
+      .where({ isDeleted: false });
+
+    // If not found by _id, try to find by userId for backward compatibility
+    if (!doctor) {
+      doctor = await Doctor.findOne({
+        userId: doctorId,
+        isDeleted: false,
+      }).populate("userId", "-password");
+    }
+
+    if (!doctor) {
+      return res.status(404).json({
+        success: false,
+        message: "Doctor not found",
+      });
+    }
+
+    // Get additional statistics
+    const totalPatients = await Patient.countDocuments({
+      _id: {
+        $in: await Appointment.distinct("patientId", {
+          doctorId: doctor._id,
+          isDeleted: false,
+        }),
+      },
+      isDeleted: false,
+    });
+
+    const totalAppointments = await Appointment.countDocuments({
+      doctorId: doctor._id,
+      isDeleted: false,
+    });
+
+    console.log(
+      "Statistics - Patients:",
+      totalPatients,
+      "Appointments:",
+      totalAppointments,
+    );
+
+    // Add statistics to the doctor profile
+    const doctorProfile = doctor.toObject();
+    doctorProfile.totalPatients = totalPatients;
+    doctorProfile.totalAppointments = totalAppointments;
+
+    res.json({
+      success: true,
+      data: doctorProfile,
+    });
+  } catch (error) {
+    console.error("Get doctor profile error:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to get doctor profile",
+    });
+  }
+};
+
+// Admin function to update patient profile (restricted fields)
+export const updatePatientProfile = async (req, res) => {
+  try {
+    const { patientId } = req.params;
+    const {
+      name,
+      email,
+      phone,
+      dateOfBirth,
+      gender,
+      bloodGroup,
+      address,
+      emergencyContact,
+      allergies,
+    } = req.body;
+
+    // Find the patient
+    const patient = await Patient.findById(patientId).populate("userId");
+    if (!patient) {
+      return res.status(404).json({
+        success: false,
+        message: "Patient not found",
+      });
+    }
+
+    // Update User model fields (admin can modify all user fields)
+    const userUpdateData = {};
+    if (name !== undefined) userUpdateData.name = name;
+    if (email !== undefined) userUpdateData.email = email;
+    if (phone !== undefined) userUpdateData.phone = phone;
+
+    if (Object.keys(userUpdateData).length > 0) {
+      // Check if email is being changed and if it already exists
+      if (email && email !== patient.userId.email) {
+        const existingUser = await User.findOne({
+          email,
+          _id: { $ne: patient.userId._id },
+          isDeleted: false,
+        });
+        if (existingUser) {
+          return res.status(400).json({
+            success: false,
+            message: "A user with this email already exists",
+          });
+        }
+      }
+
+      await User.findByIdAndUpdate(patient.userId._id, userUpdateData, {
+        new: true,
+        runValidators: true,
+      });
+    }
+
+    // Update Patient model fields (admin can modify all patient fields)
+    const patientUpdateData = {};
+    if (dateOfBirth !== undefined)
+      patientUpdateData.dateOfBirth = dateOfBirth
+        ? new Date(dateOfBirth)
+        : null;
+    if (gender !== undefined) patientUpdateData.gender = gender;
+    if (bloodGroup !== undefined) patientUpdateData.bloodGroup = bloodGroup;
+    if (address !== undefined) patientUpdateData.address = address;
+    if (emergencyContact !== undefined)
+      patientUpdateData.emergencyContact = emergencyContact;
+    if (allergies !== undefined) patientUpdateData.allergies = allergies;
+
+    const updatedPatient = await Patient.findByIdAndUpdate(
+      patientId,
+      patientUpdateData,
+      { new: true, runValidators: true },
+    ).populate("userId", "-password");
+
+    if (!updatedPatient) {
+      return res.status(404).json({
+        success: false,
+        message: "Patient profile not found",
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Patient profile updated successfully",
+      data: updatedPatient,
+    });
+  } catch (error) {
+    console.error("Update patient profile error:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to update patient profile",
+    });
+  }
+};
+
+// Admin function to get single patient profile
+export const getPatientProfile = async (req, res) => {
+  try {
+    const { patientId } = req.params;
+
+    const patient = await Patient.findById(patientId)
+      .populate("userId", "-password")
+      .where({ isDeleted: false });
+
+    if (!patient) {
+      return res.status(404).json({
+        success: false,
+        message: "Patient not found",
+      });
+    }
+
+    // Get additional statistics
+    const totalAppointments = await Appointment.countDocuments({
+      patientId: patient._id,
+      isDeleted: false,
+    });
+
+    const totalPayments = await Payment.countDocuments({
+      patientId: patient._id,
+      isDeleted: false,
+    });
+
+    const totalSpent = await Payment.aggregate([
+      {
+        $match: {
+          patientId: patient._id,
+          status: "completed",
+          isDeleted: false,
+        },
+      },
+      { $group: { _id: null, total: { $sum: "$amount" } } },
+    ]);
+
+    // Add statistics to the patient profile
+    const patientProfile = patient.toObject();
+    patientProfile.totalAppointments = totalAppointments;
+    patientProfile.totalPayments = totalPayments;
+    patientProfile.totalSpent = totalSpent[0]?.total || 0;
+
+    res.json({
+      success: true,
+      data: patientProfile,
+    });
+  } catch (error) {
+    console.error("Get patient profile error:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to get patient profile",
+    });
   }
 };

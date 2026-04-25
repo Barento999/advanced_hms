@@ -16,16 +16,7 @@ import {
   AreaChart,
   Area,
 } from "recharts";
-import {
-  TrendingUp,
-  TrendingDown,
-  Users,
-  Calendar,
-  DollarSign,
-  Activity,
-  Download,
-  Filter,
-} from "lucide-react";
+import { Users, Calendar, DollarSign, Activity, Filter } from "lucide-react";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
 import StatCard from "../../components/StatCard";
@@ -40,7 +31,6 @@ const Analytics = () => {
   const [analytics, setAnalytics] = useState(null);
   const [loading, setLoading] = useState(true);
   const [period, setPeriod] = useState("month");
-  const [selectedReport, setSelectedReport] = useState("overview");
 
   useEffect(() => {
     fetchAnalytics();
@@ -54,7 +44,9 @@ const Analytics = () => {
       // Delay to show skeleton
       await new Promise((resolve) => setTimeout(resolve, 1000));
     } catch (error) {
+      console.error("Failed to fetch analytics:", error);
       toast.error("Failed to fetch analytics data");
+      setAnalytics(null); // Reset analytics on error
     } finally {
       setLoading(false);
     }
@@ -62,7 +54,7 @@ const Analytics = () => {
 
   // Process data for charts
   const processUserTrends = () => {
-    if (!analytics?.userTrends) return [];
+    if (!analytics?.userTrends || analytics.userTrends.length === 0) return [];
 
     const dateMap = {};
     analytics.userTrends.forEach((item) => {
@@ -79,7 +71,11 @@ const Analytics = () => {
   };
 
   const processAppointmentTrends = () => {
-    if (!analytics?.appointmentTrends) return [];
+    if (
+      !analytics?.appointmentTrends ||
+      analytics.appointmentTrends.length === 0
+    )
+      return [];
 
     const dateMap = {};
     analytics.appointmentTrends.forEach((item) => {
@@ -102,7 +98,8 @@ const Analytics = () => {
   };
 
   const processRevenueTrends = () => {
-    if (!analytics?.revenueTrends) return [];
+    if (!analytics?.revenueTrends || analytics.revenueTrends.length === 0)
+      return [];
 
     return analytics.revenueTrends
       .map((item) => ({
@@ -114,7 +111,11 @@ const Analytics = () => {
   };
 
   const processSpecializationData = () => {
-    if (!analytics?.specializationStats) return [];
+    if (
+      !analytics?.specializationStats ||
+      analytics.specializationStats.length === 0
+    )
+      return [];
 
     return analytics.specializationStats.map((item) => ({
       name: item._id,
@@ -125,7 +126,11 @@ const Analytics = () => {
   };
 
   const processAppointmentStatusData = () => {
-    if (!analytics?.appointmentStatusStats) return [];
+    if (
+      !analytics?.appointmentStatusStats ||
+      analytics.appointmentStatusStats.length === 0
+    )
+      return [];
 
     return analytics.appointmentStatusStats.map((item) => ({
       name: item._id,

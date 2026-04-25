@@ -7,6 +7,13 @@ import {
   getAllAppointments,
   getAnalytics,
   getDetailedReports,
+  getDataCounts,
+  createDoctor,
+  createPatient,
+  updateDoctorProfile,
+  getDoctorProfile,
+  updatePatientProfile,
+  getPatientProfile,
 } from "../controllers/adminController.js";
 import { protect, authorize } from "../middlewares/auth.js";
 
@@ -20,6 +27,13 @@ router.get("/users", getAllUsers);
 router.get("/appointments", getAllAppointments);
 router.get("/analytics", getAnalytics);
 router.get("/reports", getDetailedReports);
+router.get("/data-counts", getDataCounts);
+router.post("/create-doctor", createDoctor);
+router.post("/create-patient", createPatient);
+router.get("/doctors/:doctorId", getDoctorProfile);
+router.put("/doctors/:doctorId", updateDoctorProfile);
+router.get("/patients/:patientId", getPatientProfile);
+router.put("/patients/:patientId", updatePatientProfile);
 router.delete("/users/:id", deleteUser);
 router.patch("/users/:id/toggle-status", toggleUserStatus);
 

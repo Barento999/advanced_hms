@@ -215,6 +215,7 @@ export const EXPORT_COLUMNS = {
     { header: "Email", accessor: "email" },
     { header: "Phone", accessor: "phone" },
     { header: "Specialization", accessor: "specialization" },
+    { header: "Qualification", accessor: "qualification" },
     { header: "Experience", accessor: "experience" },
     { header: "Rating", accessor: "rating" },
     { header: "Status", accessor: "isActive" },

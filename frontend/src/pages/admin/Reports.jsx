@@ -1,15 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  FileText,
-  Download,
-  Calendar,
-  Filter,
-  Search,
-  Users,
-  UserCheck,
-  Activity,
-  DollarSign,
-} from "lucide-react";
+import { Users, Activity, DollarSign } from "lucide-react";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
 import ExportButton from "../../components/ExportButton";
@@ -29,34 +19,86 @@ const Reports = () => {
   });
 
   useEffect(() => {
-    fetchReports();
-  }, [reportType, dateRange]);
+    // Add a small delay to prevent too many API calls when dates change rapidly
+    const timeoutId = setTimeout(() => {
+      fetchReports();
+    }, 300);
+
+    return () => clearTimeout(timeoutId);
+  }, [reportType, dateRange.startDate, dateRange.endDate]);
 
   const fetchReports = async () => {
     setLoading(true);
     try {
-      const { data } = await api.get(
-        `/admin/reports?type=${reportType}&startDate=${dateRange.startDate}&endDate=${dateRange.endDate}`,
-      );
+      console.log("Fetching reports with:", { reportType, dateRange }); // Debug log
+
+      // Build query parameters
+      let queryParams = `type=${reportType}`;
+      if (dateRange.startDate && dateRange.endDate) {
+        queryParams += `&startDate=${dateRange.startDate}&endDate=${dateRange.endDate}`;
+      }
+
+      console.log("API URL:", `/admin/reports?${queryParams}`); // Debug log
+
+      const { data } = await api.get(`/admin/reports?${queryParams}`);
+      console.log("Reports response:", data); // Debug log
       setReports(data.data);
       // Delay to show skeleton
       await new Promise((resolve) => setTimeout(resolve, 1000));
     } catch (error) {
+      console.error("Failed to fetch reports:", error);
       toast.error("Failed to fetch reports");
+      setReports(null); // Reset reports on error
     } finally {
       setLoading(false);
     }
   };
 
   const handleDateChange = (field, value) => {
-    setDateRange((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
+    setDateRange((prev) => {
+      const newRange = {
+        ...prev,
+        [field]: value,
+      };
+
+      // Validate date range
+      if (
+        field === "startDate" &&
+        newRange.endDate &&
+        new Date(value) > new Date(newRange.endDate)
+      ) {
+        toast.error("Start date cannot be after end date");
+        return prev; // Don't update if invalid
+      }
+
+      if (
+        field === "endDate" &&
+        newRange.startDate &&
+        new Date(value) < new Date(newRange.startDate)
+      ) {
+        toast.error("End date cannot be before start date");
+        return prev; // Don't update if invalid
+      }
+
+      return newRange;
+    });
   };
 
   const renderUserReport = () => {
-    if (!reports?.report) return null;
+    if (!reports?.report || reports.report.length === 0) {
+      return (
+        <div className="card">
+          <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-4">
+            User Statistics Report
+          </h3>
+          <div className="text-center py-8">
+            <p className="text-gray-500 dark:text-slate-400">
+              No user data found for the selected date range.
+            </p>
+          </div>
+        </div>
+      );
+    }
 
     return (
       <div className="card">
@@ -108,7 +150,20 @@ const Reports = () => {
   };
 
   const renderAppointmentReport = () => {
-    if (!reports?.report) return null;
+    if (!reports?.report || reports.report.length === 0) {
+      return (
+        <div className="card">
+          <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-4">
+            Appointment Trends Report
+          </h3>
+          <div className="text-center py-8">
+            <p className="text-gray-500 dark:text-slate-400">
+              No appointment data found for the selected date range.
+            </p>
+          </div>
+        </div>
+      );
+    }
 
     // Group by status
     const statusGroups = {};
@@ -190,7 +245,20 @@ const Reports = () => {
   };
 
   const renderRevenueReport = () => {
-    if (!reports?.report) return null;
+    if (!reports?.report || reports.report.length === 0) {
+      return (
+        <div className="card">
+          <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-4">
+            Revenue Report
+          </h3>
+          <div className="text-center py-8">
+            <p className="text-gray-500 dark:text-slate-400">
+              No revenue data found for the selected date range.
+            </p>
+          </div>
+        </div>
+      );
+    }
 
     const totalRevenue = reports.report.reduce(
       (sum, item) => sum + item.totalRevenue,
@@ -294,7 +362,20 @@ const Reports = () => {
   };
 
   const renderDoctorReport = () => {
-    if (!reports?.report) return null;
+    if (!reports?.report || reports.report.length === 0) {
+      return (
+        <div className="card">
+          <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-4">
+            Doctor Performance Report
+          </h3>
+          <div className="text-center py-8">
+            <p className="text-gray-500 dark:text-slate-400">
+              No doctor data found for the selected date range.
+            </p>
+          </div>
+        </div>
+      );
+    }
 
     return (
       <div className="card">
@@ -418,9 +499,17 @@ const Reports = () => {
 
           {/* Filters */}
           <div className="card mb-8">
-            <h3 className="text-lg font-semibold text-dark dark:text-slate-100 mb-4">
-              Report Filters
-            </h3>
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold text-dark dark:text-slate-100">
+                Report Filters
+              </h3>
+              <button
+                onClick={fetchReports}
+                disabled={loading}
+                className="px-4 py-2 bg-primary hover:bg-blue-700 text-white rounded-xl font-medium transition-colors disabled:opacity-50">
+                {loading ? "Loading..." : "Refresh"}
+              </button>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Report Type */}
               <div>
@@ -465,6 +554,94 @@ const Reports = () => {
                   className="w-full px-4 py-2 border border-gray-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-dark dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-transparent"
                 />
               </div>
+            </div>
+
+            {/* Debug info */}
+            <div className="mt-4 p-3 bg-gray-100 dark:bg-slate-700 rounded-lg text-sm">
+              <div className="flex justify-between items-center mb-2">
+                <strong>Debug Info:</strong>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() =>
+                      setDateRange({
+                        startDate: "",
+                        endDate: "",
+                      })
+                    }
+                    className="px-2 py-1 bg-red-500 text-white text-xs rounded">
+                    No Filter
+                  </button>
+                  <button
+                    onClick={() =>
+                      setDateRange({
+                        startDate: new Date(
+                          new Date().getFullYear(),
+                          new Date().getMonth(),
+                          1,
+                        )
+                          .toISOString()
+                          .split("T")[0],
+                        endDate: new Date().toISOString().split("T")[0],
+                      })
+                    }
+                    className="px-2 py-1 bg-blue-500 text-white text-xs rounded">
+                    This Month
+                  </button>
+                  <button
+                    onClick={() =>
+                      setDateRange({
+                        startDate: new Date(new Date().getFullYear(), 0, 1)
+                          .toISOString()
+                          .split("T")[0],
+                        endDate: new Date().toISOString().split("T")[0],
+                      })
+                    }
+                    className="px-2 py-1 bg-green-500 text-white text-xs rounded">
+                    This Year
+                  </button>
+                  <button
+                    onClick={() =>
+                      setDateRange({
+                        startDate: new Date(
+                          Date.now() - 30 * 24 * 60 * 60 * 1000,
+                        )
+                          .toISOString()
+                          .split("T")[0],
+                        endDate: new Date().toISOString().split("T")[0],
+                      })
+                    }
+                    className="px-2 py-1 bg-purple-500 text-white text-xs rounded">
+                    Last 30 Days
+                  </button>
+                  <button
+                    onClick={async () => {
+                      try {
+                        const { data } = await api.get("/admin/data-counts");
+                        console.log("Data counts:", data);
+                        toast.success(
+                          `Found ${data.data.counts.users} users, ${data.data.counts.appointments} appointments`,
+                        );
+                      } catch (error) {
+                        console.error("Data counts error:", error);
+                        toast.error("Failed to fetch data counts");
+                      }
+                    }}
+                    className="px-2 py-1 bg-orange-500 text-white text-xs rounded">
+                    Check Data
+                  </button>
+                </div>
+              </div>
+              Type: {reportType}, Start: {dateRange.startDate || "None"}, End:{" "}
+              {dateRange.endDate || "None"}
+              {reports && (
+                <div>
+                  Results:{" "}
+                  {Array.isArray(reports.report)
+                    ? reports.report.length
+                    : "N/A"}{" "}
+                  items
+                </div>
+              )}
             </div>
           </div>
 

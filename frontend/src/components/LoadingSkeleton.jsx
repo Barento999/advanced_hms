@@ -150,3 +150,75 @@ export const ListSkeleton = ({ items = 5 }) => (
     ))}
   </div>
 );
+export const DetailedProfileSkeleton = () => (
+  <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    {/* Profile Card Skeleton */}
+    <div className="lg:col-span-1">
+      <div className="card animate-pulse">
+        <div className="text-center p-6">
+          <div className="w-32 h-32 bg-gray-200 dark:bg-slate-700 rounded-full mx-auto mb-4"></div>
+          <div className="h-6 bg-gray-200 dark:bg-slate-700 rounded w-3/4 mx-auto mb-2"></div>
+          <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-1/2 mx-auto mb-4"></div>
+          <div className="h-6 bg-gray-200 dark:bg-slate-700 rounded w-1/3 mx-auto mb-4"></div>
+          <div className="h-8 bg-gray-200 dark:bg-slate-700 rounded-full w-20 mx-auto"></div>
+        </div>
+      </div>
+    </div>
+
+    {/* Details Skeleton */}
+    <div className="lg:col-span-2 space-y-6">
+      {/* Basic Information Card */}
+      <div className="card animate-pulse">
+        <div className="p-6">
+          <div className="h-6 bg-gray-200 dark:bg-slate-700 rounded w-1/3 mb-6"></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gray-200 dark:bg-slate-700 rounded-lg"></div>
+                <div className="flex-1">
+                  <div className="h-3 bg-gray-200 dark:bg-slate-700 rounded w-1/4 mb-2"></div>
+                  <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-3/4"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Professional/Medical Information Card */}
+      <div className="card animate-pulse">
+        <div className="p-6">
+          <div className="h-6 bg-gray-200 dark:bg-slate-700 rounded w-1/2 mb-6"></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gray-200 dark:bg-slate-700 rounded-lg"></div>
+                <div className="flex-1">
+                  <div className="h-3 bg-gray-200 dark:bg-slate-700 rounded w-1/3 mb-2"></div>
+                  <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-2/3"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Statistics Card */}
+      <div className="card animate-pulse">
+        <div className="p-6">
+          <div className="h-6 bg-gray-200 dark:bg-slate-700 rounded w-1/3 mb-6"></div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[...Array(3)].map((_, i) => (
+              <div
+                key={i}
+                className="text-center p-4 bg-gray-50 dark:bg-slate-700/50 rounded-lg">
+                <div className="h-8 bg-gray-200 dark:bg-slate-700 rounded w-12 mx-auto mb-2"></div>
+                <div className="h-3 bg-gray-200 dark:bg-slate-700 rounded w-20 mx-auto"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+);

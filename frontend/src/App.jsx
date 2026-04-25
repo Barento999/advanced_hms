@@ -23,6 +23,8 @@ import AdminAppointments from "./pages/admin/Appointments";
 import AdminReviews from "./pages/admin/Reviews";
 import Analytics from "./pages/admin/Analytics";
 import Reports from "./pages/admin/Reports";
+import AdminDoctorProfile from "./pages/admin/DoctorProfile";
+import AdminPatientProfile from "./pages/admin/PatientProfile";
 
 // Doctor Pages
 import DoctorDashboard from "./pages/doctor/DoctorDashboard";
@@ -130,10 +132,26 @@ function App() {
           }
         />
         <Route
+          path="/admin/doctors/:id"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <AdminDoctorProfile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/admin/patients"
           element={
             <ProtectedRoute allowedRoles={["admin"]}>
               <Patients />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/patients/:id"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <AdminPatientProfile />
             </ProtectedRoute>
           }
         />

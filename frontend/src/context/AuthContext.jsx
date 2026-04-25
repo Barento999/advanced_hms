@@ -8,14 +8,36 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const userData = localStorage.getItem("user");
+    const initializeAuth = async () => {
+      const token = localStorage.getItem("token");
+      const userData = localStorage.getItem("user");
 
-    if (token && userData) {
-      setUser(JSON.parse(userData));
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    }
-    setLoading(false);
+      if (token && userData) {
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+        try {
+          // Fetch fresh user data to ensure we have complete information
+          const response = await axios.get(
+            `${import.meta.env.VITE_API_URL}/auth/me`,
+          );
+          if (response.data.success) {
+            const freshUserData = response.data.data;
+            setUser(freshUserData);
+            // Update localStorage with fresh data
+            localStorage.setItem("user", JSON.stringify(freshUserData));
+          } else {
+            // If token is invalid, clear auth data
+            logout();
+          }
+        } catch (error) {
+          // If request fails (invalid token, etc.), clear auth data
+          logout();
+        }
+      }
+      setLoading(false);
+    };
+
+    initializeAuth();
   }, []);
 
   const login = (userData, token) => {
