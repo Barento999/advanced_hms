@@ -584,8 +584,8 @@ export const createDoctor = async (req, res) => {
       consultationFee,
     } = req.body;
 
-    // Check if user already exists
-    const existingUser = await User.findOne({ email });
+    // Check if user already exists (excluding deleted users)
+    const existingUser = await User.findOne({ email, isDeleted: false });
     if (existingUser) {
       return res.status(400).json({
         success: false,
@@ -658,8 +658,8 @@ export const createPatient = async (req, res) => {
       allergies,
     } = req.body;
 
-    // Check if user already exists
-    const existingUser = await User.findOne({ email });
+    // Check if user already exists (excluding deleted users)
+    const existingUser = await User.findOne({ email, isDeleted: false });
     if (existingUser) {
       return res.status(400).json({
         success: false,
