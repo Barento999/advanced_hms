@@ -21,6 +21,7 @@ const CompleteProfile = () => {
       relation: "",
     },
     allergies: [],
+    allergiesText: "", // Add this for the input field
     currentMedications: "",
     medicalHistory: "",
     allergiesAcknowledged: false,
@@ -161,6 +162,7 @@ const CompleteProfile = () => {
       const patientData = response.data.data;
 
       if (patientData) {
+        const allergiesArray = patientData.allergies || [];
         setFormData((prev) => ({
           ...prev,
           dateOfBirth: patientData.dateOfBirth
@@ -171,7 +173,10 @@ const CompleteProfile = () => {
           address: patientData.address || prev.address,
           emergencyContact:
             patientData.emergencyContact || prev.emergencyContact,
-          allergies: patientData.allergies || [],
+          allergies: allergiesArray,
+          allergiesText: Array.isArray(allergiesArray)
+            ? allergiesArray.join(", ")
+            : "",
         }));
       }
     } catch (error) {
@@ -205,13 +210,17 @@ const CompleteProfile = () => {
   };
 
   const handleAllergyChange = (e) => {
-    const allergies = e.target.value
-      .split(",")
-      .map((allergy) => allergy.trim())
-      .filter(Boolean);
+    const inputValue = e.target.value;
+
+    // Update the text field for display
     setFormData((prev) => ({
       ...prev,
-      allergies,
+      allergiesText: inputValue,
+      // Also update the array for validation/submission
+      allergies: inputValue
+        .split(",")
+        .map((allergy) => allergy.trim())
+        .filter(Boolean),
     }));
   };
 
@@ -568,13 +577,19 @@ const CompleteProfile = () => {
           </label>
           <input
             type="text"
-            value={formData.allergies.join(", ")}
+            value={formData.allergiesText}
             onChange={handleAllergyChange}
             className="input-field"
             placeholder="e.g., Penicillin, Peanuts, Latex"
           />
           <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">
             List any known allergies to medications, foods, or other substances
+            {formData.allergies && formData.allergies.length > 0 && (
+              <span className="text-blue-600 dark:text-blue-400 ml-2">
+                ({formData.allergies.length} allerg
+                {formData.allergies.length === 1 ? "y" : "ies"} listed)
+              </span>
+            )}
           </p>
         </div>
       </div>
