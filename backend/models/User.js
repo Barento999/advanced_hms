@@ -11,7 +11,6 @@ const userSchema = new mongoose.Schema(
     email: {
       type: String,
       required: [true, "Email is required"],
-      unique: true,
       lowercase: true,
       trim: true,
     },
@@ -45,6 +44,16 @@ const userSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+  },
+);
+
+// Create partial unique index for email (only for non-deleted users)
+userSchema.index(
+  { email: 1 },
+  {
+    unique: true,
+    partialFilterExpression: { isDeleted: false },
+    name: "email_unique_non_deleted",
   },
 );
 
