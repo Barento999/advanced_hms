@@ -8,6 +8,7 @@ import { Toaster } from "react-hot-toast";
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ProfileGuard from "./components/ProfileGuard";
 
 // Auth Pages
 import Login from "./pages/Login";
@@ -268,7 +269,9 @@ function App() {
           path="/patient"
           element={
             <ProtectedRoute allowedRoles={["patient"]}>
-              <PatientDashboard />
+              <ProfileGuard>
+                <PatientDashboard />
+              </ProfileGuard>
             </ProtectedRoute>
           }
         />
@@ -276,7 +279,9 @@ function App() {
           path="/patient/profile"
           element={
             <ProtectedRoute allowedRoles={["patient"]}>
-              <PatientProfile />
+              <ProfileGuard>
+                <PatientProfile />
+              </ProfileGuard>
             </ProtectedRoute>
           }
         />
@@ -284,7 +289,9 @@ function App() {
           path="/patient/doctors"
           element={
             <ProtectedRoute allowedRoles={["patient"]}>
-              <BookAppointment />
+              <ProfileGuard>
+                <BookAppointment />
+              </ProfileGuard>
             </ProtectedRoute>
           }
         />
@@ -292,7 +299,9 @@ function App() {
           path="/patient/appointments"
           element={
             <ProtectedRoute allowedRoles={["patient"]}>
-              <MyAppointments />
+              <ProfileGuard>
+                <MyAppointments />
+              </ProfileGuard>
             </ProtectedRoute>
           }
         />
@@ -300,7 +309,9 @@ function App() {
           path="/patient/records"
           element={
             <ProtectedRoute allowedRoles={["patient"]}>
-              <PatientMedicalRecords />
+              <ProfileGuard>
+                <PatientMedicalRecords />
+              </ProfileGuard>
             </ProtectedRoute>
           }
         />
@@ -308,7 +319,9 @@ function App() {
           path="/patient/payments"
           element={
             <ProtectedRoute allowedRoles={["patient"]}>
-              <Payments />
+              <ProfileGuard>
+                <Payments />
+              </ProfileGuard>
             </ProtectedRoute>
           }
         />
@@ -316,7 +329,9 @@ function App() {
           path="/patient/reviews"
           element={
             <ProtectedRoute allowedRoles={["patient"]}>
-              <Reviews />
+              <ProfileGuard>
+                <Reviews />
+              </ProfileGuard>
             </ProtectedRoute>
           }
         />
@@ -324,7 +339,9 @@ function App() {
           path="/patient/notifications"
           element={
             <ProtectedRoute allowedRoles={["patient"]}>
-              <Notifications />
+              <ProfileGuard>
+                <Notifications />
+              </ProfileGuard>
             </ProtectedRoute>
           }
         />

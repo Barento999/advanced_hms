@@ -1,6 +1,7 @@
 import express from "express";
 import {
   getPatientProfile,
+  checkProfileCompletion,
   updatePatientProfile,
   completePatientProfile,
   getAllDoctors,
@@ -12,7 +13,11 @@ import {
   changePassword,
 } from "../controllers/patientController.js";
 import { protect, authorize } from "../middlewares/auth.js";
-import { appointmentValidation, validate } from "../middlewares/validator.js";
+import {
+  appointmentValidation,
+  validate,
+  completeProfileValidation,
+} from "../middlewares/validator.js";
 
 const router = express.Router();
 
@@ -20,8 +25,14 @@ router.use(protect);
 router.use(authorize("patient"));
 
 router.get("/profile", getPatientProfile);
+router.get("/profile-completion", checkProfileCompletion);
 router.put("/profile", updatePatientProfile);
-router.post("/complete-profile", completePatientProfile);
+router.post(
+  "/complete-profile",
+  completeProfileValidation,
+  validate,
+  completePatientProfile,
+);
 router.put("/change-password", changePassword);
 router.get("/doctors", getAllDoctors);
 router.post("/appointments", appointmentValidation, validate, bookAppointment);

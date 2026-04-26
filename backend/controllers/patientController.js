@@ -25,6 +25,54 @@ export const getPatientProfile = async (req, res) => {
   }
 };
 
+export const checkProfileCompletion = async (req, res) => {
+  try {
+    const patient = await Patient.findOne({
+      userId: req.user._id,
+      isDeleted: false,
+    });
+
+    if (!patient) {
+      return res.json({
+        success: true,
+        data: {
+          profileCompleted: false,
+          profileExists: false,
+        },
+      });
+    }
+
+    const isComplete = patient.isProfileComplete();
+
+    res.json({
+      success: true,
+      data: {
+        profileCompleted: isComplete,
+        profileExists: true,
+        patient: {
+          dateOfBirth: !!patient.dateOfBirth,
+          gender: !!patient.gender,
+          bloodGroup: !!patient.bloodGroup,
+          address: !!(
+            patient.address?.street &&
+            patient.address?.city &&
+            patient.address?.state &&
+            patient.address?.zipCode
+          ),
+          emergencyContact: !!(
+            patient.emergencyContact?.name &&
+            patient.emergencyContact?.phone &&
+            patient.emergencyContact?.relation
+          ),
+          profileCompleted: patient.profileCompleted,
+        },
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 export const updatePatientProfile = async (req, res) => {
   try {
     // Define fields that patients are allowed to modify
@@ -81,6 +129,8 @@ export const completePatientProfile = async (req, res) => {
       allergies,
       currentMedications,
       medicalHistory,
+      allergiesAcknowledged,
+      medicationsAcknowledged,
     } = req.body;
 
     // Check if patient profile already exists
@@ -116,6 +166,11 @@ export const completePatientProfile = async (req, res) => {
         });
       }
 
+      // Mark profile as completed if all required fields are present and acknowledged
+      if (allergiesAcknowledged && medicationsAcknowledged) {
+        patient.profileCompleted = true;
+      }
+
       await patient.save();
     } else {
       // Create new patient profile
@@ -146,6 +201,7 @@ export const completePatientProfile = async (req, res) => {
         emergencyContact,
         allergies: allergies || [],
         medicalHistory: medicalHistoryArray,
+        profileCompleted: allergiesAcknowledged && medicationsAcknowledged,
       });
 
       await patient.save();

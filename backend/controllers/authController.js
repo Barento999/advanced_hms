@@ -8,7 +8,7 @@ export const register = async (req, res) => {
     const { name, email, password, role, phone, dateOfBirth, drugAllergies } =
       req.body;
 
-    const userExists = await User.findOne({ email });
+    const userExists = await User.findOne({ email, isDeleted: false });
     if (userExists) {
       return res
         .status(400)
@@ -63,7 +63,9 @@ export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email }).select("+password");
+    const user = await User.findOne({ email, isDeleted: false }).select(
+      "+password",
+    );
 
     if (!user || !(await user.comparePassword(password))) {
       return res

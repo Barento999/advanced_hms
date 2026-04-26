@@ -163,6 +163,91 @@ export const createPatientValidation = [
     .withMessage("Please select a valid blood group"),
 ];
 
+export const completeProfileValidation = [
+  body("dateOfBirth")
+    .isISO8601()
+    .withMessage("Valid date of birth is required")
+    .custom((value) => {
+      const birthDate = new Date(value);
+      const today = new Date();
+      const age = today.getFullYear() - birthDate.getFullYear();
+
+      if (birthDate > today) {
+        throw new Error("Date of birth cannot be in the future");
+      }
+      if (age > 120) {
+        throw new Error("Please enter a valid date of birth");
+      }
+      return true;
+    }),
+  body("gender")
+    .notEmpty()
+    .withMessage("Gender is required")
+    .isIn(["male", "female", "other"])
+    .withMessage("Please select a valid gender"),
+  body("bloodGroup")
+    .optional()
+    .isIn(["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"])
+    .withMessage("Please select a valid blood group"),
+  body("address.street")
+    .trim()
+    .notEmpty()
+    .withMessage("Street address is required"),
+  body("address.city").trim().notEmpty().withMessage("City is required"),
+  body("address.state").trim().notEmpty().withMessage("State is required"),
+  body("address.zipCode")
+    .trim()
+    .notEmpty()
+    .withMessage("ZIP code is required")
+    .matches(/^\d{5}(-\d{4})?$/)
+    .withMessage("Please enter a valid ZIP code (12345 or 12345-6789)"),
+  body("emergencyContact.name")
+    .trim()
+    .notEmpty()
+    .withMessage("Emergency contact name is required"),
+  body("emergencyContact.phone")
+    .trim()
+    .notEmpty()
+    .withMessage("Emergency contact phone is required")
+    .matches(/^[\+]?[1-9][\d]{0,15}$/)
+    .withMessage("Please enter a valid phone number"),
+  body("emergencyContact.relation")
+    .notEmpty()
+    .withMessage("Emergency contact relationship is required")
+    .isIn(["spouse", "parent", "child", "sibling", "friend", "other"])
+    .withMessage("Please select a valid relationship"),
+  body("currentMedications")
+    .optional()
+    .isLength({ max: 1000 })
+    .withMessage(
+      "Current medications description is too long (max 1000 characters)",
+    ),
+  body("medicalHistory")
+    .optional()
+    .isLength({ max: 2000 })
+    .withMessage(
+      "Medical history description is too long (max 2000 characters)",
+    ),
+  body("allergiesAcknowledged")
+    .isBoolean()
+    .withMessage("Allergies acknowledgment is required")
+    .custom((value) => {
+      if (value !== true) {
+        throw new Error("You must acknowledge your allergy information");
+      }
+      return true;
+    }),
+  body("medicationsAcknowledged")
+    .isBoolean()
+    .withMessage("Medications acknowledgment is required")
+    .custom((value) => {
+      if (value !== true) {
+        throw new Error("You must acknowledge your medication information");
+      }
+      return true;
+    }),
+];
+
 export const appointmentValidation = [
   body("doctorId").notEmpty().withMessage("Doctor ID is required"),
   body("appointmentDate").isISO8601().withMessage("Valid date is required"),

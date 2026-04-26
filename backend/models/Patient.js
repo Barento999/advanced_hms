@@ -37,6 +37,10 @@ const patientSchema = new mongoose.Schema(
       },
     ],
     allergies: [String],
+    profileCompleted: {
+      type: Boolean,
+      default: false,
+    },
     isDeleted: {
       type: Boolean,
       default: false,
@@ -46,6 +50,23 @@ const patientSchema = new mongoose.Schema(
     timestamps: true,
   },
 );
+
+// Method to check if profile is complete
+patientSchema.methods.isProfileComplete = function () {
+  return !!(
+    this.dateOfBirth &&
+    this.gender &&
+    this.bloodGroup &&
+    this.address?.street &&
+    this.address?.city &&
+    this.address?.state &&
+    this.address?.zipCode &&
+    this.emergencyContact?.name &&
+    this.emergencyContact?.phone &&
+    this.emergencyContact?.relation &&
+    this.profileCompleted
+  );
+};
 
 const Patient = mongoose.model("Patient", patientSchema);
 
