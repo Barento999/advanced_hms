@@ -12,6 +12,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 // Auth Pages
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import CompleteProfile from "./pages/CompleteProfile";
 import Notifications from "./pages/Notifications";
 
 // Admin Pages
@@ -104,6 +105,7 @@ function App() {
           path="/register"
           element={!user ? <Register /> : <Navigate to={`/${user.role}`} />}
         />
+        <Route path="/complete-profile" element={<CompleteProfile />} />
 
         {/* Admin Routes */}
         <Route

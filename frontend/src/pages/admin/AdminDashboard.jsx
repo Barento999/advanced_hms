@@ -3,7 +3,7 @@ import { Users, UserCheck, Calendar, DollarSign } from "lucide-react";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
 import StatCard from "../../components/StatCard";
-import { DashboardSkeleton } from "../../components/LoadingSkeleton";
+import { AdminDashboardSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
 
@@ -34,11 +34,7 @@ const AdminDashboard = () => {
         <Sidebar />
         <div className="flex-1 ml-64">
           <Navbar />
-          <DashboardSkeleton
-            title="Admin Dashboard"
-            subtitle="Healthcare management system overview"
-            showHeader={true}
-          />
+          <AdminDashboardSkeleton />
         </div>
       </div>
     );

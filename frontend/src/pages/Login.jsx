@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import api from "../utils/api";
 import { AlertCircle, Mail, Lock, Loader2 } from "lucide-react";
@@ -10,6 +10,7 @@ const Login = () => {
   const [error, setError] = useState("");
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,8 +20,16 @@ const Login = () => {
     try {
       const { data } = await api.post("/auth/login", formData);
       login(data.data, data.data.token);
+
       const role = data.data.role;
-      navigate(`/${role}`);
+      const redirect = searchParams.get("redirect");
+
+      // Handle redirect for patient profile completion
+      if (role === "patient" && redirect === "complete-profile") {
+        navigate("/complete-profile");
+      } else {
+        navigate(`/${role}`);
+      }
     } catch (err) {
       const errorMessage =
         err.response?.data?.message || "Login failed. Please try again.";

@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from "react";
-import axios from "axios";
+import api from "../utils/api";
 
 export const AuthContext = createContext();
 
@@ -13,13 +13,9 @@ export const AuthProvider = ({ children }) => {
       const userData = localStorage.getItem("user");
 
       if (token && userData) {
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
         try {
           // Fetch fresh user data to ensure we have complete information
-          const response = await axios.get(
-            `${import.meta.env.VITE_API_URL}/auth/me`,
-          );
+          const response = await api.get("/auth/me");
           if (response.data.success) {
             const freshUserData = response.data.data;
             setUser(freshUserData);
@@ -31,6 +27,7 @@ export const AuthProvider = ({ children }) => {
           }
         } catch (error) {
           // If request fails (invalid token, etc.), clear auth data
+          console.error("Auth initialization failed:", error);
           logout();
         }
       }
@@ -43,14 +40,12 @@ export const AuthProvider = ({ children }) => {
   const login = (userData, token) => {
     localStorage.setItem("token", token);
     localStorage.setItem("user", JSON.stringify(userData));
-    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     setUser(userData);
   };
 
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    delete axios.defaults.headers.common["Authorization"];
     setUser(null);
   };
 

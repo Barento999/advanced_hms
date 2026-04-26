@@ -14,7 +14,9 @@ export const registerValidation = [
   body("password")
     .isLength({ min: 6 })
     .withMessage("Password must be at least 6 characters"),
-  body("role").isIn(["admin", "doctor", "patient"]).withMessage("Invalid role"),
+  body("role")
+    .isIn(["patient"])
+    .withMessage("Only patient registration allowed"),
 ];
 
 export const loginValidation = [

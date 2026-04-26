@@ -5,7 +5,8 @@ import generateToken from "../utils/generateToken.js";
 
 export const register = async (req, res) => {
   try {
-    const { name, email, password, role, phone } = req.body;
+    const { name, email, password, role, phone, dateOfBirth, drugAllergies } =
+      req.body;
 
     const userExists = await User.findOne({ email });
     if (userExists) {
@@ -22,17 +23,20 @@ export const register = async (req, res) => {
       phone,
     });
 
-    // Create role-specific profile
-    if (role === "doctor") {
-      await Doctor.create({
+    // Create patient profile with initial registration data
+    if (role === "patient") {
+      const allergiesArray = drugAllergies
+        ? drugAllergies
+            .split(",")
+            .map((allergy) => allergy.trim())
+            .filter(Boolean)
+        : [];
+
+      await Patient.create({
         userId: user._id,
-        specialization: "General",
-        qualification: "",
-        experience: 0,
-        consultationFee: 0,
+        dateOfBirth: dateOfBirth || undefined,
+        allergies: allergiesArray,
       });
-    } else if (role === "patient") {
-      await Patient.create({ userId: user._id });
     }
 
     const token = generateToken(user._id);

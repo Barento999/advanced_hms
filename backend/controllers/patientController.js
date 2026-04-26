@@ -70,6 +70,102 @@ export const updatePatientProfile = async (req, res) => {
   }
 };
 
+export const completePatientProfile = async (req, res) => {
+  try {
+    const {
+      dateOfBirth,
+      gender,
+      bloodGroup,
+      address,
+      emergencyContact,
+      allergies,
+      currentMedications,
+      medicalHistory,
+    } = req.body;
+
+    // Check if patient profile already exists
+    let patient = await Patient.findOne({
+      userId: req.user._id,
+      isDeleted: false,
+    });
+
+    if (patient) {
+      // Update existing profile
+      patient.dateOfBirth = dateOfBirth || patient.dateOfBirth;
+      patient.gender = gender || patient.gender;
+      patient.bloodGroup = bloodGroup || patient.bloodGroup;
+      patient.address = address || patient.address;
+      patient.emergencyContact = emergencyContact || patient.emergencyContact;
+      patient.allergies = allergies || patient.allergies;
+
+      // Add medical history if provided
+      if (medicalHistory) {
+        patient.medicalHistory.push({
+          condition: "Initial Registration",
+          notes: medicalHistory,
+          diagnosedDate: new Date(),
+        });
+      }
+
+      // Add current medications to medical history if provided
+      if (currentMedications) {
+        patient.medicalHistory.push({
+          condition: "Current Medications (Self-Reported)",
+          notes: `Patient-reported current medications: ${currentMedications}`,
+          diagnosedDate: new Date(),
+        });
+      }
+
+      await patient.save();
+    } else {
+      // Create new patient profile
+      const medicalHistoryArray = [];
+      if (medicalHistory) {
+        medicalHistoryArray.push({
+          condition: "Initial Registration",
+          notes: medicalHistory,
+          diagnosedDate: new Date(),
+        });
+      }
+
+      // Add current medications to medical history if provided
+      if (currentMedications) {
+        medicalHistoryArray.push({
+          condition: "Current Medications (Self-Reported)",
+          notes: `Patient-reported current medications: ${currentMedications}`,
+          diagnosedDate: new Date(),
+        });
+      }
+
+      patient = new Patient({
+        userId: req.user._id,
+        dateOfBirth,
+        gender,
+        bloodGroup,
+        address,
+        emergencyContact,
+        allergies: allergies || [],
+        medicalHistory: medicalHistoryArray,
+      });
+
+      await patient.save();
+    }
+
+    const populatedPatient = await Patient.findById(patient._id).populate(
+      "userId",
+      "-password",
+    );
+
+    res.status(201).json({
+      success: true,
+      data: populatedPatient,
+      message: "Medical profile completed successfully!",
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 export const getAllDoctors = async (req, res) => {
   try {
     const { specialization, search, page = 1, limit = 10 } = req.query;
