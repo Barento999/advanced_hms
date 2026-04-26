@@ -16,6 +16,11 @@ import {
   getPatientProfile,
 } from "../controllers/adminController.js";
 import { protect, authorize } from "../middlewares/auth.js";
+import {
+  validate,
+  createDoctorValidation,
+  createPatientValidation,
+} from "../middlewares/validator.js";
 
 const router = express.Router();
 
@@ -28,8 +33,13 @@ router.get("/appointments", getAllAppointments);
 router.get("/analytics", getAnalytics);
 router.get("/reports", getDetailedReports);
 router.get("/data-counts", getDataCounts);
-router.post("/create-doctor", createDoctor);
-router.post("/create-patient", createPatient);
+router.post("/create-doctor", createDoctorValidation, validate, createDoctor);
+router.post(
+  "/create-patient",
+  createPatientValidation,
+  validate,
+  createPatient,
+);
 router.get("/doctors/:doctorId", getDoctorProfile);
 router.put("/doctors/:doctorId", updateDoctorProfile);
 router.get("/patients/:patientId", getPatientProfile);

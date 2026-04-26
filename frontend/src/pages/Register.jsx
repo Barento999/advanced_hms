@@ -14,10 +14,85 @@ const Register = () => {
     role: "patient", // Fixed as patient - doctors created by admin only
   });
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    // Name validation
+    if (!formData.name.trim()) {
+      newErrors.name = "Full name is required";
+    } else if (formData.name.trim().length < 2) {
+      newErrors.name = "Name must be at least 2 characters";
+    } else if (!/^[a-zA-Z\s]+$/.test(formData.name.trim())) {
+      newErrors.name = "Name can only contain letters and spaces";
+    }
+
+    // Email validation
+    if (!formData.email.trim()) {
+      newErrors.email = "Email address is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
+
+    // Password validation
+    if (!formData.password) {
+      newErrors.password = "Password is required";
+    } else if (formData.password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters";
+    } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
+      newErrors.password =
+        "Password must contain at least one uppercase letter, one lowercase letter, and one number";
+    }
+
+    // Phone validation (optional but if provided, must be valid)
+    if (
+      formData.phone &&
+      !/^[\+]?[1-9][\d]{0,15}$/.test(formData.phone.replace(/[\s\-\(\)]/g, ""))
+    ) {
+      newErrors.phone = "Please enter a valid phone number";
+    }
+
+    // Date of birth validation
+    if (!formData.dateOfBirth) {
+      newErrors.dateOfBirth = "Date of birth is required";
+    } else {
+      const birthDate = new Date(formData.dateOfBirth);
+      const today = new Date();
+      const age = today.getFullYear() - birthDate.getFullYear();
+
+      if (birthDate > today) {
+        newErrors.dateOfBirth = "Date of birth cannot be in the future";
+      } else if (age > 120) {
+        newErrors.dateOfBirth = "Please enter a valid date of birth";
+      } else if (age < 13) {
+        newErrors.dateOfBirth = "You must be at least 13 years old to register";
+      }
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      toast.error("Please fix the errors below");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -74,14 +149,16 @@ const Register = () => {
             </label>
             <input
               type="text"
-              className="input-field"
+              name="name"
+              className={`input-field ${errors.name ? "border-red-500 focus:ring-red-500" : ""}`}
               placeholder="Enter your full name"
               value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
+              onChange={handleChange}
               required
             />
+            {errors.name && (
+              <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+            )}
           </div>
 
           {/* Email and Phone - Same Line */}
@@ -92,14 +169,16 @@ const Register = () => {
               </label>
               <input
                 type="email"
-                className="input-field"
+                name="email"
+                className={`input-field ${errors.email ? "border-red-500 focus:ring-red-500" : ""}`}
                 placeholder="Enter your email"
                 value={formData.email}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
+                onChange={handleChange}
                 required
               />
+              {errors.email && (
+                <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium text-dark dark:text-slate-200 mb-2">
@@ -107,13 +186,15 @@ const Register = () => {
               </label>
               <input
                 type="tel"
-                className="input-field"
+                name="phone"
+                className={`input-field ${errors.phone ? "border-red-500 focus:ring-red-500" : ""}`}
                 placeholder="Enter your phone"
                 value={formData.phone}
-                onChange={(e) =>
-                  setFormData({ ...formData, phone: e.target.value })
-                }
+                onChange={handleChange}
               />
+              {errors.phone && (
+                <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
+              )}
             </div>
           </div>
 
@@ -124,13 +205,16 @@ const Register = () => {
             </label>
             <input
               type="date"
-              className="input-field"
+              name="dateOfBirth"
+              className={`input-field ${errors.dateOfBirth ? "border-red-500 focus:ring-red-500" : ""}`}
               value={formData.dateOfBirth}
-              onChange={(e) =>
-                setFormData({ ...formData, dateOfBirth: e.target.value })
-              }
+              onChange={handleChange}
+              max={new Date().toISOString().split("T")[0]}
               required
             />
+            {errors.dateOfBirth && (
+              <p className="text-red-500 text-sm mt-1">{errors.dateOfBirth}</p>
+            )}
           </div>
 
           {/* Drug Allergies - Full Width with Safety Highlight */}
@@ -143,12 +227,11 @@ const Register = () => {
             </label>
             <input
               type="text"
+              name="drugAllergies"
               className="input-field"
               placeholder="e.g., Penicillin, Aspirin, Ibuprofen (leave blank if none)"
               value={formData.drugAllergies}
-              onChange={(e) =>
-                setFormData({ ...formData, drugAllergies: e.target.value })
-              }
+              onChange={handleChange}
             />
             <p className="text-xs text-yellow-700 dark:text-yellow-300 mt-2">
               Please list any medications you're allergic to. This information
@@ -163,14 +246,20 @@ const Register = () => {
             </label>
             <input
               type="password"
-              className="input-field"
+              name="password"
+              className={`input-field ${errors.password ? "border-red-500 focus:ring-red-500" : ""}`}
               placeholder="Create a secure password"
               value={formData.password}
-              onChange={(e) =>
-                setFormData({ ...formData, password: e.target.value })
-              }
+              onChange={handleChange}
               required
             />
+            {errors.password && (
+              <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+            )}
+            <p className="text-xs text-muted dark:text-slate-400 mt-1">
+              Password must contain at least one uppercase letter, one lowercase
+              letter, and one number
+            </p>
           </div>
 
           <button

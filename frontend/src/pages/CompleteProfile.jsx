@@ -26,7 +26,61 @@ const CompleteProfile = () => {
   });
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+
+  const validateStep = (currentStep) => {
+    const newErrors = {};
+
+    if (currentStep === 1) {
+      // Personal Information validation
+      if (!formData.dateOfBirth) {
+        newErrors.dateOfBirth = "Date of birth is required";
+      } else {
+        const birthDate = new Date(formData.dateOfBirth);
+        const today = new Date();
+        const age = today.getFullYear() - birthDate.getFullYear();
+
+        if (birthDate > today) {
+          newErrors.dateOfBirth = "Date of birth cannot be in the future";
+        } else if (age > 120) {
+          newErrors.dateOfBirth = "Please enter a valid date of birth";
+        }
+      }
+
+      if (!formData.gender) {
+        newErrors.gender = "Gender is required";
+      }
+    }
+
+    if (currentStep === 2) {
+      // Contact Information validation
+      if (formData.emergencyContact.name && !formData.emergencyContact.phone) {
+        newErrors["emergencyContact.phone"] =
+          "Emergency contact phone is required when name is provided";
+      }
+
+      if (
+        formData.emergencyContact.phone &&
+        !/^[\+]?[1-9][\d]{0,15}$/.test(
+          formData.emergencyContact.phone.replace(/[\s\-\(\)]/g, ""),
+        )
+      ) {
+        newErrors["emergencyContact.phone"] =
+          "Please enter a valid phone number";
+      }
+
+      if (
+        formData.address.zipCode &&
+        !/^\d{5}(-\d{4})?$/.test(formData.address.zipCode)
+      ) {
+        newErrors["address.zipCode"] = "Please enter a valid ZIP code";
+      }
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   // Check if user is authenticated and is a patient
   useEffect(() => {
@@ -84,6 +138,11 @@ const CompleteProfile = () => {
         [name]: value,
       }));
     }
+
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
   };
 
   const handleAllergyChange = (e) => {
@@ -95,6 +154,18 @@ const CompleteProfile = () => {
       ...prev,
       allergies,
     }));
+  };
+
+  const nextStep = () => {
+    if (validateStep(step)) {
+      setStep(step + 1);
+    } else {
+      toast.error("Please fix the errors before continuing");
+    }
+  };
+
+  const prevStep = () => {
+    setStep(step - 1);
   };
 
   const handleSubmit = async (e) => {
