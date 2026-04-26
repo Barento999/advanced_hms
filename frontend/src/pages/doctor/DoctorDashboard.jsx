@@ -25,15 +25,70 @@ const DoctorDashboard = () => {
 
   const fetchAppointments = async () => {
     try {
-      const { data } = await api.get("/doctor/appointments?limit=5");
-      setAppointments(data.data);
+      // Get current date for filtering
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
 
-      const total = data.totalItems || 0;
-      const pending = data.data.filter((a) => a.status === "pending").length;
-      const confirmed = data.data.filter(
+      // Fetch all appointments for stats calculation
+      const { data: allData } = await api.get("/doctor/appointments");
+
+      console.log("All appointments data:", allData.data);
+      console.log("First appointment structure:", allData.data[0]);
+
+      // Filter appointments for dashboard display (only pending/confirmed and future dates)
+      const filteredAppointments = allData.data.filter((appointment) => {
+        const appointmentDate = new Date(appointment.appointmentDate);
+        appointmentDate.setHours(0, 0, 0, 0);
+
+        // Only show pending or confirmed appointments
+        const isValidStatus =
+          appointment.status === "pending" ||
+          appointment.status === "confirmed";
+
+        // Only show appointments from today onwards
+        const isFutureOrToday = appointmentDate >= today;
+
+        console.log(`Appointment ${appointment._id}:`, {
+          appointmentDate: appointment.appointmentDate,
+          parsedDate: appointmentDate.toDateString(),
+          today: today.toDateString(),
+          status: appointment.status,
+          isValidStatus,
+          isFutureOrToday,
+          shouldShow: isValidStatus && isFutureOrToday,
+        });
+
+        return isValidStatus && isFutureOrToday;
+      });
+
+      console.log("Filtered appointments:", filteredAppointments);
+
+      // Sort by date and time, then take first 5
+      const sortedAppointments = filteredAppointments
+        .sort((a, b) => {
+          const dateA = new Date(a.appointmentDate);
+          const dateB = new Date(b.appointmentDate);
+          if (dateA.getTime() !== dateB.getTime()) {
+            return dateA - dateB;
+          }
+          // If same date, sort by time
+          if (a.timeSlot?.startTime && b.timeSlot?.startTime) {
+            return a.timeSlot.startTime.localeCompare(b.timeSlot.startTime);
+          }
+          return 0;
+        })
+        .slice(0, 5);
+
+      console.log("Final sorted appointments:", sortedAppointments);
+      setAppointments(sortedAppointments);
+
+      // Calculate stats from all appointments
+      const total = allData.totalItems || 0;
+      const pending = allData.data.filter((a) => a.status === "pending").length;
+      const confirmed = allData.data.filter(
         (a) => a.status === "confirmed",
       ).length;
-      const completed = data.data.filter(
+      const completed = allData.data.filter(
         (a) => a.status === "completed",
       ).length;
 
@@ -58,7 +113,6 @@ const DoctorDashboard = () => {
           <DoctorDashboardSkeleton />
         ) : (
           <div className="p-8 mt-20">
-            {/* Header */}
             <div className="mb-8">
               <h1 className="text-3xl font-bold text-dark dark:text-slate-100">
                 Doctor Dashboard
@@ -102,15 +156,11 @@ const DoctorDashboard = () => {
             <div className="card">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-bold text-dark dark:text-slate-100">
-                  Today's Appointments
+                  Upcoming Appointments
                 </h3>
                 <div className="text-sm text-gray-500 dark:text-slate-400">
-                  {new Date().toLocaleDateString("en-US", {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
+                  Pending & Confirmed Only | Total Stats: P:{stats.pending} C:
+                  {stats.confirmed}
                 </div>
               </div>
               <div className="space-y-3">
@@ -120,13 +170,13 @@ const DoctorDashboard = () => {
                       size={48}
                       className="mx-auto mb-3 text-gray-400 dark:text-slate-600"
                     />
-                    <p className="font-medium">
-                      No appointments scheduled for today
+                    <p className="font-medium">No upcoming appointments</p>
+                    <p className="text-sm mt-1">
+                      All pending and confirmed appointments will appear here
                     </p>
-                    <p className="text-sm mt-1">Your schedule is clear</p>
                   </div>
                 ) : (
-                  appointments.map((apt, index) => (
+                  appointments.map((apt) => (
                     <div
                       key={apt._id}
                       className="group relative flex items-center gap-4 p-4 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl hover:shadow-md hover:border-primary/20 transition-all duration-200">
@@ -161,6 +211,16 @@ const DoctorDashboard = () => {
                               </h4>
                               <p className="text-sm text-gray-600 dark:text-slate-400 mt-0.5">
                                 {apt.reason}
+                              </p>
+                              <p className="text-xs text-gray-500 dark:text-slate-500 mt-1">
+                                📅{" "}
+                                {new Date(
+                                  apt.appointmentDate,
+                                ).toLocaleDateString("en-US", {
+                                  weekday: "short",
+                                  month: "short",
+                                  day: "numeric",
+                                })}
                               </p>
                               {apt.patientId?.userId?.phone && (
                                 <p className="text-xs text-gray-500 dark:text-slate-500 mt-1">

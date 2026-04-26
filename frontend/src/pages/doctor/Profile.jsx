@@ -266,6 +266,16 @@ const Profile = () => {
         <Navbar />
 
         <div className="p-8 mt-20">
+          {/* Page Header */}
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-dark dark:text-slate-100">
+              Doctor Profile
+            </h1>
+            <p className="text-gray-600 dark:text-slate-400 mt-2">
+              Manage your professional profile and practice settings
+            </p>
+          </div>
+
           {/* Professional Header Section */}
           <div className="bg-gradient-to-r from-primary to-blue-700 rounded-2xl p-8 mb-8 text-white shadow-xl">
             <div className="flex items-start justify-between">
