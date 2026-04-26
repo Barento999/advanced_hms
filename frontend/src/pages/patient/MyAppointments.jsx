@@ -7,7 +7,7 @@ import EmptyState from "../../components/EmptyState";
 import ConfirmationModal from "../../components/ConfirmationModal";
 import Pagination from "../../components/Pagination";
 import ExportButton from "../../components/ExportButton";
-import { TableSkeleton } from "../../components/LoadingSkeleton";
+import { PatientAppointmentsSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
 
@@ -105,104 +105,105 @@ const MyAppointments = () => {
       <div className="flex-1 ml-64">
         <Navbar />
 
-        <div className="p-8 mt-20">
-          <div className="card">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
-                My Appointments
-              </h2>
-              <ExportButton
-                data={allAppointments}
-                type="patientAppointments"
-                title="My Appointments Report"
-                filename="my_appointments_report"
-              />
-            </div>
-
-            {loading ? (
-              <TableSkeleton rows={8} />
-            ) : appointments.length === 0 ? (
-              <EmptyState
-                type="myAppointments"
-                actionText="Book Appointment"
-                onAction={() => navigate("/patient/doctors")}
-                className="py-12"
-              />
-            ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b border-gray-200 dark:border-slate-700">
-                      <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
-                        Doctor
-                      </th>
-                      <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
-                        Date
-                      </th>
-                      <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
-                        Time
-                      </th>
-                      <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
-                        Reason
-                      </th>
-                      <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
-                        Status
-                      </th>
-                      <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {appointments.map((apt) => (
-                      <tr
-                        key={apt._id}
-                        className="border-b border-gray-100 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
-                        <td className="py-3 px-4 text-dark dark:text-slate-100">
-                          {apt.doctorId?.userId?.name || "N/A"}
-                        </td>
-                        <td className="py-3 px-4 text-dark dark:text-slate-100">
-                          {new Date(apt.appointmentDate).toLocaleDateString()}
-                        </td>
-                        <td className="py-3 px-4 text-dark dark:text-slate-100">
-                          {apt.timeSlot?.startTime} - {apt.timeSlot?.endTime}
-                        </td>
-                        <td className="py-3 px-4 text-dark dark:text-slate-100">
-                          {apt.reason}
-                        </td>
-                        <td className="py-3 px-4">
-                          <span className={`badge badge-${apt.status}`}>
-                            {apt.status}
-                          </span>
-                        </td>
-                        <td className="py-3 px-4">
-                          {apt.status === "pending" && (
-                            <button
-                              onClick={() => cancelAppointment(apt)}
-                              className="p-2 bg-red-100 dark:bg-red-900/30 text-danger dark:text-red-400 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors">
-                              <X size={18} />
-                            </button>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-
-                {/* Pagination */}
-                <div className="mt-6">
-                  <Pagination
-                    currentPage={pagination.currentPage}
-                    totalPages={pagination.totalPages}
-                    totalItems={pagination.totalItems}
-                    itemsPerPage={pagination.itemsPerPage}
-                    onPageChange={handlePageChange}
-                  />
-                </div>
+        {loading ? (
+          <PatientAppointmentsSkeleton />
+        ) : (
+          <div className="p-8 mt-20">
+            <div className="card">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
+                  My Appointments
+                </h2>
+                <ExportButton
+                  data={allAppointments}
+                  type="patientAppointments"
+                  title="My Appointments Report"
+                  filename="my_appointments_report"
+                />
               </div>
-            )}
+              {appointments.length === 0 ? (
+                <EmptyState
+                  type="myAppointments"
+                  actionText="Book Appointment"
+                  onAction={() => navigate("/patient/doctors")}
+                  className="py-12"
+                />
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="border-b border-gray-200 dark:border-slate-700">
+                        <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
+                          Doctor
+                        </th>
+                        <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
+                          Date
+                        </th>
+                        <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
+                          Time
+                        </th>
+                        <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
+                          Reason
+                        </th>
+                        <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
+                          Status
+                        </th>
+                        <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {appointments.map((apt) => (
+                        <tr
+                          key={apt._id}
+                          className="border-b border-gray-100 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
+                          <td className="py-3 px-4 text-dark dark:text-slate-100">
+                            {apt.doctorId?.userId?.name || "N/A"}
+                          </td>
+                          <td className="py-3 px-4 text-dark dark:text-slate-100">
+                            {new Date(apt.appointmentDate).toLocaleDateString()}
+                          </td>
+                          <td className="py-3 px-4 text-dark dark:text-slate-100">
+                            {apt.timeSlot?.startTime} - {apt.timeSlot?.endTime}
+                          </td>
+                          <td className="py-3 px-4 text-dark dark:text-slate-100">
+                            {apt.reason}
+                          </td>
+                          <td className="py-3 px-4">
+                            <span className={`badge badge-${apt.status}`}>
+                              {apt.status}
+                            </span>
+                          </td>
+                          <td className="py-3 px-4">
+                            {apt.status === "pending" && (
+                              <button
+                                onClick={() => cancelAppointment(apt)}
+                                className="p-2 bg-red-100 dark:bg-red-900/30 text-danger dark:text-red-400 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors">
+                                <X size={18} />
+                              </button>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+
+                  {/* Pagination */}
+                  <div className="mt-6">
+                    <Pagination
+                      currentPage={pagination.currentPage}
+                      totalPages={pagination.totalPages}
+                      totalItems={pagination.totalItems}
+                      itemsPerPage={pagination.itemsPerPage}
+                      onPageChange={handlePageChange}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Confirmation Modal */}

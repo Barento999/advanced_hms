@@ -12,20 +12,16 @@ import {
   Activity,
   FileText,
   Edit3,
-  X,
   Droplets,
   Users,
   Home,
   Lock,
   Eye,
   EyeOff,
-  Star,
-  UserCheck,
-  Clock,
 } from "lucide-react";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
-import { ProfileSkeleton } from "../../components/LoadingSkeleton";
+import { PatientProfileSkeleton } from "../../components/LoadingSkeleton";
 import { AuthContext } from "../../context/AuthContext";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
@@ -117,7 +113,7 @@ const Profile = () => {
       }
 
       // Delay to show skeleton
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1500));
     } catch (error) {
       toast.error("Failed to load profile");
     } finally {
@@ -238,9 +234,7 @@ const Profile = () => {
         <Sidebar />
         <div className="flex-1 ml-64">
           <Navbar />
-          <div className="p-8 mt-20">
-            <ProfileSkeleton />
-          </div>
+          <PatientProfileSkeleton />
         </div>
       </div>
     );
@@ -253,6 +247,15 @@ const Profile = () => {
         <Navbar />
 
         <div className="p-8 mt-20">
+          {/* Page Header */}
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-dark dark:text-slate-100">
+              Patient Profile
+            </h1>
+            <p className="text-gray-600 dark:text-slate-400 mt-2">
+              Manage your personal information and healthcare details
+            </p>
+          </div>
           {/* Professional Header Section */}
           <div className="bg-gradient-to-r from-primary to-blue-700 rounded-2xl p-8 mb-8 text-white shadow-xl">
             <div className="flex items-start justify-between">

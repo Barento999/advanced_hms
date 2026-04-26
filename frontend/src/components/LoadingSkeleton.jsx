@@ -1059,3 +1059,287 @@ export const AdminPatientProfileSkeleton = ({ navigate }) => (
     </div>
   </div>
 );
+// Patient Profile Skeleton
+export const PatientProfileSkeleton = () => (
+  <div className="p-8 mt-20">
+    {/* Real Header - Shows Immediately */}
+    <div className="mb-8">
+      <h1 className="text-3xl font-bold text-dark dark:text-slate-100">
+        Patient Profile
+      </h1>
+      <p className="text-gray-600 dark:text-slate-400 mt-2">
+        Manage your personal information and healthcare details
+      </p>
+    </div>
+
+    {/* Professional Header Skeleton */}
+    <div className="bg-gradient-to-r from-primary to-blue-700 rounded-2xl p-8 mb-8 text-white shadow-xl">
+      <div className="flex items-start justify-between">
+        <div className="flex items-center space-x-6">
+          <div className="w-24 h-24 bg-white/20 rounded-full animate-pulse"></div>
+          <div>
+            <div className="h-8 bg-white/20 rounded w-48 mb-2 animate-pulse"></div>
+            <div className="h-4 bg-white/20 rounded w-32 mb-2 animate-pulse"></div>
+            <div className="h-4 bg-white/20 rounded w-40 animate-pulse"></div>
+          </div>
+        </div>
+        <div className="text-right">
+          <div className="h-6 bg-white/20 rounded w-24 mb-2 animate-pulse"></div>
+          <div className="h-4 bg-white/20 rounded w-20 mb-1 animate-pulse"></div>
+          <div className="h-4 bg-white/20 rounded w-24 animate-pulse"></div>
+        </div>
+      </div>
+    </div>
+
+    {/* Quick Stats Skeleton */}
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <StatCardSkeleton />
+      <StatCardSkeleton />
+      <StatCardSkeleton />
+      <StatCardSkeleton />
+    </div>
+
+    {/* Navigation Tabs Skeleton */}
+    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-200 dark:border-slate-700 mb-8">
+      <div className="flex space-x-1 p-2">
+        <div className="h-10 bg-primary rounded-lg w-24 animate-pulse"></div>
+        <div className="h-10 bg-gray-200 dark:bg-slate-700 rounded-lg w-28 animate-pulse"></div>
+        <div className="h-10 bg-gray-200 dark:bg-slate-700 rounded-lg w-32 animate-pulse"></div>
+        <div className="h-10 bg-gray-200 dark:bg-slate-700 rounded-lg w-24 animate-pulse"></div>
+      </div>
+    </div>
+
+    {/* Content Skeleton */}
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="lg:col-span-2 space-y-6">
+        <div className="card">
+          <div className="h-6 bg-gray-200 dark:bg-slate-700 rounded w-48 mb-6 animate-pulse"></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-4">
+              <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-20 animate-pulse"></div>
+              <div className="h-6 bg-gray-200 dark:bg-slate-700 rounded w-32 animate-pulse"></div>
+              <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-24 animate-pulse"></div>
+              <div className="h-6 bg-gray-200 dark:bg-slate-700 rounded w-36 animate-pulse"></div>
+            </div>
+            <div className="space-y-4">
+              <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-24 animate-pulse"></div>
+              <div className="h-6 bg-gray-200 dark:bg-slate-700 rounded w-28 animate-pulse"></div>
+              <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-20 animate-pulse"></div>
+              <div className="h-6 bg-gray-200 dark:bg-slate-700 rounded w-24 animate-pulse"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="space-y-6">
+        <div className="card">
+          <div className="h-6 bg-gray-200 dark:bg-slate-700 rounded w-40 mb-6 animate-pulse"></div>
+          <div className="space-y-4">
+            <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-32 animate-pulse"></div>
+            <div className="h-6 bg-gray-200 dark:bg-slate-700 rounded w-36 animate-pulse"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+// Patient Dashboard Skeleton
+export const PatientDashboardSkeleton = () => (
+  <div className="p-8 mt-20">
+    {/* Real Header - Shows Immediately */}
+    <div className="mb-8">
+      <h1 className="text-3xl font-bold text-dark dark:text-slate-100">
+        Patient Dashboard
+      </h1>
+      <p className="text-gray-600 dark:text-slate-400 mt-2">
+        Your healthcare journey and appointments
+      </p>
+    </div>
+
+    {/* Stats Cards Skeleton */}
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <StatCardSkeleton />
+      <StatCardSkeleton />
+      <StatCardSkeleton />
+      <StatCardSkeleton />
+    </div>
+
+    {/* Two Column Layout Skeleton */}
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {/* Recent Appointments Card */}
+      <div className="card">
+        <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-4">
+          Recent Appointments
+        </h3>
+        <div className="space-y-3">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <div
+              key={i}
+              className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-700/30 rounded-xl animate-pulse">
+              <div className="flex-1">
+                <div className="h-5 bg-gray-200 dark:bg-slate-700 rounded w-32 mb-1"></div>
+                <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-24"></div>
+              </div>
+              <div className="h-6 bg-gray-200 dark:bg-slate-700 rounded-full w-16"></div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Quick Actions Card */}
+      <div className="card">
+        <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-4">
+          Quick Actions
+        </h3>
+        <div className="space-y-3">
+          <div className="h-12 bg-gray-200 dark:bg-slate-700 rounded-xl animate-pulse"></div>
+          <div className="h-12 bg-gray-200 dark:bg-slate-700 rounded-xl animate-pulse"></div>
+          <div className="h-12 bg-gray-200 dark:bg-slate-700 rounded-xl animate-pulse"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+// Patient Appointments Skeleton
+export const PatientAppointmentsSkeleton = () => (
+  <div className="p-8 mt-20">
+    {/* Real Header - Shows Immediately */}
+    <div className="card">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
+          My Appointments
+        </h2>
+        <ExportButton
+          data={[]}
+          type="patientAppointments"
+          title="My Appointments Report"
+          filename="my_appointments_report"
+          disabled={true}
+        />
+      </div>
+
+      <TableSkeleton rows={8} />
+
+      {/* Pagination Skeleton */}
+      <div className="flex justify-between items-center mt-6 pt-4 border-t border-gray-200 dark:border-slate-700">
+        <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-32 animate-pulse"></div>
+        <div className="flex gap-2">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <div
+              key={i}
+              className="h-8 w-8 bg-gray-200 dark:bg-slate-700 rounded animate-pulse"></div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+);
+// Patient Medical Records Skeleton
+export const PatientMedicalRecordsSkeleton = () => (
+  <div className="p-8 mt-20">
+    {/* Real Header - Shows Immediately */}
+    <div className="card">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
+          My Medical Records
+        </h2>
+        <ExportButton
+          data={[]}
+          type="medicalRecords"
+          title="Medical Records Report"
+          filename="medical_records"
+          disabled={true}
+        />
+      </div>
+
+      {/* Medical Records List Skeleton */}
+      <div className="space-y-4">
+        {[1, 2, 3, 4, 5].map((i) => (
+          <div
+            key={i}
+            className="bg-gray-50 dark:bg-slate-700/30 rounded-xl p-6 animate-pulse">
+            <div className="flex justify-between items-start mb-4">
+              <div className="flex-1">
+                {/* Diagnosis Title */}
+                <div className="h-6 bg-gray-200 dark:bg-slate-700 rounded w-48 mb-2"></div>
+                {/* Doctor and Date Info */}
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 bg-gray-200 dark:bg-slate-700 rounded"></div>
+                    <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-32"></div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 bg-gray-200 dark:bg-slate-700 rounded"></div>
+                    <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-24"></div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                {/* Prescription Button Skeleton */}
+                <div className="h-10 bg-gray-200 dark:bg-slate-700 rounded w-32"></div>
+                {/* File Icon Skeleton */}
+                <div className="w-6 h-6 bg-gray-200 dark:bg-slate-700 rounded"></div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Pagination Skeleton */}
+      <div className="mt-6">
+        <div className="flex justify-between items-center">
+          <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-32 animate-pulse"></div>
+          <div className="flex gap-2">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div
+                key={i}
+                className="h-8 w-8 bg-gray-200 dark:bg-slate-700 rounded animate-pulse"></div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+// Patient Payments Skeleton
+export const PatientPaymentsSkeleton = () => (
+  <div className="p-8 mt-20">
+    {/* Stats Cards Skeleton */}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <StatCardSkeleton />
+      <StatCardSkeleton />
+      <StatCardSkeleton />
+    </div>
+
+    {/* Real Header - Shows Immediately */}
+    <div className="card">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
+          Payment History
+        </h2>
+        <ExportButton
+          data={[]}
+          type="payments"
+          title="Payment History Report"
+          filename="payment_history"
+          disabled={true}
+        />
+      </div>
+
+      <TableSkeleton rows={5} />
+
+      {/* Pagination Skeleton */}
+      <div className="mt-6">
+        <div className="flex justify-between items-center">
+          <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-32 animate-pulse"></div>
+          <div className="flex gap-2">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div
+                key={i}
+                className="h-8 w-8 bg-gray-200 dark:bg-slate-700 rounded animate-pulse"></div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
