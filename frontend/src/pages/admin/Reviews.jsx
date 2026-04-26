@@ -5,10 +5,7 @@ import Navbar from "../../components/Navbar";
 import EmptyState from "../../components/EmptyState";
 import Pagination from "../../components/Pagination";
 import ExportButton from "../../components/ExportButton";
-import {
-  ReviewCardSkeleton,
-  StatCardSkeleton,
-} from "../../components/LoadingSkeleton";
+import { AdminReviewsSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
 
@@ -173,48 +170,7 @@ const Reviews = () => {
         <Sidebar />
         <div className="flex-1 ml-64">
           <Navbar />
-          <div className="p-8 mt-20">
-            {/* Real Header - Shows Immediately */}
-            <div className="mb-6">
-              <div className="flex justify-between items-center">
-                <div>
-                  <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
-                    All Doctor Reviews
-                  </h2>
-                  <p className="text-gray-600 dark:text-slate-400 mt-1">
-                    View and manage patient reviews and doctor ratings
-                  </p>
-                </div>
-                <ExportButton
-                  data={[]}
-                  type="reviews"
-                  title="Reviews Report"
-                  filename="reviews_report"
-                  disabled={true}
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-              {[1, 2, 3, 4].map((i) => (
-                <StatCardSkeleton key={i} />
-              ))}
-            </div>
-
-            <div className="card mb-6 animate-pulse">
-              <div className="h-5 bg-gray-200 dark:bg-slate-700 rounded w-32 mb-4"></div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="h-10 bg-gray-200 dark:bg-slate-700 rounded"></div>
-                <div className="h-10 bg-gray-200 dark:bg-slate-700 rounded"></div>
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              {[1, 2, 3].map((i) => (
-                <ReviewCardSkeleton key={i} />
-              ))}
-            </div>
-          </div>
+          <AdminReviewsSkeleton />
         </div>
       </div>
     );
