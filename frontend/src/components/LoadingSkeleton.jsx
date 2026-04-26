@@ -165,6 +165,41 @@ export const TableSkeleton = ({ rows = 5 }) => (
   </div>
 );
 
+export const AdminReviewCardSkeleton = () => (
+  <div className="card animate-pulse">
+    <div className="flex items-start gap-4">
+      <div className="w-12 h-12 bg-gray-200 dark:bg-slate-700 rounded-full flex-shrink-0"></div>
+      <div className="flex-1">
+        <div className="flex items-start justify-between mb-2">
+          <div>
+            {/* Patient Name - h4 font-semibold */}
+            <div className="h-5 bg-gray-200 dark:bg-slate-700 rounded w-32 mb-1"></div>
+            {/* "reviewed [doctor name] ([specialization])" - p text-sm */}
+            <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-64"></div>
+          </div>
+          <div className="text-right">
+            {/* Stars */}
+            <div className="flex gap-1 justify-end mb-1">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <div
+                  key={i}
+                  className="w-4 h-4 bg-gray-200 dark:bg-slate-700 rounded"></div>
+              ))}
+            </div>
+            {/* Date - p text-xs */}
+            <div className="h-3 bg-gray-200 dark:bg-slate-700 rounded w-20"></div>
+          </div>
+        </div>
+        {/* Comment - p mt-2 */}
+        <div className="space-y-2 mt-2">
+          <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-full"></div>
+          <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-4/5"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
 export const ReviewCardSkeleton = () => (
   <div className="card animate-pulse">
     <div className="flex items-start gap-4">
@@ -1340,6 +1375,126 @@ export const PatientPaymentsSkeleton = () => (
           </div>
         </div>
       </div>
+    </div>
+  </div>
+);
+// Admin Dashboard Skeleton
+export const AdminDashboardSkeleton = () => (
+  <div className="p-8 mt-20">
+    {/* Real Header - Shows Immediately */}
+    <div className="mb-8">
+      <h1 className="text-3xl font-bold text-dark dark:text-slate-100">
+        Admin Dashboard
+      </h1>
+      <p className="text-gray-600 dark:text-slate-400 mt-2">
+        Healthcare management system overview
+      </p>
+    </div>
+
+    {/* Stats Cards */}
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      {[1, 2, 3, 4].map((i) => (
+        <StatCardSkeleton key={i} />
+      ))}
+    </div>
+
+    {/* Recent Appointments Table */}
+    <div className="card">
+      <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-4">
+        Recent Appointments
+      </h3>
+      <TableSkeleton rows={5} />
+    </div>
+  </div>
+);
+
+// Generic Dashboard Skeleton (for backward compatibility)
+export const DashboardSkeleton = ({
+  title = "Dashboard",
+  subtitle = "Loading dashboard data...",
+  showHeader = true,
+}) => (
+  <div className="p-8 mt-20">
+    {/* Real Header - Shows Immediately */}
+    {showHeader && (
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-dark dark:text-slate-100">
+          {title}
+        </h1>
+        <p className="text-gray-600 dark:text-slate-400 mt-2">{subtitle}</p>
+      </div>
+    )}
+
+    {/* Stats Cards */}
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      {[1, 2, 3, 4].map((i) => (
+        <StatCardSkeleton key={i} />
+      ))}
+    </div>
+
+    {/* Content Table */}
+    <div className="card">
+      <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-4">
+        Recent Activity
+      </h3>
+      <TableSkeleton rows={5} />
+    </div>
+  </div>
+);
+// Admin Reviews Skeleton
+export const AdminReviewsSkeleton = () => (
+  <div className="p-8 mt-20">
+    {/* Real Header - Shows Immediately */}
+    <div className="mb-6">
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
+            All Doctor Reviews
+          </h2>
+          <p className="text-gray-600 dark:text-slate-400 mt-1">
+            View and manage all reviews across the platform
+          </p>
+        </div>
+        <ExportButton
+          data={[]}
+          type="reviews"
+          title="Reviews Report"
+          filename="reviews_report"
+          disabled={true}
+        />
+      </div>
+    </div>
+
+    {/* Summary Stats Skeleton */}
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      {[1, 2, 3, 4].map((i) => (
+        <StatCardSkeleton key={i} />
+      ))}
+    </div>
+
+    {/* Filters Card Skeleton */}
+    <div className="card mb-6 animate-pulse">
+      <div className="h-5 bg-gray-200 dark:bg-slate-700 rounded w-32 mb-4"></div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-24 mb-2"></div>
+          <div className="h-10 bg-gray-200 dark:bg-slate-700 rounded"></div>
+        </div>
+        <div>
+          <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-28 mb-2"></div>
+          <div className="h-10 bg-gray-200 dark:bg-slate-700 rounded"></div>
+        </div>
+      </div>
+      <div className="mt-3">
+        <div className="h-3 bg-gray-200 dark:bg-slate-700 rounded w-48"></div>
+      </div>
+    </div>
+
+    {/* Reviews List Skeleton */}
+    <div className="space-y-4">
+      {[1, 2, 3].map((i) => (
+        <AdminReviewCardSkeleton key={i} />
+      ))}
     </div>
   </div>
 );
