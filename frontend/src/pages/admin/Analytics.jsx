@@ -157,7 +157,17 @@ const Analytics = () => {
         <Sidebar />
         <div className="flex-1 ml-64">
           <Navbar />
-          <DashboardSkeleton />
+          <DashboardSkeleton
+            title="Analytics & Reports"
+            subtitle="Comprehensive insights and performance metrics"
+            showExportButton={true}
+            exportData={[]}
+            exportType="analytics"
+            exportTitle="Analytics Report"
+            exportFilename="analytics_report"
+            period={period}
+            setPeriod={setPeriod}
+          />
         </div>
       </div>
     );
@@ -182,7 +192,7 @@ const Analytics = () => {
             </div>
 
             <div className="flex items-center gap-4">
-              {/* Period Filter */}
+              it is n{/* Period Filter */}
               <div className="flex items-center gap-2">
                 <Filter size={20} className="text-gray-500" />
                 <select
@@ -195,7 +205,6 @@ const Analytics = () => {
                   <option value="year">Last Year</option>
                 </select>
               </div>
-
               {/* Export Button */}
               <ExportButton
                 data={analytics || {}}

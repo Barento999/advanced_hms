@@ -23,7 +23,7 @@ import {
 } from "lucide-react";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
-import { ProfileSkeleton } from "../../components/LoadingSkeleton";
+import { DoctorProfileSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
 
@@ -109,6 +109,9 @@ const Profile = () => {
           availableTimeSlots: profile.availableTimeSlots || [],
         });
       }
+
+      // Delay to show skeleton
+      await new Promise((resolve) => setTimeout(resolve, 1500));
     } catch (error) {
       toast.error("Failed to load profile");
     } finally {
@@ -239,7 +242,18 @@ const Profile = () => {
         <Sidebar />
         <div className="flex-1 ml-64">
           <Navbar />
-          <ProfileSkeleton />
+          <div className="p-8 mt-20">
+            {/* Real Header - Shows Immediately */}
+            <div className="mb-8">
+              <h1 className="text-3xl font-bold text-dark dark:text-slate-100">
+                Doctor Profile
+              </h1>
+              <p className="text-gray-600 dark:text-slate-400 mt-2">
+                Manage your professional profile and practice settings
+              </p>
+            </div>
+            <DoctorProfileSkeleton />
+          </div>
         </div>
       </div>
     );
@@ -572,7 +586,7 @@ const Profile = () => {
                       <div className="flex items-center gap-2">
                         <User size={16} className="text-primary" />
                         <span className="text-gray-900 dark:text-slate-100 font-medium">
-                          Dr. {basicInfo.name || "Not available"}
+                          {basicInfo.name || "Not available"}
                         </span>
                       </div>
                     </div>

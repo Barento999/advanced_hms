@@ -6,7 +6,7 @@ import EmptyState from "../../components/EmptyState";
 import ConfirmationModal from "../../components/ConfirmationModal";
 import Pagination from "../../components/Pagination";
 import ExportButton from "../../components/ExportButton";
-import { TableSkeleton } from "../../components/LoadingSkeleton";
+import { AdminTablePageSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
 
@@ -124,6 +124,27 @@ const UserManagement = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex min-h-screen">
+        <Sidebar />
+        <div className="flex-1 ml-64">
+          <Navbar />
+          <AdminTablePageSkeleton
+            title="User Management"
+            subtitle="Manage user accounts and access controls"
+            showExportButton={true}
+            exportData={[]}
+            exportType="users"
+            exportTitle="Users Report"
+            exportFilename="users_report"
+            rows={8}
+          />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-h-screen">
       <Sidebar />
@@ -144,9 +165,7 @@ const UserManagement = () => {
               />
             </div>
 
-            {loading ? (
-              <TableSkeleton rows={8} />
-            ) : users.length === 0 ? (
+            {users.length === 0 ? (
               <EmptyState type="users" className="py-12" />
             ) : (
               <div className="overflow-x-auto">

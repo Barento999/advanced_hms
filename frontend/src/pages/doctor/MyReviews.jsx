@@ -5,10 +5,7 @@ import Navbar from "../../components/Navbar";
 import EmptyState from "../../components/EmptyState";
 import Pagination from "../../components/Pagination";
 import ExportButton from "../../components/ExportButton";
-import {
-  ReviewCardSkeleton,
-  StatCardSkeleton,
-} from "../../components/LoadingSkeleton";
+import { DoctorReviewsSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
 
@@ -90,22 +87,7 @@ const MyReviews = () => {
         <Sidebar />
         <div className="flex-1 ml-64">
           <Navbar />
-          <div className="p-8 mt-20">
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
-                My Reviews
-              </h2>
-              <p className="text-gray-600 dark:text-slate-400 mt-1">
-                See what your patients are saying about you
-              </p>
-            </div>
-            <StatCardSkeleton />
-            <div className="space-y-4 mt-6">
-              <ReviewCardSkeleton />
-              <ReviewCardSkeleton />
-              <ReviewCardSkeleton />
-            </div>
-          </div>
+          <DoctorReviewsSkeleton />
         </div>
       </div>
     );

@@ -23,7 +23,7 @@ import {
 } from "lucide-react";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
-import { DetailedProfileSkeleton } from "../../components/LoadingSkeleton";
+import { AdminDoctorProfileSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
 
@@ -143,8 +143,8 @@ const DoctorProfile = () => {
         <Sidebar />
         <div className="ml-64">
           <Navbar />
-          <div className="p-8">
-            <DetailedProfileSkeleton />
+          <div className="p-8 pt-28">
+            <AdminDoctorProfileSkeleton navigate={navigate} />
           </div>
         </div>
       </div>
@@ -157,7 +157,7 @@ const DoctorProfile = () => {
         <Sidebar />
         <div className="ml-64">
           <Navbar />
-          <div className="p-8">
+          <div className="p-8 pt-28">
             <div className="text-center py-12">
               <h2 className="text-2xl font-bold text-gray-900 dark:text-slate-100 mb-4">
                 Doctor Not Found
@@ -180,7 +180,7 @@ const DoctorProfile = () => {
       <div className="ml-64">
         <Navbar />
 
-        <div className="p-8 space-y-8">
+        <div className="p-8 pt-28 space-y-8">
           {/* Header with Back Button */}
           <div className="flex items-center gap-4 mb-8">
             <button

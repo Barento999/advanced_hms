@@ -3,7 +3,7 @@ import { Users, Activity, DollarSign } from "lucide-react";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
 import ExportButton from "../../components/ExportButton";
-import { ListSkeleton } from "../../components/LoadingSkeleton";
+import { ReportsSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
 
@@ -471,6 +471,25 @@ const Reports = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex min-h-screen">
+        <Sidebar />
+        <div className="flex-1 ml-64">
+          <Navbar />
+          <ReportsSkeleton
+            reportType={reportType}
+            setReportType={setReportType}
+            dateRange={dateRange}
+            handleDateChange={handleDateChange}
+            fetchReports={fetchReports}
+            loading={loading}
+          />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-h-screen">
       <Sidebar />
@@ -646,7 +665,7 @@ const Reports = () => {
           </div>
 
           {/* Report Content */}
-          {loading ? <ListSkeleton items={5} /> : renderReport()}
+          {renderReport()}
         </div>
       </div>
     </div>

@@ -4,7 +4,7 @@ import Navbar from "../../components/Navbar";
 import EmptyState from "../../components/EmptyState";
 import Pagination from "../../components/Pagination";
 import ExportButton from "../../components/ExportButton";
-import { TableSkeleton } from "../../components/LoadingSkeleton";
+import { AdminTablePageSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
 
@@ -70,6 +70,37 @@ const Appointments = () => {
     setPagination((prev) => ({ ...prev, currentPage: page }));
   };
 
+  if (loading) {
+    return (
+      <div className="flex min-h-screen">
+        <Sidebar />
+        <div className="flex-1 ml-64">
+          <Navbar />
+          <AdminTablePageSkeleton
+            title="All Appointments"
+            subtitle="View and manage all patient appointments"
+            showExportButton={true}
+            exportData={[]}
+            exportType="appointments"
+            exportTitle="Appointments Report"
+            exportFilename="appointments_report"
+            showFilterButtons={true}
+            filterOptions={[
+              "all",
+              "pending",
+              "confirmed",
+              "completed",
+              "cancelled",
+            ]}
+            currentFilter={filter}
+            onFilterChange={setFilter}
+            rows={10}
+          />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-h-screen">
       <Sidebar />
@@ -114,9 +145,7 @@ const Appointments = () => {
               </div>
             </div>
 
-            {loading ? (
-              <TableSkeleton rows={10} />
-            ) : appointments.length === 0 ? (
+            {appointments.length === 0 ? (
               <EmptyState
                 type="appointments"
                 title={

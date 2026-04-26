@@ -69,9 +69,19 @@ const MedicalRecords = () => {
         <Navbar />
 
         <div className="p-8 mt-20">
+          {/* Header */}
+          <div className="mb-6">
+            <h1 className="text-3xl font-bold text-dark dark:text-slate-100">
+              Add Medical Record
+            </h1>
+            <p className="text-gray-600 dark:text-slate-400 mt-2">
+              Create comprehensive medical records for your patients
+            </p>
+          </div>
+
           <div className="max-w-4xl mx-auto card">
             <h2 className="text-2xl font-bold text-dark dark:text-slate-100 mb-6">
-              Add Medical Record
+              Patient Medical Record Form
             </h2>
 
             <form onSubmit={handleSubmit} className="space-y-6">

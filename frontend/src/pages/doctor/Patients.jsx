@@ -5,7 +5,7 @@ import Navbar from "../../components/Navbar";
 import EmptyState from "../../components/EmptyState";
 import Pagination from "../../components/Pagination";
 import ExportButton from "../../components/ExportButton";
-import { CardSkeleton } from "../../components/LoadingSkeleton";
+import { PatientCardSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
 
@@ -60,6 +60,42 @@ const Patients = () => {
     setPagination((prev) => ({ ...prev, currentPage: page }));
   };
 
+  if (loading) {
+    return (
+      <div className="flex min-h-screen">
+        <Sidebar />
+        <div className="flex-1 ml-64">
+          <Navbar />
+          <div className="p-8 mt-20">
+            <div className="card">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
+                  My Patients
+                </h2>
+                <ExportButton
+                  data={[]}
+                  type="patients"
+                  title="My Patients Report"
+                  filename="my_patients_report"
+                  disabled={true}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <PatientCardSkeleton />
+                <PatientCardSkeleton />
+                <PatientCardSkeleton />
+                <PatientCardSkeleton />
+                <PatientCardSkeleton />
+                <PatientCardSkeleton />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-h-screen">
       <Sidebar />
@@ -80,16 +116,7 @@ const Patients = () => {
               />
             </div>
 
-            {loading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <CardSkeleton />
-                <CardSkeleton />
-                <CardSkeleton />
-                <CardSkeleton />
-                <CardSkeleton />
-                <CardSkeleton />
-              </div>
-            ) : patients.length === 0 ? (
+            {patients.length === 0 ? (
               <EmptyState
                 type="patients"
                 title="No patients yet"

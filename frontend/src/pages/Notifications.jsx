@@ -5,7 +5,7 @@ import Navbar from "../components/Navbar";
 import EmptyState from "../components/EmptyState";
 import ConfirmationModal from "../components/ConfirmationModal";
 import Pagination from "../components/Pagination";
-import { ListSkeleton } from "../components/LoadingSkeleton";
+import { NotificationsSkeleton } from "../components/LoadingSkeleton";
 import { NotificationContext } from "../context/SocketContext";
 import api from "../utils/api";
 import toast from "react-hot-toast";
@@ -128,6 +128,21 @@ const Notifications = () => {
   const unreadNotifications = notifications.filter((n) => !n.isRead);
   const readNotifications = notifications.filter((n) => n.isRead);
 
+  if (loading) {
+    return (
+      <div className="flex min-h-screen">
+        <Sidebar />
+        <div className="flex-1 ml-64">
+          <Navbar />
+          <NotificationsSkeleton
+            unreadCount={unreadNotifications.length}
+            handleMarkAllAsRead={handleMarkAllAsRead}
+          />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-h-screen">
       <Sidebar />
@@ -155,11 +170,7 @@ const Notifications = () => {
             )}
           </div>
 
-          {loading ? (
-            <div className="card">
-              <ListSkeleton items={6} />
-            </div>
-          ) : notifications.length === 0 ? (
+          {notifications.length === 0 ? (
             <div className="card">
               <EmptyState type="notifications" className="py-12" />
             </div>
@@ -250,7 +261,7 @@ const Notifications = () => {
           )}
 
           {/* Pagination */}
-          {!loading && notifications.length > 0 && (
+          {notifications.length > 0 && (
             <div className="mt-6">
               <Pagination
                 currentPage={pagination.currentPage}

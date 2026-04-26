@@ -4,7 +4,7 @@ import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
 import EmptyState from "../../components/EmptyState";
 import Pagination from "../../components/Pagination";
-import { ListSkeleton } from "../../components/LoadingSkeleton";
+import { AppointmentReviewSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
 
@@ -79,6 +79,39 @@ const Reviews = () => {
     setShowModal(true);
   };
 
+  if (loading) {
+    return (
+      <div className="flex min-h-screen">
+        <Sidebar />
+        <div className="flex-1 ml-64">
+          <Navbar />
+          <div className="p-8 mt-20">
+            {/* Real Header - Shows Immediately */}
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
+                Doctor Reviews
+              </h2>
+              <p className="text-gray-600 dark:text-slate-400 mt-1">
+                Rate and review your completed appointments
+              </p>
+            </div>
+
+            <div className="grid gap-4">
+              <AppointmentReviewSkeleton />
+              <AppointmentReviewSkeleton />
+              <AppointmentReviewSkeleton />
+              <AppointmentReviewSkeleton />
+              <AppointmentReviewSkeleton />
+              <AppointmentReviewSkeleton />
+              <AppointmentReviewSkeleton />
+              <AppointmentReviewSkeleton />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-h-screen">
       <Sidebar />
@@ -96,9 +129,7 @@ const Reviews = () => {
           </div>
 
           <div className="grid gap-4">
-            {loading ? (
-              <ListSkeleton items={8} />
-            ) : appointments.length === 0 ? (
+            {appointments.length === 0 ? (
               <EmptyState
                 type="reviews"
                 title="No appointments to review"

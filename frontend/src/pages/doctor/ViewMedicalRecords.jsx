@@ -5,7 +5,7 @@ import Navbar from "../../components/Navbar";
 import EmptyState from "../../components/EmptyState";
 import Pagination from "../../components/Pagination";
 import PrescriptionButton from "../../components/PrescriptionButton";
-import { ListSkeleton } from "../../components/LoadingSkeleton";
+import { MedicalRecordSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
 
@@ -62,6 +62,56 @@ const ViewMedicalRecords = () => {
     fetchRecords(1);
   };
 
+  if (loading) {
+    return (
+      <div className="flex min-h-screen">
+        <Sidebar />
+        <div className="flex-1 ml-64">
+          <Navbar />
+          <div className="p-8 mt-20">
+            <div className="card">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
+                  Medical Records
+                </h2>
+
+                {/* Search */}
+                <form onSubmit={handleSearch} className="flex gap-2">
+                  <div className="relative">
+                    <Search
+                      size={20}
+                      className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Search by patient name or diagnosis..."
+                      className="pl-10 pr-4 py-2 border border-gray-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-dark dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-transparent"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-primary text-white rounded-xl hover:bg-blue-700 transition-colors">
+                    Search
+                  </button>
+                </form>
+              </div>
+
+              <div className="space-y-4">
+                <MedicalRecordSkeleton />
+                <MedicalRecordSkeleton />
+                <MedicalRecordSkeleton />
+                <MedicalRecordSkeleton />
+                <MedicalRecordSkeleton />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-h-screen">
       <Sidebar />
@@ -98,9 +148,7 @@ const ViewMedicalRecords = () => {
               </form>
             </div>
 
-            {loading ? (
-              <ListSkeleton items={5} />
-            ) : records.length === 0 ? (
+            {records.length === 0 ? (
               <EmptyState
                 type="medicalRecords"
                 title={searchTerm ? "No records found" : "No medical records"}

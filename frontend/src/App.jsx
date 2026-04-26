@@ -33,7 +33,6 @@ import DoctorAppointments from "./pages/doctor/Appointments";
 import DoctorPatients from "./pages/doctor/Patients";
 import DoctorMedicalRecords from "./pages/doctor/MedicalRecords";
 import ViewMedicalRecords from "./pages/doctor/ViewMedicalRecords";
-import DoctorSchedule from "./pages/doctor/Schedule";
 import DoctorReviews from "./pages/doctor/MyReviews";
 
 // Patient Pages
@@ -242,14 +241,6 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={["doctor"]}>
               <ViewMedicalRecords />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/doctor/schedule"
-          element={
-            <ProtectedRoute allowedRoles={["doctor"]}>
-              <DoctorSchedule />
             </ProtectedRoute>
           }
         />

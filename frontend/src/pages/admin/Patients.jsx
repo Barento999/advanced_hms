@@ -8,7 +8,7 @@ import ConfirmationModal from "../../components/ConfirmationModal";
 import AddPatientModal from "../../components/AddPatientModal";
 import Pagination from "../../components/Pagination";
 import ExportButton from "../../components/ExportButton";
-import { TableSkeleton } from "../../components/LoadingSkeleton";
+import { AdminTablePageSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
 
@@ -162,6 +162,30 @@ const Patients = () => {
     return age;
   };
 
+  if (loading) {
+    return (
+      <div className="flex min-h-screen">
+        <Sidebar />
+        <div className="flex-1 ml-64">
+          <Navbar />
+          <AdminTablePageSkeleton
+            title="Patient Management"
+            subtitle="Manage patient records and medical information"
+            showAddButton={true}
+            addButtonText="Add Patient"
+            onAddClick={() => setAddPatientModal(true)}
+            showExportButton={true}
+            exportData={[]}
+            exportType="adminPatients"
+            exportTitle="Patients Report"
+            exportFilename="patients_report"
+            rows={8}
+          />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-h-screen">
       <Sidebar />
@@ -190,9 +214,7 @@ const Patients = () => {
               </div>
             </div>
 
-            {loading ? (
-              <TableSkeleton rows={8} />
-            ) : patients.length === 0 ? (
+            {patients.length === 0 ? (
               <EmptyState type="patients" className="py-12" />
             ) : (
               <div className="overflow-x-auto">

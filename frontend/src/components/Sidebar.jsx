@@ -6,7 +6,6 @@ import {
   Calendar,
   FileText,
   CreditCard,
-  Settings,
   LogOut,
   Bell,
   Star,
@@ -46,7 +45,6 @@ const Sidebar = () => {
           path: "/doctor/records",
         },
         { icon: FileText, label: "View Records", path: "/doctor/view-records" },
-        { icon: Settings, label: "Schedule", path: "/doctor/schedule" },
         { icon: Star, label: "Reviews", path: "/doctor/reviews" },
         { icon: Bell, label: "Notifications", path: "/doctor/notifications" },
       ];

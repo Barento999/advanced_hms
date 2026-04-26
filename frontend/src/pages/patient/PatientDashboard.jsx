@@ -24,7 +24,7 @@ const PatientDashboard = () => {
       const { data } = await api.get("/patient/appointments?limit=5");
       setAppointments(data.data);
 
-      const total = data.pagination.total;
+      const total = data.totalItems || 0;
       const upcoming = data.data.filter((a) =>
         ["pending", "confirmed"].includes(a.status),
       ).length;
@@ -36,6 +36,7 @@ const PatientDashboard = () => {
       // Delay to show skeleton
       await new Promise((resolve) => setTimeout(resolve, 1000));
     } catch (error) {
+      console.error("Error fetching data:", error);
       toast.error("Failed to fetch data");
     } finally {
       setLoading(false);
@@ -49,8 +50,24 @@ const PatientDashboard = () => {
         <Navbar />
 
         <div className="p-8 mt-20">
+          {/* Header */}
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-dark dark:text-slate-100">
+              Patient Dashboard
+            </h1>
+            <p className="text-gray-600 dark:text-slate-400 mt-2">
+              Your healthcare journey and appointments
+            </p>
+          </div>
+
           {loading ? (
             <>
+              {/* Header Skeleton */}
+              <div className="mb-8">
+                <div className="h-8 bg-gray-200 dark:bg-slate-700 rounded w-64 mb-2 animate-pulse"></div>
+                <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-80 animate-pulse"></div>
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <StatCardSkeleton />
                 <StatCardSkeleton />

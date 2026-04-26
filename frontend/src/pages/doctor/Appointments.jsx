@@ -6,7 +6,7 @@ import EmptyState from "../../components/EmptyState";
 import ConfirmationModal from "../../components/ConfirmationModal";
 import Pagination from "../../components/Pagination";
 import ExportButton from "../../components/ExportButton";
-import { TableSkeleton } from "../../components/LoadingSkeleton";
+import { AdminTablePageSkeleton } from "../../components/LoadingSkeleton";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
 
@@ -131,6 +131,31 @@ const Appointments = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex min-h-screen">
+        <Sidebar />
+        <div className="flex-1 ml-64">
+          <Navbar />
+          <AdminTablePageSkeleton
+            title="My Appointments"
+            subtitle="Manage your patient appointments and consultations"
+            showExportButton={true}
+            exportData={[]}
+            exportType="doctorAppointments"
+            exportTitle="My Appointments Report"
+            exportFilename="my_appointments_report"
+            showFilterButtons={true}
+            filterOptions={["all", "pending", "confirmed", "completed"]}
+            currentFilter={filter}
+            onFilterChange={setFilter}
+            rows={8}
+          />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-h-screen">
       <Sidebar />
@@ -141,7 +166,7 @@ const Appointments = () => {
           <div className="card">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
-                Appointments
+                My Appointments
               </h2>
 
               <div className="flex items-center gap-4">
@@ -171,9 +196,7 @@ const Appointments = () => {
               </div>
             </div>
 
-            {loading ? (
-              <TableSkeleton rows={8} />
-            ) : appointments.length === 0 ? (
+            {appointments.length === 0 ? (
               <EmptyState
                 type="doctorAppointments"
                 title={

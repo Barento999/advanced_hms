@@ -34,7 +34,11 @@ const AdminDashboard = () => {
         <Sidebar />
         <div className="flex-1 ml-64">
           <Navbar />
-          <DashboardSkeleton />
+          <DashboardSkeleton
+            title="Admin Dashboard"
+            subtitle="Healthcare management system overview"
+            showHeader={true}
+          />
         </div>
       </div>
     );
@@ -47,6 +51,16 @@ const AdminDashboard = () => {
         <Navbar />
 
         <div className="p-8 mt-20">
+          {/* Header */}
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-dark dark:text-slate-100">
+              Admin Dashboard
+            </h1>
+            <p className="text-gray-600 dark:text-slate-400 mt-2">
+              Healthcare management system overview
+            </p>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <StatCard
               icon={Users}
