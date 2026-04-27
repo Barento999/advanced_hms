@@ -48,7 +48,8 @@ const AdminProfile = () => {
 
   useEffect(() => {
     fetchAdminProfile();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   const fetchAdminProfile = async () => {
     try {
@@ -87,28 +88,34 @@ const AdminProfile = () => {
 
   const handleSaveProfile = async () => {
     try {
+      // Validate input
+      if (!editData.name || editData.name.trim() === "") {
+        toast.error("Name is required");
+        return;
+      }
+
       setSaving(true);
 
       // Update user profile via auth endpoint
       const response = await api.patch("/auth/profile", {
-        name: editData.name,
-        phone: editData.phone,
+        name: editData.name.trim(),
+        phone: editData.phone?.trim() || "",
       });
 
       if (response.data.success) {
         // Update local state
         const updatedData = {
           ...adminData,
-          name: editData.name,
-          phone: editData.phone,
+          name: response.data.data.name,
+          phone: response.data.data.phone,
         };
         setAdminData(updatedData);
 
         // Update auth context
         updateUser({
           ...user,
-          name: editData.name,
-          phone: editData.phone,
+          name: response.data.data.name,
+          phone: response.data.data.phone,
         });
 
         setEditing(false);
@@ -116,7 +123,9 @@ const AdminProfile = () => {
       }
     } catch (error) {
       console.error("Error updating profile:", error);
-      toast.error(error.response?.data?.message || "Failed to update profile");
+      const errorMessage =
+        error.response?.data?.message || "Failed to update profile";
+      toast.error(errorMessage);
     } finally {
       setSaving(false);
     }

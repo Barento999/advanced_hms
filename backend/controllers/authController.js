@@ -111,6 +111,14 @@ export const updateProfile = async (req, res) => {
   try {
     const { name, phone } = req.body;
 
+    // Validate input
+    if (!name || name.trim() === "") {
+      return res.status(400).json({
+        success: false,
+        message: "Name is required",
+      });
+    }
+
     const user = await User.findById(req.user._id);
     if (!user) {
       return res
@@ -119,8 +127,10 @@ export const updateProfile = async (req, res) => {
     }
 
     // Update user fields
-    if (name) user.name = name;
-    if (phone) user.phone = phone;
+    user.name = name.trim();
+    if (phone !== undefined) {
+      user.phone = phone.trim();
+    }
 
     await user.save();
 
@@ -138,6 +148,7 @@ export const updateProfile = async (req, res) => {
       message: "Profile updated successfully",
     });
   } catch (error) {
+    console.error("Update profile error:", error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
