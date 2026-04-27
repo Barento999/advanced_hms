@@ -53,7 +53,7 @@ const patientSchema = new mongoose.Schema(
 
 // Method to check if profile is complete
 patientSchema.methods.isProfileComplete = function () {
-  return !!(
+  const hasAllRequiredFields = !!(
     this.dateOfBirth &&
     this.gender &&
     this.bloodGroup &&
@@ -63,9 +63,13 @@ patientSchema.methods.isProfileComplete = function () {
     this.address?.zipCode &&
     this.emergencyContact?.name &&
     this.emergencyContact?.phone &&
-    this.emergencyContact?.relation &&
-    this.profileCompleted
+    this.emergencyContact?.relation
   );
+
+  // Profile is complete if either:
+  // 1. The profileCompleted flag is explicitly set to true, OR
+  // 2. All required fields are filled (for backward compatibility)
+  return this.profileCompleted === true || hasAllRequiredFields;
 };
 
 const Patient = mongoose.model("Patient", patientSchema);
