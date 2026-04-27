@@ -12,7 +12,6 @@ import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
-import { AdminTablePageSkeleton } from "../../components/LoadingSkeleton";
 import Pagination from "../../components/Pagination";
 import ConfirmationModal from "../../components/ConfirmationModal";
 import ExportButton from "../../components/ExportButton";
@@ -382,7 +381,7 @@ const AdminManagement = () => {
                       className="hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
-                          <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center">
+                          <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
                             <Shield size={20} className="text-white" />
                           </div>
                           <div className="ml-4">

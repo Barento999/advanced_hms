@@ -119,31 +119,28 @@ const AddAdminModal = ({ isOpen, onClose, onSuccess }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fadeIn">
-      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-lg border border-gray-200 dark:border-slate-700 animate-slideUp">
-        {/* Enhanced Header with Gradient */}
-        <div className="relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-indigo-600 opacity-10"></div>
-          <div className="relative flex items-center justify-between p-6 border-b border-gray-200 dark:border-slate-700">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
-                <Shield size={24} className="text-white" />
-              </div>
-              <div>
-                <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
-                  Add New Admin
-                </h2>
-                <p className="text-sm text-gray-600 dark:text-slate-400 mt-0.5">
-                  Create a new system administrator account
-                </p>
-              </div>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white dark:bg-slate-800 rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+        {/* Header */}
+        <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-slate-700">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+              <Shield size={20} className="text-white" />
             </div>
-            <button
-              onClick={handleClose}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors">
-              <X size={20} className="text-gray-500 dark:text-slate-400" />
-            </button>
+            <div>
+              <h2 className="text-xl font-bold text-dark dark:text-slate-100">
+                Add New Admin
+              </h2>
+              <p className="text-sm text-gray-600 dark:text-slate-400">
+                Create a new system administrator account
+              </p>
+            </div>
           </div>
+          <button
+            onClick={handleClose}
+            className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors">
+            <X size={20} className="text-gray-500 dark:text-slate-400" />
+          </button>
         </div>
 
         {/* Form */}
@@ -305,8 +302,8 @@ const AddAdminModal = ({ isOpen, onClose, onSuccess }) => {
             )}
           </div>
 
-          {/* Enhanced Security Notice */}
-          <div className="bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 border-l-4 border-yellow-500 rounded-lg p-4">
+          {/* Security Notice */}
+          <div className="bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-500 rounded-lg p-4">
             <div className="flex items-start gap-3">
               <div className="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center flex-shrink-0">
                 <Shield size={16} className="text-white" />
@@ -324,19 +321,19 @@ const AddAdminModal = ({ isOpen, onClose, onSuccess }) => {
             </div>
           </div>
 
-          {/* Enhanced Actions */}
+          {/* Actions */}
           <div className="flex gap-3 pt-2">
             <button
               type="button"
               onClick={handleClose}
               disabled={loading}
-              className="flex-1 px-4 py-3 border-2 border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 rounded-xl hover:bg-gray-50 dark:hover:bg-slate-700 transition-all font-medium disabled:opacity-50">
+              className="flex-1 px-4 py-3 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 rounded-xl hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors font-medium disabled:opacity-50">
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 px-4 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-xl transition-all font-medium shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+              className="flex-1 px-4 py-3 bg-primary hover:bg-blue-800 text-white rounded-xl transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
               {loading ? (
                 <>
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
