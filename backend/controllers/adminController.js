@@ -1057,3 +1057,50 @@ export const getPatientProfile = async (req, res) => {
     });
   }
 };
+export const createAdmin = async (req, res) => {
+  try {
+    const { name, email, password, phone } = req.body;
+
+    // Check if user already exists
+    const existingUser = await User.findOne({ email, isDeleted: false });
+    if (existingUser) {
+      return res.status(400).json({
+        success: false,
+        message: "User with this email already exists",
+      });
+    }
+
+    // Create admin user
+    const adminUser = await User.create({
+      name,
+      email,
+      password,
+      phone,
+      role: "admin",
+      isActive: true,
+    });
+
+    // Return admin data without password
+    const adminData = {
+      _id: adminUser._id,
+      name: adminUser.name,
+      email: adminUser.email,
+      phone: adminUser.phone,
+      role: adminUser.role,
+      isActive: adminUser.isActive,
+      createdAt: adminUser.createdAt,
+    };
+
+    res.status(201).json({
+      success: true,
+      data: adminData,
+      message: "Admin created successfully",
+    });
+  } catch (error) {
+    console.error("Error creating admin:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};

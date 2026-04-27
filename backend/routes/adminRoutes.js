@@ -14,6 +14,7 @@ import {
   getDoctorProfile,
   updatePatientProfile,
   getPatientProfile,
+  createAdmin,
 } from "../controllers/adminController.js";
 import { protect, authorize } from "../middlewares/auth.js";
 import {
@@ -40,6 +41,7 @@ router.post(
   validate,
   createPatient,
 );
+router.post("/create-admin", createAdmin);
 router.get("/doctors/:doctorId", getDoctorProfile);
 router.put("/doctors/:doctorId", updateDoctorProfile);
 router.get("/patients/:patientId", getPatientProfile);

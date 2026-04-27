@@ -212,7 +212,7 @@ const Navbar = () => {
                   <button
                     onClick={() => {
                       setShowAdminDropdown(false);
-                      navigate("/admin");
+                      navigate("/admin/management");
                     }}
                     className="w-full flex items-center gap-3 px-4 py-3 hover:bg-secondary dark:hover:bg-slate-700 transition-colors text-left">
                     <Shield size={18} className="text-primary" />

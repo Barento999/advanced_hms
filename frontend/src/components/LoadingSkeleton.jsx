@@ -1501,7 +1501,7 @@ export const AdminReviewsSkeleton = () => (
 
 // Admin Profile Skeleton
 export const AdminProfileSkeleton = () => (
-  <div className="p-6 max-w-4xl mx-auto">
+  <div className="p-6 max-w-4xl mx-auto mt-20">
     {/* Real Header - Shows Immediately */}
     <div className="mb-8">
       <div className="flex items-center justify-between">
