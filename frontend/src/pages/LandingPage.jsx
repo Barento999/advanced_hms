@@ -342,6 +342,11 @@ const LandingPage = () => {
             </div>
             <div className="hidden md:flex items-center gap-6">
               <a
+                href="#about"
+                className="text-gray-700 dark:text-slate-300 hover:text-primary transition-colors">
+                About
+              </a>
+              <a
                 href="#features"
                 className="text-gray-700 dark:text-slate-300 hover:text-primary transition-colors">
                 Features
@@ -352,19 +357,9 @@ const LandingPage = () => {
                 Specializations
               </a>
               <a
-                href="#testimonials"
-                className="text-gray-700 dark:text-slate-300 hover:text-primary transition-colors">
-                Testimonials
-              </a>
-              <a
                 href="#pricing"
                 className="text-gray-700 dark:text-slate-300 hover:text-primary transition-colors">
                 Pricing
-              </a>
-              <a
-                href="#faq"
-                className="text-gray-700 dark:text-slate-300 hover:text-primary transition-colors">
-                FAQ
               </a>
               <a
                 href="#contact"
@@ -458,6 +453,112 @@ const LandingPage = () => {
                 <p className="text-blue-100">{stat.label}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* About Us Section */}
+      <section
+        id="about"
+        className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-800">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <img
+                src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&h=600&fit=crop"
+                alt="Healthcare team"
+                className="rounded-2xl shadow-2xl w-full h-auto"
+              />
+            </div>
+            <div>
+              <h2 className="text-4xl font-bold text-dark dark:text-slate-100 mb-6">
+                About Our Healthcare Platform
+              </h2>
+              <p className="text-lg text-gray-600 dark:text-slate-400 mb-6">
+                We are dedicated to revolutionizing healthcare management by
+                connecting patients with qualified healthcare professionals
+                through cutting-edge technology. Our mission is to make quality
+                healthcare accessible, efficient, and patient-centered.
+              </p>
+              <p className="text-lg text-gray-600 dark:text-slate-400 mb-6">
+                Founded with the vision of bridging the gap between patients and
+                healthcare providers, our platform serves thousands of users
+                daily, facilitating seamless appointment scheduling, secure
+                medical record management, and real-time communication.
+              </p>
+              <div className="grid grid-cols-2 gap-6 mt-8">
+                <div>
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+                      <Award className="w-6 h-6 text-primary" />
+                    </div>
+                    <div>
+                      <p className="text-2xl font-bold text-dark dark:text-slate-100">
+                        10+
+                      </p>
+                      <p className="text-sm text-gray-600 dark:text-slate-400">
+                        Years Experience
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+                      <Users className="w-6 h-6 text-primary" />
+                    </div>
+                    <div>
+                      <p className="text-2xl font-bold text-dark dark:text-slate-100">
+                        50+
+                      </p>
+                      <p className="text-sm text-gray-600 dark:text-slate-400">
+                        Team Members
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-8">
+                <h3 className="text-xl font-semibold text-dark dark:text-slate-100 mb-4">
+                  Our Core Values
+                </h3>
+                <div className="space-y-3">
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
+                    <div>
+                      <p className="font-semibold text-dark dark:text-slate-100">
+                        Patient-Centered Care
+                      </p>
+                      <p className="text-sm text-gray-600 dark:text-slate-400">
+                        Your health and wellbeing are our top priorities
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
+                    <div>
+                      <p className="font-semibold text-dark dark:text-slate-100">
+                        Innovation & Technology
+                      </p>
+                      <p className="text-sm text-gray-600 dark:text-slate-400">
+                        Leveraging latest tech for better healthcare delivery
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
+                    <div>
+                      <p className="font-semibold text-dark dark:text-slate-100">
+                        Trust & Transparency
+                      </p>
+                      <p className="text-sm text-gray-600 dark:text-slate-400">
+                        Building lasting relationships through honesty
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -973,6 +1074,162 @@ const LandingPage = () => {
                 123 Healthcare Ave, Medical District
               </p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Careers Section */}
+      <section
+        id="careers"
+        className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-slate-900">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-dark dark:text-slate-100 mb-4">
+              Join Our Team
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-slate-400 max-w-2xl mx-auto">
+              Be part of a mission to transform healthcare delivery. We're
+              always looking for talented individuals who share our passion.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+            <div>
+              <img
+                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=600&fit=crop"
+                alt="Team collaboration"
+                className="rounded-2xl shadow-2xl w-full h-auto"
+              />
+            </div>
+            <div>
+              <h3 className="text-3xl font-bold text-dark dark:text-slate-100 mb-6">
+                Why Work With Us?
+              </h3>
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Heart className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-dark dark:text-slate-100 mb-1">
+                      Make a Real Impact
+                    </h4>
+                    <p className="text-gray-600 dark:text-slate-400">
+                      Help improve healthcare access for thousands of patients
+                      daily
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <TrendingUp className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-dark dark:text-slate-100 mb-1">
+                      Growth Opportunities
+                    </h4>
+                    <p className="text-gray-600 dark:text-slate-400">
+                      Continuous learning and career advancement programs
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Users className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-dark dark:text-slate-100 mb-1">
+                      Collaborative Culture
+                    </h4>
+                    <p className="text-gray-600 dark:text-slate-400">
+                      Work with passionate professionals in a supportive
+                      environment
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Shield className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-dark dark:text-slate-100 mb-1">
+                      Competitive Benefits
+                    </h4>
+                    <p className="text-gray-600 dark:text-slate-400">
+                      Comprehensive health coverage, flexible hours, and more
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm">
+              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                <Stethoscope className="w-6 h-6 text-primary" />
+              </div>
+              <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-3">
+                Healthcare Professionals
+              </h3>
+              <p className="text-gray-600 dark:text-slate-400 mb-4">
+                Join our network of qualified doctors and specialists providing
+                quality care to patients.
+              </p>
+              <a
+                href="#contact"
+                className="text-primary hover:underline font-medium">
+                Learn More →
+              </a>
+            </div>
+
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm">
+              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                <Activity className="w-6 h-6 text-primary" />
+              </div>
+              <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-3">
+                Technology & Engineering
+              </h3>
+              <p className="text-gray-600 dark:text-slate-400 mb-4">
+                Build innovative solutions that power our healthcare platform
+                and improve user experience.
+              </p>
+              <a
+                href="#contact"
+                className="text-primary hover:underline font-medium">
+                Learn More →
+              </a>
+            </div>
+
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm">
+              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                <MessageSquare className="w-6 h-6 text-primary" />
+              </div>
+              <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-3">
+                Support & Operations
+              </h3>
+              <p className="text-gray-600 dark:text-slate-400 mb-4">
+                Help our users navigate the platform and ensure smooth
+                operations every day.
+              </p>
+              <a
+                href="#contact"
+                className="text-primary hover:underline font-medium">
+                Learn More →
+              </a>
+            </div>
+          </div>
+
+          <div className="mt-12 text-center">
+            <p className="text-lg text-gray-600 dark:text-slate-400 mb-6">
+              Don't see a position that fits? Send us your resume anyway!
+            </p>
+            <a
+              href="#contact"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-primary hover:bg-blue-800 text-white rounded-xl transition-colors text-lg font-medium">
+              Get In Touch
+              <ArrowRight size={20} />
+            </a>
           </div>
         </div>
       </section>
