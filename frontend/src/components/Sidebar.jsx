@@ -11,7 +11,6 @@ import {
   Star,
   BarChart3,
   FileBarChart,
-  UserCog,
 } from "lucide-react";
 import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
@@ -27,7 +26,6 @@ const Sidebar = () => {
     if (user?.role === "admin") {
       return [
         { icon: Home, label: "Dashboard", path: "/admin" },
-        { icon: UserCog, label: "User Management", path: "/admin/users" },
         { icon: Users, label: "Doctors", path: "/admin/doctors" },
         { icon: Users, label: "Patients", path: "/admin/patients" },
         { icon: Calendar, label: "Appointments", path: "/admin/appointments" },

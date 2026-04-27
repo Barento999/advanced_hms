@@ -18,7 +18,6 @@ import Notifications from "./pages/Notifications";
 
 // Admin Pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
-import UserManagement from "./pages/admin/UserManagement";
 import Doctors from "./pages/admin/Doctors";
 import Patients from "./pages/admin/Patients";
 import AdminAppointments from "./pages/admin/Appointments";
@@ -114,14 +113,6 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={["admin"]}>
               <AdminDashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/users"
-          element={
-            <ProtectedRoute allowedRoles={["admin"]}>
-              <UserManagement />
             </ProtectedRoute>
           }
         />
