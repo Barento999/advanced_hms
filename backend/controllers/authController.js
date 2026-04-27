@@ -194,3 +194,98 @@ export const changePassword = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+// @desc    Get landing page statistics
+// @route   GET /api/auth/landing-stats
+// @access  Public
+export const getLandingStats = async (req, res) => {
+  try {
+    // Get counts from database
+    const [doctorCount, patientCount, appointmentCount, reviewCount] =
+      await Promise.all([
+        Doctor.countDocuments(),
+        Patient.countDocuments(),
+        (async () => {
+          const Appointment = (await import("../models/Appointment.js"))
+            .default;
+          return Appointment.countDocuments({ status: "completed" });
+        })(),
+        (async () => {
+          const Review = (await import("../models/Review.js")).default;
+          return Review.countDocuments();
+        })(),
+      ]);
+
+    // Get specialization counts
+    const specializationCounts = await Doctor.aggregate([
+      {
+        $group: {
+          _id: "$specialization",
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { count: -1 } },
+      { $limit: 10 },
+    ]);
+
+    // Get top-rated reviews for testimonials
+    const Review = (await import("../models/Review.js")).default;
+    const topReviews = await Review.find({
+      rating: { $gte: 4 },
+      isDeleted: false,
+    })
+      .sort({ rating: -1, createdAt: -1 })
+      .limit(10)
+      .populate("patientId")
+      .populate("doctorId");
+
+    // Format testimonials with proper data
+    const testimonialsPromises = topReviews.map(async (review) => {
+      if (!review.patientId || !review.doctorId) return null;
+
+      const patient = await User.findById(review.patientId.userId);
+      const doctor = await User.findById(review.doctorId.userId);
+
+      if (!patient || !doctor) return null;
+
+      return {
+        name: patient.name,
+        role: "Patient",
+        rating: review.rating,
+        text: review.comment,
+        doctorName: doctor.name,
+        image: `https://ui-avatars.com/api/?name=${encodeURIComponent(
+          patient.name,
+        )}&background=random`,
+      };
+    });
+
+    const testimonialsResults = await Promise.all(testimonialsPromises);
+    const testimonials = testimonialsResults
+      .filter((t) => t !== null)
+      .slice(0, 3);
+
+    res.json({
+      success: true,
+      data: {
+        stats: {
+          doctors: doctorCount,
+          patients: patientCount,
+          appointments: appointmentCount,
+          reviews: reviewCount,
+        },
+        specializations: specializationCounts.map((spec) => ({
+          name: spec._id,
+          count: spec.count,
+        })),
+        testimonials,
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching landing stats:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error fetching landing page statistics",
+    });
+  }
+};

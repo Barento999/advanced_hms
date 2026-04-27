@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
 import {
   Calendar,
   Users,
@@ -33,6 +34,72 @@ const LandingPage = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
+  const [stats, setStats] = useState([
+    { number: "500+", label: "Healthcare Professionals" },
+    { number: "10,000+", label: "Happy Patients" },
+    { number: "50,000+", label: "Appointments Completed" },
+    { number: "99.9%", label: "Uptime Guarantee" },
+  ]);
+  const [specializations, setSpecializations] = useState([]);
+  const [testimonials, setTestimonials] = useState([
+    {
+      name: "Sarah Johnson",
+      role: "Patient",
+      image:
+        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop",
+      rating: 5,
+      text: "This platform has transformed how I manage my health. Booking appointments is so easy, and I can access all my medical records in one place.",
+    },
+    {
+      name: "Dr. Michael Chen",
+      role: "Cardiologist",
+      image:
+        "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=150&h=150&fit=crop",
+      rating: 5,
+      text: "As a healthcare provider, this system streamlines my workflow. Patient management, scheduling, and record-keeping have never been easier.",
+    },
+    {
+      name: "Emily Rodriguez",
+      role: "Patient",
+      image:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop",
+      rating: 5,
+      text: "The real-time notifications and 24/7 access to my health information give me peace of mind. Highly recommend this platform!",
+    },
+  ]);
+  const [loading, setLoading] = useState(true);
+
+  // Icon mapping for specializations
+  const specializationIcons = {
+    Cardiology: Heart,
+    Neurology: Activity,
+    Pediatrics: Users,
+    Orthopedics: Stethoscope,
+    Dermatology: Award,
+    "General Medicine": ClipboardCheck,
+    Gynecology: Users,
+    Psychiatry: Activity,
+    Ophthalmology: Award,
+    ENT: Stethoscope,
+    Dentistry: ClipboardCheck,
+    Radiology: Activity,
+  };
+
+  // Description mapping for specializations
+  const specializationDescriptions = {
+    Cardiology: "Heart and cardiovascular care",
+    Neurology: "Brain and nervous system",
+    Pediatrics: "Children's healthcare",
+    Orthopedics: "Bone and joint care",
+    Dermatology: "Skin and hair care",
+    "General Medicine": "Primary healthcare",
+    Gynecology: "Women's health",
+    Psychiatry: "Mental health care",
+    Ophthalmology: "Eye care",
+    ENT: "Ear, nose, and throat",
+    Dentistry: "Dental care",
+    Radiology: "Medical imaging",
+  };
 
   const toggleFaq = (index) => {
     setOpenFaqIndex(openFaqIndex === index ? null : index);
@@ -50,6 +117,99 @@ const LandingPage = () => {
       }
     }
   }, [user, navigate]);
+
+  useEffect(() => {
+    const fetchLandingStats = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/auth/landing-stats",
+        );
+        if (response.data.success) {
+          const {
+            stats: dbStats,
+            specializations: dbSpecs,
+            testimonials: dbTestimonials,
+          } = response.data.data;
+
+          // Update stats
+          setStats([
+            {
+              number: `${dbStats.doctors}+`,
+              label: "Healthcare Professionals",
+            },
+            { number: `${dbStats.patients}+`, label: "Happy Patients" },
+            {
+              number: `${dbStats.appointments}+`,
+              label: "Appointments Completed",
+            },
+            { number: "99.9%", label: "Uptime Guarantee" },
+          ]);
+
+          // Update specializations with real data
+          const formattedSpecs = dbSpecs.map((spec) => ({
+            name: spec.name,
+            icon: specializationIcons[spec.name] || Stethoscope,
+            doctors: `${spec.count}+`,
+            description:
+              specializationDescriptions[spec.name] ||
+              "Specialized medical care",
+          }));
+
+          setSpecializations(formattedSpecs);
+
+          // Update testimonials with real data if available
+          if (dbTestimonials && dbTestimonials.length > 0) {
+            setTestimonials(dbTestimonials);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching landing stats:", error);
+        // Set default specializations on error
+        setSpecializations([
+          {
+            name: "Cardiology",
+            icon: Heart,
+            doctors: "45+",
+            description: "Heart and cardiovascular care",
+          },
+          {
+            name: "Neurology",
+            icon: Activity,
+            doctors: "38+",
+            description: "Brain and nervous system",
+          },
+          {
+            name: "Pediatrics",
+            icon: Users,
+            doctors: "52+",
+            description: "Children's healthcare",
+          },
+          {
+            name: "Orthopedics",
+            icon: Stethoscope,
+            doctors: "41+",
+            description: "Bone and joint care",
+          },
+          {
+            name: "Dermatology",
+            icon: Award,
+            doctors: "29+",
+            description: "Skin and hair care",
+          },
+          {
+            name: "General Medicine",
+            icon: ClipboardCheck,
+            doctors: "67+",
+            description: "Primary healthcare",
+          },
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLandingStats();
+  }, []);
 
   const features = [
     {
@@ -130,79 +290,6 @@ const LandingPage = () => {
       description:
         "Access medical records, prescriptions, and track your health journey all in one place.",
       icon: Heart,
-    },
-  ];
-
-  const stats = [
-    { number: "500+", label: "Healthcare Professionals" },
-    { number: "10,000+", label: "Happy Patients" },
-    { number: "50,000+", label: "Appointments Completed" },
-    { number: "99.9%", label: "Uptime Guarantee" },
-  ];
-
-  const specializations = [
-    {
-      name: "Cardiology",
-      icon: Heart,
-      doctors: "45+",
-      description: "Heart and cardiovascular care",
-    },
-    {
-      name: "Neurology",
-      icon: Activity,
-      doctors: "38+",
-      description: "Brain and nervous system",
-    },
-    {
-      name: "Pediatrics",
-      icon: Users,
-      doctors: "52+",
-      description: "Children's healthcare",
-    },
-    {
-      name: "Orthopedics",
-      icon: Stethoscope,
-      doctors: "41+",
-      description: "Bone and joint care",
-    },
-    {
-      name: "Dermatology",
-      icon: Award,
-      doctors: "29+",
-      description: "Skin and hair care",
-    },
-    {
-      name: "General Medicine",
-      icon: ClipboardCheck,
-      doctors: "67+",
-      description: "Primary healthcare",
-    },
-  ];
-
-  const testimonials = [
-    {
-      name: "Sarah Johnson",
-      role: "Patient",
-      image:
-        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop",
-      rating: 5,
-      text: "This platform has transformed how I manage my health. Booking appointments is so easy, and I can access all my medical records in one place.",
-    },
-    {
-      name: "Dr. Michael Chen",
-      role: "Cardiologist",
-      image:
-        "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=150&h=150&fit=crop",
-      rating: 5,
-      text: "As a healthcare provider, this system streamlines my workflow. Patient management, scheduling, and record-keeping have never been easier.",
-    },
-    {
-      name: "Emily Rodriguez",
-      role: "Patient",
-      image:
-        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop",
-      rating: 5,
-      text: "The real-time notifications and 24/7 access to my health information give me peace of mind. Highly recommend this platform!",
     },
   ];
 

@@ -5,6 +5,7 @@ import {
   getMe,
   updateProfile,
   changePassword,
+  getLandingStats,
 } from "../controllers/authController.js";
 import { protect } from "../middlewares/auth.js";
 import {
@@ -21,5 +22,6 @@ router.post("/login", authLimiter, loginValidation, validate, login);
 router.get("/me", protect, getMe);
 router.patch("/profile", protect, updateProfile);
 router.patch("/change-password", protect, changePassword);
+router.get("/landing-stats", getLandingStats); // Public endpoint
 
 export default router;
