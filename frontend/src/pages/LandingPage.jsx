@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import {
   Calendar,
@@ -25,13 +25,18 @@ import {
   Mail,
   Phone,
   MapPin,
-  Zap,
+  ChevronDown,
 } from "lucide-react";
 import { AuthContext } from "../context/AuthContext";
 
 const LandingPage = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [openFaqIndex, setOpenFaqIndex] = useState(null);
+
+  const toggleFaq = (index) => {
+    setOpenFaqIndex(openFaqIndex === index ? null : index);
+  };
 
   useEffect(() => {
     // Redirect logged-in users to their dashboard
@@ -791,20 +796,36 @@ const LandingPage = () => {
               Everything you need to know about our platform
             </p>
           </div>
-          <div className="space-y-6">
+          <div className="space-y-4">
             {faqs.map((faq, index) => (
               <div
                 key={index}
-                className="bg-gray-50 dark:bg-slate-900 rounded-xl p-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <HelpCircle className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-dark dark:text-slate-100 mb-2">
+                className="bg-gray-50 dark:bg-slate-900 rounded-xl overflow-hidden transition-all">
+                <button
+                  onClick={() => toggleFaq(index)}
+                  className="w-full flex items-center justify-between p-6 text-left hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors">
+                  <div className="flex items-start gap-4 flex-1">
+                    <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <HelpCircle className="w-5 h-5 text-primary" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-dark dark:text-slate-100 pr-4">
                       {faq.question}
                     </h3>
-                    <p className="text-gray-600 dark:text-slate-400">
+                  </div>
+                  <ChevronDown
+                    className={`w-6 h-6 text-gray-600 dark:text-slate-400 flex-shrink-0 transition-transform duration-300 ${
+                      openFaqIndex === index ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+                <div
+                  className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                    openFaqIndex === index
+                      ? "max-h-96 opacity-100"
+                      : "max-h-0 opacity-0"
+                  }`}>
+                  <div className="px-6 pb-6 pl-18">
+                    <p className="text-gray-600 dark:text-slate-400 leading-relaxed">
                       {faq.answer}
                     </p>
                   </div>
