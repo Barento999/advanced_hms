@@ -11,6 +11,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import ProfileGuard from "./components/ProfileGuard";
 
 // Auth Pages
+import LandingPage from "./pages/LandingPage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import CompleteProfile from "./pages/CompleteProfile";
@@ -99,6 +100,7 @@ function App() {
         }}
       />
       <Routes>
+        <Route path="/" element={<LandingPage />} />
         <Route
           path="/login"
           element={!user ? <Login /> : <Navigate to={`/${user.role}`} />}
@@ -354,8 +356,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
-        <Route path="/" element={<Navigate to="/login" />} />
       </Routes>
     </Router>
   );
