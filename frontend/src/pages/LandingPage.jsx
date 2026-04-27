@@ -11,6 +11,16 @@ import {
   CheckCircle,
   ArrowRight,
   UserCheck,
+  Stethoscope,
+  Award,
+  TrendingUp,
+  MessageSquare,
+  Bell,
+  Smartphone,
+  Lock,
+  Star,
+  Video,
+  ClipboardCheck,
 } from "lucide-react";
 import { AuthContext } from "../context/AuthContext";
 
@@ -118,6 +128,105 @@ const LandingPage = () => {
     { number: "10,000+", label: "Happy Patients" },
     { number: "50,000+", label: "Appointments Completed" },
     { number: "99.9%", label: "Uptime Guarantee" },
+  ];
+
+  const specializations = [
+    {
+      name: "Cardiology",
+      icon: Heart,
+      doctors: "45+",
+      description: "Heart and cardiovascular care",
+    },
+    {
+      name: "Neurology",
+      icon: Activity,
+      doctors: "38+",
+      description: "Brain and nervous system",
+    },
+    {
+      name: "Pediatrics",
+      icon: Users,
+      doctors: "52+",
+      description: "Children's healthcare",
+    },
+    {
+      name: "Orthopedics",
+      icon: Stethoscope,
+      doctors: "41+",
+      description: "Bone and joint care",
+    },
+    {
+      name: "Dermatology",
+      icon: Award,
+      doctors: "29+",
+      description: "Skin and hair care",
+    },
+    {
+      name: "General Medicine",
+      icon: ClipboardCheck,
+      doctors: "67+",
+      description: "Primary healthcare",
+    },
+  ];
+
+  const testimonials = [
+    {
+      name: "Sarah Johnson",
+      role: "Patient",
+      image:
+        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop",
+      rating: 5,
+      text: "This platform has transformed how I manage my health. Booking appointments is so easy, and I can access all my medical records in one place.",
+    },
+    {
+      name: "Dr. Michael Chen",
+      role: "Cardiologist",
+      image:
+        "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=150&h=150&fit=crop",
+      rating: 5,
+      text: "As a healthcare provider, this system streamlines my workflow. Patient management, scheduling, and record-keeping have never been easier.",
+    },
+    {
+      name: "Emily Rodriguez",
+      role: "Patient",
+      image:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop",
+      rating: 5,
+      text: "The real-time notifications and 24/7 access to my health information give me peace of mind. Highly recommend this platform!",
+    },
+  ];
+
+  const benefits = [
+    {
+      icon: Smartphone,
+      title: "Mobile-Friendly",
+      description: "Access your healthcare from any device, anywhere, anytime.",
+    },
+    {
+      icon: Bell,
+      title: "Smart Reminders",
+      description: "Never miss an appointment with automated notifications.",
+    },
+    {
+      icon: Video,
+      title: "Telemedicine Ready",
+      description: "Connect with doctors virtually when needed.",
+    },
+    {
+      icon: Lock,
+      title: "Data Privacy",
+      description: "Your health data is encrypted and HIPAA compliant.",
+    },
+    {
+      icon: TrendingUp,
+      title: "Health Analytics",
+      description: "Track your health trends and progress over time.",
+    },
+    {
+      icon: MessageSquare,
+      title: "Direct Communication",
+      description: "Message your healthcare providers securely.",
+    },
   ];
 
   return (
@@ -294,6 +403,232 @@ const LandingPage = () => {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Specializations Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-slate-900">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-dark dark:text-slate-100 mb-4">
+              Medical Specializations
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-slate-400 max-w-2xl mx-auto">
+              Connect with expert doctors across various medical specializations
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {specializations.map((spec, index) => (
+              <div
+                key={index}
+                className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm hover:shadow-md transition-all hover:-translate-y-1">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <spec.icon className="w-6 h-6 text-primary" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-bold text-dark dark:text-slate-100 mb-1">
+                      {spec.name}
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-slate-400 mb-2">
+                      {spec.description}
+                    </p>
+                    <p className="text-sm font-semibold text-primary">
+                      {spec.doctors} Doctors Available
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Platform Benefits with Image */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-800">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20">
+            <div className="order-2 lg:order-1">
+              <h2 className="text-4xl font-bold text-dark dark:text-slate-100 mb-6">
+                Advanced Healthcare Technology
+              </h2>
+              <p className="text-lg text-gray-600 dark:text-slate-400 mb-8">
+                Our platform leverages cutting-edge technology to provide you
+                with the best healthcare experience. From AI-powered appointment
+                scheduling to secure data encryption, we've got you covered.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {benefits.map((benefit, index) => (
+                  <div key={index} className="flex items-start gap-3">
+                    <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <benefit.icon className="w-5 h-5 text-primary" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-dark dark:text-slate-100 mb-1">
+                        {benefit.title}
+                      </h4>
+                      <p className="text-sm text-gray-600 dark:text-slate-400">
+                        {benefit.description}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="order-1 lg:order-2">
+              <div className="relative">
+                <img
+                  src="https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=800&h=600&fit=crop"
+                  alt="Healthcare technology"
+                  className="rounded-2xl shadow-2xl w-full h-auto"
+                />
+                <div className="absolute -bottom-6 -right-6 bg-white dark:bg-slate-800 rounded-xl shadow-xl p-4 max-w-xs">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center">
+                      <Shield className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-dark dark:text-slate-100">
+                        HIPAA Compliant
+                      </p>
+                      <p className="text-xs text-gray-600 dark:text-slate-400">
+                        Enterprise-grade security
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-slate-900">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-dark dark:text-slate-100 mb-4">
+              What Our Users Say
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-slate-400 max-w-2xl mx-auto">
+              Trusted by thousands of patients and healthcare professionals
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, index) => (
+              <div
+                key={index}
+                className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm">
+                <div className="flex items-center gap-1 mb-4">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className="w-5 h-5 fill-yellow-400 text-yellow-400"
+                    />
+                  ))}
+                </div>
+                <p className="text-gray-600 dark:text-slate-400 mb-6 italic">
+                  "{testimonial.text}"
+                </p>
+                <div className="flex items-center gap-3">
+                  <img
+                    src={testimonial.image}
+                    alt={testimonial.name}
+                    className="w-12 h-12 rounded-full object-cover"
+                  />
+                  <div>
+                    <p className="font-semibold text-dark dark:text-slate-100">
+                      {testimonial.name}
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-slate-400">
+                      {testimonial.role}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Trust & Security Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-800">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <img
+                src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&h=600&fit=crop"
+                alt="Medical professionals"
+                className="rounded-2xl shadow-2xl w-full h-auto"
+              />
+            </div>
+            <div>
+              <h2 className="text-4xl font-bold text-dark dark:text-slate-100 mb-6">
+                Your Trust, Our Responsibility
+              </h2>
+              <p className="text-lg text-gray-600 dark:text-slate-400 mb-6">
+                We understand that your health information is sensitive and
+                personal. That's why we've implemented industry-leading security
+                measures to protect your data.
+              </p>
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <div className="w-6 h-6 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <CheckCircle className="w-4 h-4 text-green-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-dark dark:text-slate-100 mb-1">
+                      End-to-End Encryption
+                    </h4>
+                    <p className="text-gray-600 dark:text-slate-400">
+                      All your medical data is encrypted both in transit and at
+                      rest
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-6 h-6 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <CheckCircle className="w-4 h-4 text-green-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-dark dark:text-slate-100 mb-1">
+                      HIPAA Compliance
+                    </h4>
+                    <p className="text-gray-600 dark:text-slate-400">
+                      Fully compliant with healthcare data protection
+                      regulations
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-6 h-6 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <CheckCircle className="w-4 h-4 text-green-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-dark dark:text-slate-100 mb-1">
+                      Regular Security Audits
+                    </h4>
+                    <p className="text-gray-600 dark:text-slate-400">
+                      Continuous monitoring and third-party security assessments
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-6 h-6 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <CheckCircle className="w-4 h-4 text-green-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-dark dark:text-slate-100 mb-1">
+                      Access Control
+                    </h4>
+                    <p className="text-gray-600 dark:text-slate-400">
+                      You control who can access your medical information
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
