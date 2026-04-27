@@ -322,6 +322,12 @@ const LandingPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
+      <style>{`
+        html {
+          scroll-behavior: smooth;
+          scroll-padding-top: 80px;
+        }
+      `}</style>
       {/* Navigation */}
       <nav className="bg-white dark:bg-slate-800 shadow-sm fixed w-full top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -333,6 +339,38 @@ const LandingPage = () => {
               <span className="text-xl font-bold text-dark dark:text-slate-100">
                 HealthCare
               </span>
+            </div>
+            <div className="hidden md:flex items-center gap-6">
+              <a
+                href="#features"
+                className="text-gray-700 dark:text-slate-300 hover:text-primary transition-colors">
+                Features
+              </a>
+              <a
+                href="#specializations"
+                className="text-gray-700 dark:text-slate-300 hover:text-primary transition-colors">
+                Specializations
+              </a>
+              <a
+                href="#testimonials"
+                className="text-gray-700 dark:text-slate-300 hover:text-primary transition-colors">
+                Testimonials
+              </a>
+              <a
+                href="#pricing"
+                className="text-gray-700 dark:text-slate-300 hover:text-primary transition-colors">
+                Pricing
+              </a>
+              <a
+                href="#faq"
+                className="text-gray-700 dark:text-slate-300 hover:text-primary transition-colors">
+                FAQ
+              </a>
+              <a
+                href="#contact"
+                className="text-gray-700 dark:text-slate-300 hover:text-primary transition-colors">
+                Contact
+              </a>
             </div>
             <div className="flex items-center gap-4">
               <Link
@@ -425,7 +463,7 @@ const LandingPage = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
+      <section id="features" className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-dark dark:text-slate-100 mb-4">
@@ -499,7 +537,9 @@ const LandingPage = () => {
       </section>
 
       {/* Specializations Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-slate-900">
+      <section
+        id="specializations"
+        className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-slate-900">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-dark dark:text-slate-100 mb-4">
@@ -596,7 +636,9 @@ const LandingPage = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-slate-900">
+      <section
+        id="testimonials"
+        className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-slate-900">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-dark dark:text-slate-100 mb-4">
@@ -725,7 +767,9 @@ const LandingPage = () => {
       </section>
 
       {/* Pricing Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-slate-900">
+      <section
+        id="pricing"
+        className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-slate-900">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-dark dark:text-slate-100 mb-4">
@@ -786,7 +830,9 @@ const LandingPage = () => {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-800">
+      <section
+        id="faq"
+        className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-800">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-dark dark:text-slate-100 mb-4">
@@ -868,7 +914,9 @@ const LandingPage = () => {
       </section>
 
       {/* Contact/Support Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-800">
+      <section
+        id="contact"
+        className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-800">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-dark dark:text-slate-100 mb-4">
