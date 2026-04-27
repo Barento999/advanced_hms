@@ -21,6 +21,11 @@ import {
   Star,
   Video,
   ClipboardCheck,
+  HelpCircle,
+  Mail,
+  Phone,
+  MapPin,
+  Zap,
 } from "lucide-react";
 import { AuthContext } from "../context/AuthContext";
 
@@ -226,6 +231,87 @@ const LandingPage = () => {
       icon: MessageSquare,
       title: "Direct Communication",
       description: "Message your healthcare providers securely.",
+    },
+  ];
+
+  const faqs = [
+    {
+      question: "How do I book an appointment?",
+      answer:
+        "Simply sign up, complete your profile, browse available doctors by specialization, and select a convenient time slot. You'll receive instant confirmation and reminders.",
+    },
+    {
+      question: "Is my medical data secure?",
+      answer:
+        "Absolutely. We use enterprise-grade encryption, are HIPAA compliant, and conduct regular security audits. Your data is protected both in transit and at rest.",
+    },
+    {
+      question: "Can I access my medical records anytime?",
+      answer:
+        "Yes! Your complete medical history, prescriptions, lab results, and appointment records are available 24/7 from any device with internet access.",
+    },
+    {
+      question: "What if I need to cancel an appointment?",
+      answer:
+        "You can cancel or reschedule appointments directly from your dashboard. We recommend doing so at least 24 hours in advance as a courtesy to healthcare providers.",
+    },
+    {
+      question: "Do you support telemedicine consultations?",
+      answer:
+        "Yes, many of our healthcare providers offer virtual consultations. You can filter for telemedicine-enabled doctors when booking appointments.",
+    },
+    {
+      question: "How do I become a healthcare provider on this platform?",
+      answer:
+        "Healthcare providers are onboarded by our admin team to ensure credential verification and quality standards. Please contact our support team for more information.",
+    },
+  ];
+
+  const pricingPlans = [
+    {
+      name: "For Patients",
+      price: "Free",
+      description: "Complete healthcare management at no cost",
+      features: [
+        "Unlimited appointment bookings",
+        "Digital medical records access",
+        "Secure messaging with doctors",
+        "Appointment reminders",
+        "Health analytics dashboard",
+        "24/7 platform access",
+      ],
+      cta: "Get Started",
+      popular: false,
+    },
+    {
+      name: "For Doctors",
+      price: "Custom",
+      description: "Professional tools for healthcare providers",
+      features: [
+        "Patient management system",
+        "Appointment scheduling",
+        "Digital prescription tools",
+        "Medical records management",
+        "Analytics and reporting",
+        "Secure communication",
+      ],
+      cta: "Contact Us",
+      popular: true,
+    },
+    {
+      name: "For Healthcare Facilities",
+      price: "Enterprise",
+      description: "Comprehensive solution for medical institutions",
+      features: [
+        "Multi-provider management",
+        "Advanced analytics",
+        "Custom integrations",
+        "Dedicated support",
+        "Training and onboarding",
+        "SLA guarantees",
+      ],
+      cta: "Contact Sales",
+      popular: false,
     },
   ];
 
@@ -628,6 +714,195 @@ const LandingPage = () => {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-slate-900">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-dark dark:text-slate-100 mb-4">
+              Simple, Transparent Pricing
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-slate-400 max-w-2xl mx-auto">
+              Choose the plan that works best for you
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {pricingPlans.map((plan, index) => (
+              <div
+                key={index}
+                className={`bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-sm ${
+                  plan.popular
+                    ? "ring-2 ring-primary transform scale-105"
+                    : "hover:shadow-md"
+                } transition-all`}>
+                {plan.popular && (
+                  <div className="bg-primary text-white text-sm font-semibold px-3 py-1 rounded-full inline-block mb-4">
+                    Most Popular
+                  </div>
+                )}
+                <h3 className="text-2xl font-bold text-dark dark:text-slate-100 mb-2">
+                  {plan.name}
+                </h3>
+                <div className="mb-4">
+                  <span className="text-4xl font-bold text-primary">
+                    {plan.price}
+                  </span>
+                </div>
+                <p className="text-gray-600 dark:text-slate-400 mb-6">
+                  {plan.description}
+                </p>
+                <ul className="space-y-3 mb-8">
+                  {plan.features.map((feature, idx) => (
+                    <li key={idx} className="flex items-start gap-2">
+                      <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                      <span className="text-gray-600 dark:text-slate-400">
+                        {feature}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  to={plan.price === "Free" ? "/register" : "/login"}
+                  className={`block text-center px-6 py-3 rounded-xl transition-colors ${
+                    plan.popular
+                      ? "bg-primary text-white hover:bg-blue-800"
+                      : "border-2 border-primary text-primary hover:bg-primary hover:text-white"
+                  }`}>
+                  {plan.cta}
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-800">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-dark dark:text-slate-100 mb-4">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-slate-400">
+              Everything you need to know about our platform
+            </p>
+          </div>
+          <div className="space-y-6">
+            {faqs.map((faq, index) => (
+              <div
+                key={index}
+                className="bg-gray-50 dark:bg-slate-900 rounded-xl p-6">
+                <div className="flex items-start gap-4">
+                  <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <HelpCircle className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-dark dark:text-slate-100 mb-2">
+                      {faq.question}
+                    </h3>
+                    <p className="text-gray-600 dark:text-slate-400">
+                      {faq.answer}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Newsletter Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-slate-900">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-gradient-to-r from-primary to-blue-800 rounded-3xl p-12 text-center">
+            <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Mail className="w-8 h-8 text-white" />
+            </div>
+            <h2 className="text-3xl font-bold text-white mb-4">
+              Stay Updated with Health Tips
+            </h2>
+            <p className="text-xl text-blue-100 mb-8">
+              Subscribe to our newsletter for health tips, platform updates, and
+              exclusive offers
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="flex-1 px-6 py-3 rounded-xl border-0 focus:ring-2 focus:ring-white"
+              />
+              <button className="px-8 py-3 bg-white text-primary hover:bg-gray-100 rounded-xl transition-colors font-medium whitespace-nowrap">
+                Subscribe
+              </button>
+            </div>
+            <p className="text-sm text-blue-100 mt-4">
+              We respect your privacy. Unsubscribe at any time.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact/Support Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-800">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-dark dark:text-slate-100 mb-4">
+              Need Help? We're Here for You
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-slate-400 max-w-2xl mx-auto">
+              Our support team is available 24/7 to assist you
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Phone className="w-8 h-8 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold text-dark dark:text-slate-100 mb-2">
+                Call Us
+              </h3>
+              <p className="text-gray-600 dark:text-slate-400 mb-2">
+                Available 24/7 for emergencies
+              </p>
+              <a
+                href="tel:+1234567890"
+                className="text-primary hover:underline font-medium">
+                +1 (234) 567-890
+              </a>
+            </div>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Mail className="w-8 h-8 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold text-dark dark:text-slate-100 mb-2">
+                Email Us
+              </h3>
+              <p className="text-gray-600 dark:text-slate-400 mb-2">
+                We'll respond within 24 hours
+              </p>
+              <a
+                href="mailto:support@healthcare.com"
+                className="text-primary hover:underline font-medium">
+                support@healthcare.com
+              </a>
+            </div>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <MapPin className="w-8 h-8 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold text-dark dark:text-slate-100 mb-2">
+                Visit Us
+              </h3>
+              <p className="text-gray-600 dark:text-slate-400 mb-2">
+                Main office location
+              </p>
+              <p className="text-primary font-medium">
+                123 Healthcare Ave, Medical District
+              </p>
             </div>
           </div>
         </div>
