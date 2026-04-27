@@ -67,6 +67,8 @@ const AdminProfile = () => {
           phone: user.phone || "",
         });
       }
+      // Delay to show skeleton
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     } catch (error) {
       console.error("Error fetching admin profile:", error);
       toast.error("Failed to load profile");

@@ -64,6 +64,8 @@ const AdminManagement = () => {
         totalItems: data.totalItems,
         itemsPerPage: data.itemsPerPage,
       });
+      // Delay to show skeleton
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     } catch (error) {
       console.error("Error fetching admins:", error);
       toast.error("Failed to fetch admins");
