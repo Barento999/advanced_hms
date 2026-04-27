@@ -1498,3 +1498,88 @@ export const AdminReviewsSkeleton = () => (
     </div>
   </div>
 );
+
+// Admin Profile Skeleton
+export const AdminProfileSkeleton = () => (
+  <div className="p-6 max-w-4xl mx-auto">
+    {/* Real Header - Shows Immediately */}
+    <div className="mb-8">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-dark dark:text-slate-100">
+            Admin Profile
+          </h1>
+          <p className="text-gray-600 dark:text-slate-400 mt-2">
+            Manage your administrator account settings
+          </p>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="h-10 bg-gray-200 dark:bg-slate-700 rounded-xl w-32 animate-pulse"></div>
+        </div>
+      </div>
+    </div>
+
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {/* Profile Information Skeleton */}
+      <div className="lg:col-span-2">
+        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-6 border border-border dark:border-slate-700 animate-pulse">
+          <div className="flex items-center gap-4 mb-6">
+            <div className="w-16 h-16 bg-gray-200 dark:bg-slate-700 rounded-full"></div>
+            <div>
+              <div className="h-6 bg-gray-200 dark:bg-slate-700 rounded w-48 mb-2"></div>
+              <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-32"></div>
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            {/* Name Field Skeleton */}
+            <div>
+              <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-20 mb-2"></div>
+              <div className="h-12 bg-gray-200 dark:bg-slate-700 rounded-xl"></div>
+            </div>
+
+            {/* Email Field Skeleton */}
+            <div>
+              <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-24 mb-2"></div>
+              <div className="h-12 bg-gray-200 dark:bg-slate-700 rounded-xl"></div>
+            </div>
+
+            {/* Phone Field Skeleton */}
+            <div>
+              <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-28 mb-2"></div>
+              <div className="h-12 bg-gray-200 dark:bg-slate-700 rounded-xl"></div>
+            </div>
+
+            {/* Account Created Field Skeleton */}
+            <div>
+              <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-32 mb-2"></div>
+              <div className="h-12 bg-gray-200 dark:bg-slate-700 rounded-xl"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Security Settings Skeleton */}
+      <div className="space-y-6">
+        {/* Password Change Card Skeleton */}
+        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-6 border border-border dark:border-slate-700 animate-pulse">
+          <div className="h-5 bg-gray-200 dark:bg-slate-700 rounded w-32 mb-4"></div>
+          <div className="h-12 bg-gray-200 dark:bg-slate-700 rounded-xl"></div>
+        </div>
+
+        {/* Admin Privileges Card Skeleton */}
+        <div className="bg-gradient-to-br from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 rounded-2xl p-6 border border-primary/20 animate-pulse">
+          <div className="h-5 bg-gray-200 dark:bg-slate-700 rounded w-40 mb-4"></div>
+          <div className="space-y-3">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-gray-200 dark:bg-slate-700 rounded-full"></div>
+                <div className="h-3 bg-gray-200 dark:bg-slate-700 rounded w-32"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+);

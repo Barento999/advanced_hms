@@ -1,5 +1,5 @@
-import { Bell, User, Moon, Sun } from "lucide-react";
-import { useContext, useState } from "react";
+import { Bell, User, Moon, Sun, ChevronDown, Shield } from "lucide-react";
+import { useContext, useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { NotificationContext } from "../context/SocketContext";
@@ -13,7 +13,33 @@ const Navbar = () => {
   };
   const { darkMode, toggleDarkMode } = useContext(ThemeContext);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showAdminDropdown, setShowAdminDropdown] = useState(false);
   const navigate = useNavigate();
+  const adminDropdownRef = useRef(null);
+  const notificationDropdownRef = useRef(null);
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        adminDropdownRef.current &&
+        !adminDropdownRef.current.contains(event.target)
+      ) {
+        setShowAdminDropdown(false);
+      }
+      if (
+        notificationDropdownRef.current &&
+        !notificationDropdownRef.current.contains(event.target)
+      ) {
+        setShowNotifications(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   // Role-specific greeting messages
   const getRoleGreeting = () => {
@@ -70,7 +96,7 @@ const Navbar = () => {
           )}
         </button>
 
-        <div className="relative">
+        <div className="relative" ref={notificationDropdownRef}>
           <button
             onClick={() => setShowNotifications(!showNotifications)}
             className="relative p-3 hover:bg-secondary dark:hover:bg-slate-700 rounded-xl transition-all duration-200 group">
@@ -145,14 +171,69 @@ const Navbar = () => {
             className={`w-11 h-11 ${getRoleBadgeColor()} rounded-full flex items-center justify-center shadow-md`}>
             <User size={22} className="text-white" />
           </div>
-          <div>
-            <p className="font-semibold text-dark dark:text-white">
-              {user?.name}
-            </p>
-            <p className="text-xs text-primary dark:text-blue-400 font-medium uppercase">
-              {user?.role}
-            </p>
-          </div>
+
+          {/* Admin Dropdown */}
+          {user?.role === "admin" ? (
+            <div className="relative" ref={adminDropdownRef}>
+              <button
+                onClick={() => setShowAdminDropdown(!showAdminDropdown)}
+                className="flex items-center gap-2 hover:bg-secondary dark:hover:bg-slate-700 rounded-xl px-3 py-2 transition-all duration-200 group">
+                <div>
+                  <p className="font-semibold text-dark dark:text-white text-left">
+                    {user?.name}
+                  </p>
+                  <p className="text-xs text-primary dark:text-blue-400 font-medium uppercase">
+                    {user?.role}
+                  </p>
+                </div>
+                <ChevronDown
+                  size={16}
+                  className={`text-muted dark:text-slate-400 group-hover:text-primary transition-all duration-200 ${
+                    showAdminDropdown ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+
+              {/* Admin Dropdown Menu */}
+              {showAdminDropdown && (
+                <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-border dark:border-slate-700 z-50 py-2">
+                  <button
+                    onClick={() => {
+                      setShowAdminDropdown(false);
+                      navigate("/admin/profile");
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-3 hover:bg-secondary dark:hover:bg-slate-700 transition-colors text-left">
+                    <User size={18} className="text-primary" />
+                    <span className="text-dark dark:text-white font-medium">
+                      Admin Profile
+                    </span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setShowAdminDropdown(false);
+                      navigate("/admin");
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-3 hover:bg-secondary dark:hover:bg-slate-700 transition-colors text-left">
+                    <Shield size={18} className="text-primary" />
+                    <span className="text-dark dark:text-white font-medium">
+                      Admin Management
+                    </span>
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            /* Non-admin users - regular display */
+            <div>
+              <p className="font-semibold text-dark dark:text-white">
+                {user?.name}
+              </p>
+              <p className="text-xs text-primary dark:text-blue-400 font-medium uppercase">
+                {user?.role}
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>
