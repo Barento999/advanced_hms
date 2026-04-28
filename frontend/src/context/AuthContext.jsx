@@ -47,6 +47,8 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setUser(null);
+    // Redirect to landing page after logout
+    window.location.href = "/";
   };
 
   const updateUser = (updatedUserData) => {

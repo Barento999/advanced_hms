@@ -106,19 +106,6 @@ const LandingPage = () => {
   };
 
   useEffect(() => {
-    // Redirect logged-in users to their dashboard
-    if (user) {
-      if (user.role === "admin") {
-        navigate("/admin");
-      } else if (user.role === "doctor") {
-        navigate("/doctor");
-      } else if (user.role === "patient") {
-        navigate("/patient");
-      }
-    }
-  }, [user, navigate]);
-
-  useEffect(() => {
     const fetchLandingStats = async () => {
       try {
         const response = await axios.get(
