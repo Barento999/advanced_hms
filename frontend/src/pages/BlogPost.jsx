@@ -22,6 +22,7 @@ import {
   Users,
   Stethoscope,
 } from "lucide-react";
+import PublicNavbar from "../components/PublicNavbar";
 import { ThemeContext } from "../context/ThemeContext";
 
 const BlogPost = () => {
@@ -266,7 +267,8 @@ const BlogPost = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <PublicNavbar />
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-16">
           <div className="animate-pulse">
             <div className="h-8 bg-gray-200 dark:bg-slate-700 rounded w-32 mb-8"></div>
             <div className="h-12 bg-gray-200 dark:bg-slate-700 rounded w-3/4 mb-4"></div>
@@ -293,8 +295,11 @@ const BlogPost = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
+      {/* Public Navbar */}
+      <PublicNavbar />
+
       {/* Back Button */}
-      <div className="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+      <div className="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 mt-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <button
             onClick={() => navigate("/blog")}

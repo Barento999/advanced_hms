@@ -19,6 +19,7 @@ import {
   Stethoscope,
 } from "lucide-react";
 import Pagination from "../components/Pagination";
+import PublicNavbar from "../components/PublicNavbar";
 import { ThemeContext } from "../context/ThemeContext";
 import { useContext } from "react";
 
@@ -145,8 +146,11 @@ const Blog = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
+      {/* Public Navbar */}
+      <PublicNavbar />
+
       {/* Header */}
-      <div className="bg-gradient-to-r from-primary to-blue-800 text-white py-16">
+      <div className="bg-gradient-to-r from-primary to-blue-800 text-white py-16 mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
