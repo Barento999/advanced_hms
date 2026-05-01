@@ -29,6 +29,7 @@ import {
   ChevronDown,
   Moon,
   Sun,
+  ChevronUp,
 } from "lucide-react";
 import { AuthContext } from "../context/AuthContext";
 import { ThemeContext } from "../context/ThemeContext";
@@ -38,6 +39,7 @@ const LandingPage = () => {
   const { darkMode, toggleDarkMode } = useContext(ThemeContext);
   const navigate = useNavigate();
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
+  const [showScrollTop, setShowScrollTop] = useState(false);
   const [stats, setStats] = useState([
     { number: "500+", label: "Healthcare Professionals" },
     { number: "10,000+", label: "Happy Patients" },
@@ -95,6 +97,27 @@ const LandingPage = () => {
 
     return () => observer.disconnect();
   }, [loading]);
+
+  // Scroll to top button visibility
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 400) {
+        setShowScrollTop(true);
+      } else {
+        setShowScrollTop(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
 
   // Icon mapping for specializations
   const specializationIcons = {
@@ -438,6 +461,21 @@ const LandingPage = () => {
         .animate-fade-in-up {
           opacity: 1;
           transform: translateY(0);
+        }
+        
+        .animate-fade-in {
+          animation: fadeIn 0.3s ease-in;
+        }
+        
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: scale(0.8);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
         }
       `}</style>
       {/* Navigation */}
@@ -1478,6 +1516,16 @@ const LandingPage = () => {
           </div>
         </div>
       </footer>
+
+      {/* Scroll to Top Button */}
+      {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-8 right-8 z-50 p-4 bg-primary hover:bg-blue-800 text-white rounded-full shadow-lg transition-all duration-300 hover:scale-110 animate-fade-in"
+          aria-label="Scroll to top">
+          <ChevronUp className="w-6 h-6" />
+        </button>
+      )}
     </div>
   );
 };
