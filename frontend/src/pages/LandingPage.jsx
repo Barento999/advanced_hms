@@ -241,7 +241,10 @@ const LandingPage = () => {
           },
         ]);
       } finally {
-        setLoading(false);
+        // Add a minimum delay of 2 seconds to show skeletons
+        setTimeout(() => {
+          setLoading(false);
+        }, 2000);
       }
     };
 
