@@ -472,6 +472,115 @@ const BlogPost = () => {
           </div>
         )}
 
+        {/* Comments Section */}
+        <div className="mt-16 border-t border-gray-200 dark:border-slate-700 pt-12">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-slate-100 mb-6">
+            Discussion
+          </h2>
+          
+          {/* Comment Info Box */}
+          <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-6 mb-8">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 bg-primary/20 dark:bg-primary/30 rounded-full flex items-center justify-center flex-shrink-0">
+                <User className="w-6 h-6 text-primary" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-semibold text-gray-900 dark:text-slate-100 mb-2">
+                  Join the Conversation
+                </h3>
+                <p className="text-gray-600 dark:text-slate-400 mb-4">
+                  Share your thoughts, ask questions, or discuss this article with our healthcare community. 
+                  Sign in to leave a comment.
+                </p>
+                <div className="flex gap-3">
+                  <Link
+                    to="/login"
+                    className="px-6 py-2 bg-primary hover:bg-blue-800 text-white rounded-lg transition-colors font-medium">
+                    Sign In to Comment
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="px-6 py-2 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700 rounded-lg transition-colors font-medium">
+                    Create Account
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Sample Comments (Placeholder) */}
+          <div className="space-y-6">
+            <div className="bg-gray-50 dark:bg-slate-800/50 rounded-xl p-6">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 bg-gradient-to-br from-primary to-blue-800 rounded-full flex items-center justify-center flex-shrink-0">
+                  <span className="text-white font-semibold text-sm">JD</span>
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="font-semibold text-gray-900 dark:text-slate-100">
+                      John Doe
+                    </span>
+                    <span className="text-sm text-gray-500 dark:text-slate-500">
+                      • 2 days ago
+                    </span>
+                  </div>
+                  <p className="text-gray-700 dark:text-slate-300">
+                    Great article! These tips are really helpful. I've been following similar advice from my doctor and have seen significant improvements in my health.
+                  </p>
+                  <div className="flex items-center gap-4 mt-3">
+                    <button className="text-sm text-gray-600 dark:text-slate-400 hover:text-primary transition-colors flex items-center gap-1">
+                      <Heart className="w-4 h-4" />
+                      <span>12</span>
+                    </button>
+                    <button className="text-sm text-gray-600 dark:text-slate-400 hover:text-primary transition-colors">
+                      Reply
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gray-50 dark:bg-slate-800/50 rounded-xl p-6">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-green-700 rounded-full flex items-center justify-center flex-shrink-0">
+                  <span className="text-white font-semibold text-sm">SM</span>
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="font-semibold text-gray-900 dark:text-slate-100">
+                      Sarah Miller
+                    </span>
+                    <span className="text-sm text-gray-500 dark:text-slate-500">
+                      • 5 days ago
+                    </span>
+                  </div>
+                  <p className="text-gray-700 dark:text-slate-300">
+                    Thank you for sharing this valuable information. I especially appreciate the emphasis on preventive care and regular checkups.
+                  </p>
+                  <div className="flex items-center gap-4 mt-3">
+                    <button className="text-sm text-gray-600 dark:text-slate-400 hover:text-primary transition-colors flex items-center gap-1">
+                      <Heart className="w-4 h-4" />
+                      <span>8</span>
+                    </button>
+                    <button className="text-sm text-gray-600 dark:text-slate-400 hover:text-primary transition-colors">
+                      Reply
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-center py-4">
+              <p className="text-gray-500 dark:text-slate-500 text-sm mb-3">
+                Comments are moderated to ensure quality discussion
+              </p>
+              <button className="text-primary hover:text-blue-800 dark:hover:text-blue-400 font-medium text-sm">
+                Load More Comments
+              </button>
+            </div>
+          </div>
+        </div>
+
         {/* CTA Section */}
         <div className="mt-16 bg-gradient-to-r from-primary to-blue-800 rounded-2xl p-8 text-center text-white">
           <h3 className="text-2xl font-bold mb-4">

@@ -1737,13 +1737,28 @@ const LandingPage = () => {
                   <article
                     key={post._id}
                     className="bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all hover:-translate-y-1">
-                    <div
-                      className={`h-48 ${categoryStyle.bgColor} flex items-center justify-center relative overflow-hidden`}>
+                    <div className="h-48 relative overflow-hidden bg-gray-100 dark:bg-slate-700">
+                      {post.featuredImage ? (
+                        <img
+                          src={post.featuredImage}
+                          alt={post.title}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            // Fallback to category icon if image fails to load
+                            e.target.style.display = 'none';
+                            e.target.nextElementSibling.style.display = 'flex';
+                          }}
+                        />
+                      ) : null}
                       <div
-                        className={`absolute inset-0 bg-gradient-to-br ${categoryStyle.gradient} to-transparent`}></div>
-                      <CategoryIcon
-                        className={`w-16 h-16 ${categoryStyle.iconColor} relative z-10`}
-                      />
+                        className={`absolute inset-0 ${categoryStyle.bgColor} ${post.featuredImage ? 'hidden' : 'flex'} items-center justify-center`}
+                        style={{ display: post.featuredImage ? 'none' : 'flex' }}>
+                        <div
+                          className={`absolute inset-0 bg-gradient-to-br ${categoryStyle.gradient} to-transparent`}></div>
+                        <CategoryIcon
+                          className={`w-16 h-16 ${categoryStyle.iconColor} relative z-10`}
+                        />
+                      </div>
                     </div>
                     <div className="p-6">
                       <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-slate-400 mb-3">
