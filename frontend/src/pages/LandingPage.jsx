@@ -604,16 +604,27 @@ const LandingPage = () => {
       {/* Stats Section */}
       <section className="py-16 bg-primary scroll-animate">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <p className="text-4xl font-bold text-white mb-2">
-                  {stat.number}
-                </p>
-                <p className="text-blue-100">{stat.label}</p>
-              </div>
-            ))}
-          </div>
+          {loading ? (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="text-center animate-pulse">
+                  <div className="h-10 bg-white/20 rounded w-24 mx-auto mb-2"></div>
+                  <div className="h-4 bg-white/20 rounded w-32 mx-auto"></div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              {stats.map((stat, index) => (
+                <div key={index} className="text-center">
+                  <p className="text-4xl font-bold text-white mb-2">
+                    {stat.number}
+                  </p>
+                  <p className="text-blue-100">{stat.label}</p>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -810,30 +821,49 @@ const LandingPage = () => {
               Connect with expert doctors across various medical specializations
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {specializations.map((spec, index) => (
-              <div
-                key={index}
-                className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm hover:shadow-md transition-all hover:-translate-y-1">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <spec.icon className="w-6 h-6 text-primary" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-lg font-bold text-dark dark:text-slate-100 mb-1">
-                      {spec.name}
-                    </h3>
-                    <p className="text-sm text-gray-600 dark:text-slate-400 mb-2">
-                      {spec.description}
-                    </p>
-                    <p className="text-sm font-semibold text-primary">
-                      {spec.doctors} Doctors Available
-                    </p>
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div
+                  key={i}
+                  className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm animate-pulse">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-gray-200 dark:bg-slate-700 rounded-lg flex-shrink-0"></div>
+                    <div className="flex-1">
+                      <div className="h-5 bg-gray-200 dark:bg-slate-700 rounded w-32 mb-2"></div>
+                      <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-full mb-2"></div>
+                      <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-24"></div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {specializations.map((spec, index) => (
+                <div
+                  key={index}
+                  className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm hover:shadow-md transition-all hover:-translate-y-1">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <spec.icon className="w-6 h-6 text-primary" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-bold text-dark dark:text-slate-100 mb-1">
+                        {spec.name}
+                      </h3>
+                      <p className="text-sm text-gray-600 dark:text-slate-400 mb-2">
+                        {spec.description}
+                      </p>
+                      <p className="text-sm font-semibold text-primary">
+                        {spec.doctors} Doctors Available
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -909,40 +939,70 @@ const LandingPage = () => {
               Trusted by thousands of patients and healthcare professionals
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <div
-                key={index}
-                className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm">
-                <div className="flex items-center gap-1 mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className="w-5 h-5 fill-yellow-400 text-yellow-400"
-                    />
-                  ))}
-                </div>
-                <p className="text-gray-600 dark:text-slate-400 mb-6 italic">
-                  "{testimonial.text}"
-                </p>
-                <div className="flex items-center gap-3">
-                  <img
-                    src={testimonial.image}
-                    alt={testimonial.name}
-                    className="w-12 h-12 rounded-full object-cover"
-                  />
-                  <div>
-                    <p className="font-semibold text-dark dark:text-slate-100">
-                      {testimonial.name}
-                    </p>
-                    <p className="text-sm text-gray-600 dark:text-slate-400">
-                      {testimonial.role}
-                    </p>
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {[1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm animate-pulse">
+                  <div className="flex items-center gap-1 mb-4">
+                    {[1, 2, 3, 4, 5].map((j) => (
+                      <div
+                        key={j}
+                        className="w-5 h-5 bg-gray-200 dark:bg-slate-700 rounded"></div>
+                    ))}
+                  </div>
+                  <div className="space-y-2 mb-6">
+                    <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-full"></div>
+                    <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-full"></div>
+                    <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-3/4"></div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-gray-200 dark:bg-slate-700 rounded-full"></div>
+                    <div className="flex-1">
+                      <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-24 mb-2"></div>
+                      <div className="h-3 bg-gray-200 dark:bg-slate-700 rounded w-16"></div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {testimonials.map((testimonial, index) => (
+                <div
+                  key={index}
+                  className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm">
+                  <div className="flex items-center gap-1 mb-4">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className="w-5 h-5 fill-yellow-400 text-yellow-400"
+                      />
+                    ))}
+                  </div>
+                  <p className="text-gray-600 dark:text-slate-400 mb-6 italic">
+                    "{testimonial.text}"
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={testimonial.image}
+                      alt={testimonial.name}
+                      className="w-12 h-12 rounded-full object-cover"
+                    />
+                    <div>
+                      <p className="font-semibold text-dark dark:text-slate-100">
+                        {testimonial.name}
+                      </p>
+                      <p className="text-sm text-gray-600 dark:text-slate-400">
+                        {testimonial.role}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
