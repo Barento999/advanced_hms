@@ -36,6 +36,10 @@ import {
   Instagram,
   Menu,
   X,
+  ShieldCheck,
+  BadgeCheck,
+  Award as AwardIcon,
+  CheckCircle2,
 } from "lucide-react";
 import { AuthContext } from "../context/AuthContext";
 import { ThemeContext } from "../context/ThemeContext";
@@ -1542,6 +1546,95 @@ const LandingPage = () => {
             Create Free Account
             <ArrowRight size={20} />
           </Link>
+        </div>
+      </section>
+
+      {/* Trust Badges / Certifications Section */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-800 border-t border-gray-200 dark:border-slate-700">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h3 className="text-2xl font-bold text-dark dark:text-slate-100 mb-2">
+              Trusted & Certified
+            </h3>
+            <p className="text-gray-600 dark:text-slate-400">
+              Our platform meets the highest standards of security and compliance
+            </p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {/* HIPAA Compliance */}
+            <div className="flex flex-col items-center text-center p-6 bg-gray-50 dark:bg-slate-700/30 rounded-xl hover:shadow-md transition-shadow">
+              <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mb-4">
+                <ShieldCheck className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+              </div>
+              <h4 className="font-bold text-dark dark:text-slate-100 mb-2">
+                HIPAA Compliant
+              </h4>
+              <p className="text-sm text-gray-600 dark:text-slate-400">
+                Full compliance with healthcare data protection standards
+              </p>
+            </div>
+
+            {/* ISO Certification */}
+            <div className="flex flex-col items-center text-center p-6 bg-gray-50 dark:bg-slate-700/30 rounded-xl hover:shadow-md transition-shadow">
+              <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mb-4">
+                <BadgeCheck className="w-8 h-8 text-green-600 dark:text-green-400" />
+              </div>
+              <h4 className="font-bold text-dark dark:text-slate-100 mb-2">
+                ISO 27001
+              </h4>
+              <p className="text-sm text-gray-600 dark:text-slate-400">
+                International standard for information security management
+              </p>
+            </div>
+
+            {/* SSL Encryption */}
+            <div className="flex flex-col items-center text-center p-6 bg-gray-50 dark:bg-slate-700/30 rounded-xl hover:shadow-md transition-shadow">
+              <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mb-4">
+                <Lock className="w-8 h-8 text-purple-600 dark:text-purple-400" />
+              </div>
+              <h4 className="font-bold text-dark dark:text-slate-100 mb-2">
+                256-bit SSL
+              </h4>
+              <p className="text-sm text-gray-600 dark:text-slate-400">
+                Bank-level encryption for all data transmission
+              </p>
+            </div>
+
+            {/* SOC 2 Certified */}
+            <div className="flex flex-col items-center text-center p-6 bg-gray-50 dark:bg-slate-700/30 rounded-xl hover:shadow-md transition-shadow">
+              <div className="w-16 h-16 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center mb-4">
+                <CheckCircle2 className="w-8 h-8 text-orange-600 dark:text-orange-400" />
+              </div>
+              <h4 className="font-bold text-dark dark:text-slate-100 mb-2">
+                SOC 2 Type II
+              </h4>
+              <p className="text-sm text-gray-600 dark:text-slate-400">
+                Audited security, availability, and confidentiality controls
+              </p>
+            </div>
+          </div>
+
+          {/* Additional Trust Indicators */}
+          <div className="mt-12 pt-8 border-t border-gray-200 dark:border-slate-700">
+            <div className="flex flex-wrap justify-center items-center gap-8">
+              <div className="flex items-center gap-2 text-gray-600 dark:text-slate-400">
+                <Shield className="w-5 h-5 text-primary" />
+                <span className="text-sm font-medium">99.9% Uptime SLA</span>
+              </div>
+              <div className="flex items-center gap-2 text-gray-600 dark:text-slate-400">
+                <AwardIcon className="w-5 h-5 text-primary" />
+                <span className="text-sm font-medium">GDPR Compliant</span>
+              </div>
+              <div className="flex items-center gap-2 text-gray-600 dark:text-slate-400">
+                <CheckCircle className="w-5 h-5 text-primary" />
+                <span className="text-sm font-medium">Regular Security Audits</span>
+              </div>
+              <div className="flex items-center gap-2 text-gray-600 dark:text-slate-400">
+                <Lock className="w-5 h-5 text-primary" />
+                <span className="text-sm font-medium">Data Encryption at Rest</span>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
