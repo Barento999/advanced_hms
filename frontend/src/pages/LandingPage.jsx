@@ -73,6 +73,29 @@ const LandingPage = () => {
   ]);
   const [loading, setLoading] = useState(true);
 
+  // Scroll animation setup
+  useEffect(() => {
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: "0px 0px -100px 0px",
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("animate-fade-in-up");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    // Observe all sections
+    const sections = document.querySelectorAll(".scroll-animate");
+    sections.forEach((section) => observer.observe(section));
+
+    return () => observer.disconnect();
+  }, [loading]);
+
   // Icon mapping for specializations
   const specializationIcons = {
     Cardiology: Heart,
@@ -405,6 +428,17 @@ const LandingPage = () => {
           scroll-behavior: smooth;
           scroll-padding-top: 80px;
         }
+        
+        .scroll-animate {
+          opacity: 0;
+          transform: translateY(30px);
+          transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        
+        .animate-fade-in-up {
+          opacity: 1;
+          transform: translateY(0);
+        }
       `}</style>
       {/* Navigation */}
       <nav className="bg-white dark:bg-slate-800 shadow-sm fixed w-full top-0 z-50">
@@ -472,7 +506,7 @@ const LandingPage = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 scroll-animate">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -530,7 +564,7 @@ const LandingPage = () => {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 bg-primary">
+      <section className="py-16 bg-primary scroll-animate">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
@@ -548,7 +582,7 @@ const LandingPage = () => {
       {/* About Us Section */}
       <section
         id="about"
-        className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-800">
+        className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-800 scroll-animate">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -652,7 +686,7 @@ const LandingPage = () => {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-20 px-4 sm:px-6 lg:px-8">
+      <section id="features" className="py-20 px-4 sm:px-6 lg:px-8 scroll-animate">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-dark dark:text-slate-100 mb-4">
@@ -685,7 +719,7 @@ const LandingPage = () => {
       </section>
 
       {/* How It Works Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-800">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-800 scroll-animate">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-dark dark:text-slate-100 mb-4">
@@ -728,7 +762,7 @@ const LandingPage = () => {
       {/* Specializations Section */}
       <section
         id="specializations"
-        className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-slate-900">
+        className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-slate-900 scroll-animate">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-dark dark:text-slate-100 mb-4">
@@ -766,7 +800,7 @@ const LandingPage = () => {
       </section>
 
       {/* Platform Benefits with Image */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-800">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-800 scroll-animate">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20">
             <div className="order-2 lg:order-1">
@@ -827,7 +861,7 @@ const LandingPage = () => {
       {/* Testimonials Section */}
       <section
         id="testimonials"
-        className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-slate-900">
+        className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-slate-900 scroll-animate">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-dark dark:text-slate-100 mb-4">
@@ -875,7 +909,7 @@ const LandingPage = () => {
       </section>
 
       {/* Trust & Security Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-800">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-800 scroll-animate">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -958,7 +992,7 @@ const LandingPage = () => {
       {/* Pricing Section */}
       <section
         id="pricing"
-        className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-slate-900">
+        className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-slate-900 scroll-animate">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-dark dark:text-slate-100 mb-4">
@@ -1021,7 +1055,7 @@ const LandingPage = () => {
       {/* FAQ Section */}
       <section
         id="faq"
-        className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-800">
+        className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-800 scroll-animate">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-dark dark:text-slate-100 mb-4">
@@ -1072,7 +1106,7 @@ const LandingPage = () => {
       </section>
 
       {/* Newsletter Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-slate-900">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-slate-900 scroll-animate">
         <div className="max-w-4xl mx-auto">
           <div className="bg-gradient-to-r from-primary to-blue-800 rounded-3xl p-12 text-center">
             <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -1105,7 +1139,7 @@ const LandingPage = () => {
       {/* Contact/Support Section */}
       <section
         id="contact"
-        className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-800">
+        className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-800 scroll-animate">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-dark dark:text-slate-100 mb-4">
@@ -1169,7 +1203,7 @@ const LandingPage = () => {
       {/* Careers Section */}
       <section
         id="careers"
-        className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-slate-900">
+        className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-slate-900 scroll-animate">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-dark dark:text-slate-100 mb-4">
@@ -1323,7 +1357,7 @@ const LandingPage = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-primary to-blue-800">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-primary to-blue-800 scroll-animate">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl font-bold text-white mb-6">
             Ready to Take Control of Your Health?
