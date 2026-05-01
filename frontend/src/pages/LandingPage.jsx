@@ -560,11 +560,16 @@ const LandingPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 overflow-x-hidden">
       <style>{`
         html {
           scroll-behavior: smooth;
           scroll-padding-top: 80px;
+          overflow-x: hidden;
+        }
+        
+        body {
+          overflow-x: hidden;
         }
         
         .scroll-animate {
@@ -595,17 +600,17 @@ const LandingPage = () => {
       `}</style>
       {/* Emergency Banner */}
       {showEmergencyBanner && (
-        <div className="bg-red-600 text-white py-3 px-4 fixed w-full top-0 z-[60] shadow-lg">
+        <div className="bg-red-600 text-white py-3 px-4 fixed w-full top-0 z-[60] shadow-lg left-0 right-0">
           <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3 flex-1">
+            <div className="flex items-center gap-3 flex-1 min-w-0">
               <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 animate-pulse">
                 <AlertTriangle className="w-5 h-5" />
               </div>
-              <div className="flex-1">
-                <p className="font-semibold text-sm md:text-base">
+              <div className="flex-1 min-w-0">
+                <p className="font-semibold text-sm md:text-base truncate">
                   🚨 Medical Emergency? Call 911 Immediately
                 </p>
-                <p className="text-xs text-red-100 hidden sm:block">
+                <p className="text-xs text-red-100 hidden sm:block truncate">
                   This platform is not for emergencies. For urgent care, contact emergency services.
                 </p>
               </div>
@@ -621,7 +626,7 @@ const LandingPage = () => {
       )}
 
       {/* Navigation */}
-      <nav className={`bg-white dark:bg-slate-800 shadow-sm fixed w-full z-50 transition-all ${showEmergencyBanner ? 'top-[52px]' : 'top-0'}`}>
+      <nav className={`bg-white dark:bg-slate-800 shadow-sm fixed w-full z-50 transition-all left-0 right-0 ${showEmergencyBanner ? 'top-[52px]' : 'top-0'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-2">
@@ -677,12 +682,12 @@ const LandingPage = () => {
               </button>
               <Link
                 to="/login"
-                className="hidden md:block px-4 py-2 text-gray-700 dark:text-slate-300 hover:text-primary transition-colors">
+                className="hidden md:block px-4 py-2 text-gray-700 dark:text-slate-300 hover:text-primary transition-colors whitespace-nowrap">
                 Login
               </Link>
               <Link
                 to="/register"
-                className="hidden md:block px-6 py-2 bg-primary hover:bg-blue-800 text-white rounded-xl transition-colors">
+                className="hidden md:block px-6 py-2 bg-primary hover:bg-blue-800 text-white rounded-xl transition-colors whitespace-nowrap">
                 Get Started
               </Link>
               <button
@@ -997,14 +1002,13 @@ const LandingPage = () => {
             {howItWorks.map((item, index) => (
               <div key={index} className="relative">
                 <div className="text-center">
-                  <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4 relative z-10">
                     <item.icon className="w-8 h-8 text-white" />
                   </div>
-                  <div className="absolute top-8 left-1/2 w-full h-0.5 bg-gray-200 dark:bg-slate-700 -z-10 hidden lg:block">
-                    {index < howItWorks.length - 1 && (
-                      <div className="w-full h-full bg-primary"></div>
-                    )}
-                  </div>
+                  {/* Connecting line - only show on large screens and not for last item */}
+                  {index < howItWorks.length - 1 && (
+                    <div className="absolute top-8 left-1/2 w-full h-0.5 bg-primary -z-0 hidden lg:block" style={{ width: 'calc(100% - 2rem)' }}></div>
+                  )}
                   <div className="mb-4">
                     <span className="inline-block w-8 h-8 bg-primary/10 text-primary rounded-full font-bold">
                       {item.step}
