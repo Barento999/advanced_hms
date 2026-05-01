@@ -65,12 +65,26 @@ export const getPostById = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Try to find by ID first, then by slug
-    let post = await BlogPost.findOne({
-      $or: [{ _id: id }, { slug: id }],
-      status: "published",
-      deleted: false,
-    }).populate("author", "name email");
+    let post;
+    
+    // Check if id is a valid MongoDB ObjectId
+    const isValidObjectId = /^[0-9a-fA-F]{24}$/.test(id);
+    
+    if (isValidObjectId) {
+      // Try to find by ID first, then by slug
+      post = await BlogPost.findOne({
+        $or: [{ _id: id }, { slug: id }],
+        status: "published",
+        deleted: false,
+      }).populate("author", "name email");
+    } else {
+      // If not a valid ObjectId, search only by slug
+      post = await BlogPost.findOne({
+        slug: id,
+        status: "published",
+        deleted: false,
+      }).populate("author", "name email");
+    }
 
     if (!post) {
       return res.status(404).json({
