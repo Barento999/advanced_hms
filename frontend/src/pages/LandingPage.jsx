@@ -42,6 +42,11 @@ import {
   CheckCircle2,
   Calendar as CalendarIcon,
   BookOpen,
+  AlertTriangle,
+  Globe,
+  Zap,
+  Target,
+  Briefcase,
 } from "lucide-react";
 import { AuthContext } from "../context/AuthContext";
 import { ThemeContext } from "../context/ThemeContext";
@@ -88,6 +93,7 @@ const LandingPage = () => {
   ]);
   const [loading, setLoading] = useState(true);
   const [blogPosts, setBlogPosts] = useState([]);
+  const [showEmergencyBanner, setShowEmergencyBanner] = useState(true);
 
   // Scroll animation setup
   useEffect(() => {
@@ -587,8 +593,35 @@ const LandingPage = () => {
           }
         }
       `}</style>
+      {/* Emergency Banner */}
+      {showEmergencyBanner && (
+        <div className="bg-red-600 text-white py-3 px-4 fixed w-full top-0 z-[60] shadow-lg">
+          <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3 flex-1">
+              <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 animate-pulse">
+                <AlertTriangle className="w-5 h-5" />
+              </div>
+              <div className="flex-1">
+                <p className="font-semibold text-sm md:text-base">
+                  🚨 Medical Emergency? Call 911 Immediately
+                </p>
+                <p className="text-xs text-red-100 hidden sm:block">
+                  This platform is not for emergencies. For urgent care, contact emergency services.
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => setShowEmergencyBanner(false)}
+              className="p-1 hover:bg-white/20 rounded-lg transition-colors flex-shrink-0"
+              aria-label="Close emergency banner">
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Navigation */}
-      <nav className="bg-white dark:bg-slate-800 shadow-sm fixed w-full top-0 z-50">
+      <nav className={`bg-white dark:bg-slate-800 shadow-sm fixed w-full z-50 transition-all ${showEmergencyBanner ? 'top-[52px]' : 'top-0'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-2">
@@ -726,7 +759,7 @@ const LandingPage = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 scroll-animate">
+      <section className={`pt-32 pb-20 px-4 sm:px-6 lg:px-8 scroll-animate ${showEmergencyBanner ? 'mt-[52px]' : ''}`}>
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -986,6 +1019,281 @@ const LandingPage = () => {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Doctor Verification Process Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-slate-900 scroll-animate">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-4">
+              <ShieldCheck className="w-5 h-5 text-primary" />
+              <span className="text-primary font-semibold">Verified Healthcare Professionals</span>
+            </div>
+            <h2 className="text-4xl font-bold text-dark dark:text-slate-100 mb-4">
+              Rigorous Doctor Verification Process
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-slate-400 max-w-3xl mx-auto">
+              Every healthcare provider on our platform undergoes comprehensive verification to ensure you receive care from qualified, licensed professionals.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm hover:shadow-md transition-all hover:-translate-y-1">
+              <div className="w-14 h-14 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center mb-4">
+                <BadgeCheck className="w-7 h-7 text-blue-600 dark:text-blue-400" />
+              </div>
+              <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-3">
+                License Verification
+              </h3>
+              <p className="text-gray-600 dark:text-slate-400 mb-4">
+                We verify active medical licenses with state medical boards and ensure all credentials are current and in good standing.
+              </p>
+              <div className="flex items-center gap-2 text-sm text-primary font-medium">
+                <CheckCircle className="w-4 h-4" />
+                <span>100% Verified</span>
+              </div>
+            </div>
+
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm hover:shadow-md transition-all hover:-translate-y-1">
+              <div className="w-14 h-14 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center mb-4">
+                <Award className="w-7 h-7 text-green-600 dark:text-green-400" />
+              </div>
+              <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-3">
+                Board Certification
+              </h3>
+              <p className="text-gray-600 dark:text-slate-400 mb-4">
+                Confirmation of board certification in their specialty areas, ensuring expertise and adherence to professional standards.
+              </p>
+              <div className="flex items-center gap-2 text-sm text-primary font-medium">
+                <CheckCircle className="w-4 h-4" />
+                <span>Specialty Verified</span>
+              </div>
+            </div>
+
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm hover:shadow-md transition-all hover:-translate-y-1">
+              <div className="w-14 h-14 bg-purple-100 dark:bg-purple-900/30 rounded-xl flex items-center justify-center mb-4">
+                <Shield className="w-7 h-7 text-purple-600 dark:text-purple-400" />
+              </div>
+              <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-3">
+                Background Screening
+              </h3>
+              <p className="text-gray-600 dark:text-slate-400 mb-4">
+                Comprehensive background checks including malpractice history, disciplinary actions, and professional references.
+              </p>
+              <div className="flex items-center gap-2 text-sm text-primary font-medium">
+                <CheckCircle className="w-4 h-4" />
+                <span>Fully Screened</span>
+              </div>
+            </div>
+
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm hover:shadow-md transition-all hover:-translate-y-1">
+              <div className="w-14 h-14 bg-orange-100 dark:bg-orange-900/30 rounded-xl flex items-center justify-center mb-4">
+                <BookOpen className="w-7 h-7 text-orange-600 dark:text-orange-400" />
+              </div>
+              <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-3">
+                Continuing Education
+              </h3>
+              <p className="text-gray-600 dark:text-slate-400 mb-4">
+                Verification of ongoing medical education credits to ensure providers stay current with latest medical practices.
+              </p>
+              <div className="flex items-center gap-2 text-sm text-primary font-medium">
+                <CheckCircle className="w-4 h-4" />
+                <span>Up-to-Date</span>
+              </div>
+            </div>
+
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm hover:shadow-md transition-all hover:-translate-y-1">
+              <div className="w-14 h-14 bg-red-100 dark:bg-red-900/30 rounded-xl flex items-center justify-center mb-4">
+                <Users className="w-7 h-7 text-red-600 dark:text-red-400" />
+              </div>
+              <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-3">
+                Peer Review
+              </h3>
+              <p className="text-gray-600 dark:text-slate-400 mb-4">
+                Regular peer reviews and quality assessments to maintain high standards of care and patient satisfaction.
+              </p>
+              <div className="flex items-center gap-2 text-sm text-primary font-medium">
+                <CheckCircle className="w-4 h-4" />
+                <span>Quality Assured</span>
+              </div>
+            </div>
+
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm hover:shadow-md transition-all hover:-translate-y-1">
+              <div className="w-14 h-14 bg-cyan-100 dark:bg-cyan-900/30 rounded-xl flex items-center justify-center mb-4">
+                <FileText className="w-7 h-7 text-cyan-600 dark:text-cyan-400" />
+              </div>
+              <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-3">
+                Insurance & Liability
+              </h3>
+              <p className="text-gray-600 dark:text-slate-400 mb-4">
+                Confirmation of active malpractice insurance and professional liability coverage for your protection.
+              </p>
+              <div className="flex items-center gap-2 text-sm text-primary font-medium">
+                <CheckCircle className="w-4 h-4" />
+                <span>Fully Insured</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white dark:bg-slate-800 rounded-xl p-8 shadow-sm">
+            <div className="flex flex-col md:flex-row items-center gap-6">
+              <div className="w-16 h-16 bg-gradient-to-br from-primary to-blue-800 rounded-xl flex items-center justify-center flex-shrink-0">
+                <Target className="w-8 h-8 text-white" />
+              </div>
+              <div className="flex-1 text-center md:text-left">
+                <h3 className="text-2xl font-bold text-dark dark:text-slate-100 mb-2">
+                  Our Commitment to Quality
+                </h3>
+                <p className="text-gray-600 dark:text-slate-400">
+                  We maintain the highest standards of healthcare provider verification. Our multi-step process ensures that every doctor on our platform meets rigorous professional and ethical standards, giving you peace of mind when booking appointments.
+                </p>
+              </div>
+              <div className="flex-shrink-0">
+                <div className="text-center px-6 py-4 bg-green-50 dark:bg-green-900/20 rounded-xl">
+                  <p className="text-3xl font-bold text-green-600 dark:text-green-400 mb-1">100%</p>
+                  <p className="text-sm text-gray-600 dark:text-slate-400">Verified Providers</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Insurance & Payment Information Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-800 scroll-animate">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-100 dark:bg-green-900/30 rounded-full mb-4">
+              <Briefcase className="w-5 h-5 text-green-600 dark:text-green-400" />
+              <span className="text-green-600 dark:text-green-400 font-semibold">Transparent Pricing</span>
+            </div>
+            <h2 className="text-4xl font-bold text-dark dark:text-slate-100 mb-4">
+              Insurance & Payment Options
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-slate-400 max-w-3xl mx-auto">
+              We accept most major insurance plans and offer flexible payment options to make quality healthcare accessible to everyone.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+            <div className="bg-gray-50 dark:bg-slate-700 rounded-xl p-8">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
+                  <Shield className="w-6 h-6 text-primary" />
+                </div>
+                <h3 className="text-2xl font-bold text-dark dark:text-slate-100">
+                  Accepted Insurance
+                </h3>
+              </div>
+              <p className="text-gray-600 dark:text-slate-400 mb-6">
+                We work with most major insurance providers to ensure you can use your benefits:
+              </p>
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  "Blue Cross Blue Shield",
+                  "Aetna",
+                  "UnitedHealthcare",
+                  "Cigna",
+                  "Humana",
+                  "Medicare",
+                  "Medicaid",
+                  "Kaiser Permanente",
+                ].map((insurance, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center gap-2 text-gray-700 dark:text-slate-300">
+                    <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
+                    <span className="text-sm">{insurance}</span>
+                  </div>
+                ))}
+              </div>
+              <p className="text-sm text-gray-600 dark:text-slate-400 mt-6 italic">
+                Don't see your insurance? Contact us to verify coverage.
+              </p>
+            </div>
+
+            <div className="bg-gray-50 dark:bg-slate-700 rounded-xl p-8">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center">
+                  <Zap className="w-6 h-6 text-green-600 dark:text-green-400" />
+                </div>
+                <h3 className="text-2xl font-bold text-dark dark:text-slate-100">
+                  Payment Methods
+                </h3>
+              </div>
+              <p className="text-gray-600 dark:text-slate-400 mb-6">
+                Multiple convenient payment options for your healthcare needs:
+              </p>
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-dark dark:text-slate-100">
+                      Insurance Co-pays
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-slate-400">
+                      Pay only your insurance co-payment amount
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-dark dark:text-slate-100">
+                      Credit/Debit Cards
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-slate-400">
+                      Visa, Mastercard, American Express, Discover
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-dark dark:text-slate-100">
+                      HSA/FSA Cards
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-slate-400">
+                      Use your health savings or flexible spending accounts
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-dark dark:text-slate-100">
+                      Payment Plans
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-slate-400">
+                      Flexible payment plans available for larger bills
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-8">
+            <div className="flex flex-col md:flex-row items-center gap-6">
+              <div className="w-14 h-14 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center flex-shrink-0">
+                <FileText className="w-7 h-7 text-blue-600 dark:text-blue-400" />
+              </div>
+              <div className="flex-1 text-center md:text-left">
+                <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-2">
+                  Transparent Pricing Guarantee
+                </h3>
+                <p className="text-gray-600 dark:text-slate-400">
+                  No hidden fees. No surprise bills. You'll know the cost upfront before booking any appointment. We provide detailed cost estimates and work with your insurance to maximize your benefits.
+                </p>
+              </div>
+              <a
+                href="#contact"
+                className="px-6 py-3 bg-primary hover:bg-blue-800 text-white rounded-xl transition-colors font-medium whitespace-nowrap">
+                Verify Coverage
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -1810,6 +2118,150 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* Language & Accessibility Section */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-slate-900">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-8 shadow-sm">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center">
+                  <Globe className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                </div>
+                <h3 className="text-2xl font-bold text-dark dark:text-slate-100">
+                  Multi-Language Support
+                </h3>
+              </div>
+              <p className="text-gray-600 dark:text-slate-400 mb-6">
+                Healthcare should be accessible to everyone, regardless of language. We offer:
+              </p>
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
+                  <span className="text-gray-700 dark:text-slate-300">
+                    Platform available in 12+ languages
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
+                  <span className="text-gray-700 dark:text-slate-300">
+                    Professional medical interpreters available
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
+                  <span className="text-gray-700 dark:text-slate-300">
+                    Translated medical documents and records
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
+                  <span className="text-gray-700 dark:text-slate-300">
+                    Culturally competent care providers
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-8 shadow-sm">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-xl flex items-center justify-center">
+                  <Users className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                </div>
+                <h3 className="text-2xl font-bold text-dark dark:text-slate-100">
+                  Accessibility Features
+                </h3>
+              </div>
+              <p className="text-gray-600 dark:text-slate-400 mb-6">
+                Our platform is designed to be accessible to all users:
+              </p>
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
+                  <span className="text-gray-700 dark:text-slate-300">
+                    WCAG 2.1 AA compliant design
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
+                  <span className="text-gray-700 dark:text-slate-300">
+                    Screen reader compatible
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
+                  <span className="text-gray-700 dark:text-slate-300">
+                    Keyboard navigation support
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
+                  <span className="text-gray-700 dark:text-slate-300">
+                    High contrast mode and adjustable text sizes
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Medical Disclaimer Section */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-amber-50 dark:bg-amber-900/10 border-y border-amber-200 dark:border-amber-900/30">
+        <div className="max-w-5xl mx-auto">
+          <div className="flex flex-col md:flex-row gap-6 items-start">
+            <div className="w-14 h-14 bg-amber-100 dark:bg-amber-900/30 rounded-xl flex items-center justify-center flex-shrink-0">
+              <AlertTriangle className="w-7 h-7 text-amber-600 dark:text-amber-400" />
+            </div>
+            <div className="flex-1">
+              <h3 className="text-2xl font-bold text-dark dark:text-slate-100 mb-4">
+                Important Medical Disclaimer
+              </h3>
+              <div className="space-y-3 text-gray-700 dark:text-slate-300">
+                <p className="flex items-start gap-2">
+                  <span className="text-amber-600 dark:text-amber-400 font-bold flex-shrink-0">•</span>
+                  <span>
+                    <strong>Emergency Services:</strong> This platform is NOT for medical emergencies. If you are experiencing a medical emergency, call 911 or go to your nearest emergency room immediately.
+                  </span>
+                </p>
+                <p className="flex items-start gap-2">
+                  <span className="text-amber-600 dark:text-amber-400 font-bold flex-shrink-0">•</span>
+                  <span>
+                    <strong>Not a Substitute:</strong> This platform does not replace in-person medical care. Always consult with a licensed healthcare provider for medical advice, diagnosis, or treatment.
+                  </span>
+                </p>
+                <p className="flex items-start gap-2">
+                  <span className="text-amber-600 dark:text-amber-400 font-bold flex-shrink-0">•</span>
+                  <span>
+                    <strong>Information Purpose:</strong> Content provided on this platform is for informational and educational purposes only and should not be considered medical advice.
+                  </span>
+                </p>
+                <p className="flex items-start gap-2">
+                  <span className="text-amber-600 dark:text-amber-400 font-bold flex-shrink-0">•</span>
+                  <span>
+                    <strong>Professional Relationship:</strong> Use of this platform does not create a doctor-patient relationship until you have an actual consultation with a healthcare provider.
+                  </span>
+                </p>
+                <p className="flex items-start gap-2">
+                  <span className="text-amber-600 dark:text-amber-400 font-bold flex-shrink-0">•</span>
+                  <span>
+                    <strong>Crisis Resources:</strong> If you're experiencing a mental health crisis, call the National Suicide Prevention Lifeline at 988 or text "HELLO" to 741741.
+                  </span>
+                </p>
+              </div>
+              <div className="mt-6 p-4 bg-white dark:bg-slate-800 rounded-xl border border-amber-200 dark:border-amber-900/30">
+                <p className="text-sm text-gray-600 dark:text-slate-400">
+                  <strong className="text-dark dark:text-slate-100">Patient Rights:</strong> You have the right to access your medical records, request corrections, and understand how your health information is used. For more information about your rights under HIPAA, please review our{" "}
+                  <a href="#privacy" className="text-primary hover:underline">
+                    Privacy Policy
+                  </a>
+                  .
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Trust Badges / Certifications Section */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-800 border-t border-gray-200 dark:border-slate-700">
         <div className="max-w-7xl mx-auto">
@@ -1902,18 +2354,26 @@ const LandingPage = () => {
       {/* Footer */}
       <footer className="bg-slate-900 text-slate-300 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            <div>
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-8">
+            <div className="md:col-span-2">
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
                   <Heart className="w-6 h-6 text-white" />
                 </div>
                 <span className="text-xl font-bold text-white">HealthCare</span>
               </div>
-              <p className="text-slate-400">
+              <p className="text-slate-400 mb-4">
                 Modern healthcare management platform for better health
-                outcomes.
+                outcomes. Connecting patients with qualified healthcare professionals.
               </p>
+              <div className="space-y-2">
+                <p className="text-sm text-slate-400">
+                  <strong className="text-slate-300">24/7 Support:</strong> +1 (234) 567-890
+                </p>
+                <p className="text-sm text-slate-400">
+                  <strong className="text-slate-300">Email:</strong> support@healthcare.com
+                </p>
+              </div>
             </div>
             <div>
               <h4 className="text-white font-semibold mb-4">Platform</h4>
@@ -1937,6 +2397,13 @@ const LandingPage = () => {
                     href="#features"
                     className="hover:text-white transition-colors">
                     Features
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#pricing"
+                    className="hover:text-white transition-colors">
+                    Pricing
                   </a>
                 </li>
               </ul>
@@ -1975,7 +2442,7 @@ const LandingPage = () => {
               </ul>
             </div>
             <div>
-              <h4 className="text-white font-semibold mb-4">Legal</h4>
+              <h4 className="text-white font-semibold mb-4">Legal & Resources</h4>
               <ul className="space-y-2">
                 <li>
                   <a
@@ -1993,20 +2460,64 @@ const LandingPage = () => {
                 </li>
                 <li>
                   <a
-                    href="#security"
+                    href="#hipaa"
                     className="hover:text-white transition-colors">
-                    Security
+                    HIPAA Compliance
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#accessibility"
+                    className="hover:text-white transition-colors">
+                    Accessibility
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#patient-rights"
+                    className="hover:text-white transition-colors">
+                    Patient Rights
                   </a>
                 </li>
               </ul>
             </div>
           </div>
-          <div className="border-t border-slate-800 pt-8 mt-8">
+
+          {/* Emergency Resources */}
+          <div className="border-t border-slate-800 pt-8 mb-8">
+            <div className="bg-slate-800 rounded-xl p-6">
+              <h4 className="text-white font-semibold mb-4 flex items-center gap-2">
+                <AlertTriangle className="w-5 h-5 text-red-400" />
+                Emergency & Crisis Resources
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                <div>
+                  <p className="text-slate-400 mb-1">Medical Emergency</p>
+                  <p className="text-white font-semibold">Call 911</p>
+                </div>
+                <div>
+                  <p className="text-slate-400 mb-1">Suicide Prevention Lifeline</p>
+                  <p className="text-white font-semibold">Call or Text 988</p>
+                </div>
+                <div>
+                  <p className="text-slate-400 mb-1">Crisis Text Line</p>
+                  <p className="text-white font-semibold">Text HELLO to 741741</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t border-slate-800 pt-8">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <p className="text-slate-400 text-center md:text-left">
-                &copy; {new Date().getFullYear()} HealthCare Management System.
-                All rights reserved.
-              </p>
+              <div className="text-center md:text-left">
+                <p className="text-slate-400 mb-2">
+                  &copy; {new Date().getFullYear()} HealthCare Management System.
+                  All rights reserved.
+                </p>
+                <p className="text-xs text-slate-500">
+                  HIPAA Compliant • ISO 27001 Certified • SOC 2 Type II Audited
+                </p>
+              </div>
               <div className="flex items-center gap-4">
                 <a
                   href="https://facebook.com"
