@@ -87,6 +87,7 @@ const LandingPage = () => {
     },
   ]);
   const [loading, setLoading] = useState(true);
+  const [blogPosts, setBlogPosts] = useState([]);
 
   // Scroll animation setup
   useEffect(() => {
@@ -129,6 +130,79 @@ const LandingPage = () => {
     window.scrollTo({
       top: 0,
       behavior: "smooth",
+    });
+  };
+
+  // Helper function to get category icon and color
+  const getCategoryStyle = (category) => {
+    const styles = {
+      "Health Tips": {
+        icon: Heart,
+        bgColor: "bg-primary/10 dark:bg-primary/20",
+        iconColor: "text-primary",
+        gradient: "from-primary/20",
+      },
+      "Platform Updates": {
+        icon: Activity,
+        bgColor: "bg-green-50 dark:bg-green-900/20",
+        iconColor: "text-green-600 dark:text-green-400",
+        gradient: "from-green-500/20",
+      },
+      Guides: {
+        icon: Shield,
+        bgColor: "bg-purple-50 dark:bg-purple-900/20",
+        iconColor: "text-purple-600 dark:text-purple-400",
+        gradient: "from-purple-500/20",
+      },
+      "Medical News": {
+        icon: FileText,
+        bgColor: "bg-blue-50 dark:bg-blue-900/20",
+        iconColor: "text-blue-600 dark:text-blue-400",
+        gradient: "from-blue-500/20",
+      },
+      Wellness: {
+        icon: Heart,
+        bgColor: "bg-pink-50 dark:bg-pink-900/20",
+        iconColor: "text-pink-600 dark:text-pink-400",
+        gradient: "from-pink-500/20",
+      },
+      Technology: {
+        icon: Activity,
+        bgColor: "bg-indigo-50 dark:bg-indigo-900/20",
+        iconColor: "text-indigo-600 dark:text-indigo-400",
+        gradient: "from-indigo-500/20",
+      },
+      "Patient Stories": {
+        icon: Users,
+        bgColor: "bg-orange-50 dark:bg-orange-900/20",
+        iconColor: "text-orange-600 dark:text-orange-400",
+        gradient: "from-orange-500/20",
+      },
+      "Doctor Insights": {
+        icon: Stethoscope,
+        bgColor: "bg-teal-50 dark:bg-teal-900/20",
+        iconColor: "text-teal-600 dark:text-teal-400",
+        gradient: "from-teal-500/20",
+      },
+    };
+
+    return (
+      styles[category] || {
+        icon: BookOpen,
+        bgColor: "bg-gray-50 dark:bg-gray-900/20",
+        iconColor: "text-gray-600 dark:text-gray-400",
+        gradient: "from-gray-500/20",
+      }
+    );
+  };
+
+  // Format date for blog posts
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
   };
 
@@ -262,6 +336,25 @@ const LandingPage = () => {
     };
 
     fetchLandingStats();
+  }, []);
+
+  // Fetch featured blog posts
+  useEffect(() => {
+    const fetchBlogPosts = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/blog/featured?limit=3"
+        );
+        if (response.data.success) {
+          setBlogPosts(response.data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching blog posts:", error);
+        // Keep default empty array on error
+      }
+    };
+
+    fetchBlogPosts();
   }, []);
 
   const features = [
@@ -1294,92 +1387,135 @@ const LandingPage = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Blog Post 1 */}
-            <article className="bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all hover:-translate-y-1">
-              <div className="h-48 bg-primary/10 dark:bg-primary/20 flex items-center justify-center relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent"></div>
-                <Heart className="w-16 h-16 text-primary relative z-10" />
-              </div>
-              <div className="p-6">
-                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-slate-400 mb-3">
-                  <CalendarIcon className="w-4 h-4" />
-                  <span>May 1, 2026</span>
-                  <span className="mx-2">•</span>
-                  <BookOpen className="w-4 h-4" />
-                  <span>5 min read</span>
-                </div>
-                <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-3">
-                  10 Tips for Maintaining Heart Health
-                </h3>
-                <p className="text-gray-600 dark:text-slate-400 mb-4 line-clamp-3">
-                  Learn essential practices to keep your heart healthy and reduce the risk of cardiovascular diseases.
-                </p>
-                <a
-                  href="#blog"
-                  className="text-primary hover:text-blue-800 dark:hover:text-blue-400 font-medium inline-flex items-center gap-2 transition-colors">
-                  Read More
-                  <ArrowRight className="w-4 h-4" />
-                </a>
-              </div>
-            </article>
+            {blogPosts.length > 0 ? (
+              blogPosts.map((post) => {
+                const categoryStyle = getCategoryStyle(post.category);
+                const CategoryIcon = categoryStyle.icon;
 
-            {/* Blog Post 2 */}
-            <article className="bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all hover:-translate-y-1">
-              <div className="h-48 bg-green-50 dark:bg-green-900/20 flex items-center justify-center relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-green-500/20 to-transparent"></div>
-                <Activity className="w-16 h-16 text-green-600 dark:text-green-400 relative z-10" />
-              </div>
-              <div className="p-6">
-                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-slate-400 mb-3">
-                  <CalendarIcon className="w-4 h-4" />
-                  <span>April 28, 2026</span>
-                  <span className="mx-2">•</span>
-                  <BookOpen className="w-4 h-4" />
-                  <span>4 min read</span>
-                </div>
-                <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-3">
-                  New Feature: Virtual Consultations
-                </h3>
-                <p className="text-gray-600 dark:text-slate-400 mb-4 line-clamp-3">
-                  We're excited to announce our new telemedicine feature, making healthcare more accessible than ever.
-                </p>
-                <a
-                  href="#blog"
-                  className="text-primary hover:text-blue-800 dark:hover:text-blue-400 font-medium inline-flex items-center gap-2 transition-colors">
-                  Read More
-                  <ArrowRight className="w-4 h-4" />
-                </a>
-              </div>
-            </article>
+                return (
+                  <article
+                    key={post._id}
+                    className="bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all hover:-translate-y-1">
+                    <div
+                      className={`h-48 ${categoryStyle.bgColor} flex items-center justify-center relative overflow-hidden`}>
+                      <div
+                        className={`absolute inset-0 bg-gradient-to-br ${categoryStyle.gradient} to-transparent`}></div>
+                      <CategoryIcon
+                        className={`w-16 h-16 ${categoryStyle.iconColor} relative z-10`}
+                      />
+                    </div>
+                    <div className="p-6">
+                      <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-slate-400 mb-3">
+                        <CalendarIcon className="w-4 h-4" />
+                        <span>{formatDate(post.publishedAt)}</span>
+                        <span className="mx-2">•</span>
+                        <BookOpen className="w-4 h-4" />
+                        <span>{post.readTime} min read</span>
+                      </div>
+                      <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-3">
+                        {post.title}
+                      </h3>
+                      <p className="text-gray-600 dark:text-slate-400 mb-4 line-clamp-3">
+                        {post.description}
+                      </p>
+                      <a
+                        href={`#blog/${post.slug}`}
+                        className="text-primary hover:text-blue-800 dark:hover:text-blue-400 font-medium inline-flex items-center gap-2 transition-colors">
+                        Read More
+                        <ArrowRight className="w-4 h-4" />
+                      </a>
+                    </div>
+                  </article>
+                );
+              })
+            ) : (
+              // Fallback content when no blog posts are available
+              <>
+                <article className="bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all hover:-translate-y-1">
+                  <div className="h-48 bg-primary/10 dark:bg-primary/20 flex items-center justify-center relative overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent"></div>
+                    <Heart className="w-16 h-16 text-primary relative z-10" />
+                  </div>
+                  <div className="p-6">
+                    <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-slate-400 mb-3">
+                      <CalendarIcon className="w-4 h-4" />
+                      <span>May 1, 2026</span>
+                      <span className="mx-2">•</span>
+                      <BookOpen className="w-4 h-4" />
+                      <span>5 min read</span>
+                    </div>
+                    <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-3">
+                      10 Tips for Maintaining Heart Health
+                    </h3>
+                    <p className="text-gray-600 dark:text-slate-400 mb-4 line-clamp-3">
+                      Learn essential practices to keep your heart healthy and reduce the risk of cardiovascular diseases.
+                    </p>
+                    <a
+                      href="#blog"
+                      className="text-primary hover:text-blue-800 dark:hover:text-blue-400 font-medium inline-flex items-center gap-2 transition-colors">
+                      Read More
+                      <ArrowRight className="w-4 h-4" />
+                    </a>
+                  </div>
+                </article>
 
-            {/* Blog Post 3 */}
-            <article className="bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all hover:-translate-y-1">
-              <div className="h-48 bg-purple-50 dark:bg-purple-900/20 flex items-center justify-center relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-transparent"></div>
-                <Shield className="w-16 h-16 text-purple-600 dark:text-purple-400 relative z-10" />
-              </div>
-              <div className="p-6">
-                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-slate-400 mb-3">
-                  <CalendarIcon className="w-4 h-4" />
-                  <span>April 25, 2026</span>
-                  <span className="mx-2">•</span>
-                  <BookOpen className="w-4 h-4" />
-                  <span>6 min read</span>
-                </div>
-                <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-3">
-                  Understanding Your Medical Records
-                </h3>
-                <p className="text-gray-600 dark:text-slate-400 mb-4 line-clamp-3">
-                  A comprehensive guide to understanding and managing your digital medical records securely.
-                </p>
-                <a
-                  href="#blog"
-                  className="text-primary hover:text-blue-800 dark:hover:text-blue-400 font-medium inline-flex items-center gap-2 transition-colors">
-                  Read More
-                  <ArrowRight className="w-4 h-4" />
-                </a>
-              </div>
-            </article>
+                <article className="bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all hover:-translate-y-1">
+                  <div className="h-48 bg-green-50 dark:bg-green-900/20 flex items-center justify-center relative overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-green-500/20 to-transparent"></div>
+                    <Activity className="w-16 h-16 text-green-600 dark:text-green-400 relative z-10" />
+                  </div>
+                  <div className="p-6">
+                    <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-slate-400 mb-3">
+                      <CalendarIcon className="w-4 h-4" />
+                      <span>April 28, 2026</span>
+                      <span className="mx-2">•</span>
+                      <BookOpen className="w-4 h-4" />
+                      <span>4 min read</span>
+                    </div>
+                    <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-3">
+                      New Feature: Virtual Consultations
+                    </h3>
+                    <p className="text-gray-600 dark:text-slate-400 mb-4 line-clamp-3">
+                      We're excited to announce our new telemedicine feature, making healthcare more accessible than ever.
+                    </p>
+                    <a
+                      href="#blog"
+                      className="text-primary hover:text-blue-800 dark:hover:text-blue-400 font-medium inline-flex items-center gap-2 transition-colors">
+                      Read More
+                      <ArrowRight className="w-4 h-4" />
+                    </a>
+                  </div>
+                </article>
+
+                <article className="bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all hover:-translate-y-1">
+                  <div className="h-48 bg-purple-50 dark:bg-purple-900/20 flex items-center justify-center relative overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-transparent"></div>
+                    <Shield className="w-16 h-16 text-purple-600 dark:text-purple-400 relative z-10" />
+                  </div>
+                  <div className="p-6">
+                    <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-slate-400 mb-3">
+                      <CalendarIcon className="w-4 h-4" />
+                      <span>April 25, 2026</span>
+                      <span className="mx-2">•</span>
+                      <BookOpen className="w-4 h-4" />
+                      <span>6 min read</span>
+                    </div>
+                    <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-3">
+                      Understanding Your Medical Records
+                    </h3>
+                    <p className="text-gray-600 dark:text-slate-400 mb-4 line-clamp-3">
+                      A comprehensive guide to understanding and managing your digital medical records securely.
+                    </p>
+                    <a
+                      href="#blog"
+                      className="text-primary hover:text-blue-800 dark:hover:text-blue-400 font-medium inline-flex items-center gap-2 transition-colors">
+                      Read More
+                      <ArrowRight className="w-4 h-4" />
+                    </a>
+                  </div>
+                </article>
+              </>
+            )}
           </div>
 
           <div className="text-center mt-12">
