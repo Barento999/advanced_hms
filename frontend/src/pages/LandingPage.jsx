@@ -40,6 +40,8 @@ import {
   BadgeCheck,
   Award as AwardIcon,
   CheckCircle2,
+  Calendar as CalendarIcon,
+  BookOpen,
 } from "lucide-react";
 import { AuthContext } from "../context/AuthContext";
 import { ThemeContext } from "../context/ThemeContext";
@@ -1275,6 +1277,115 @@ const LandingPage = () => {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Blog/News Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-800 scroll-animate">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-dark dark:text-slate-100 mb-4">
+              Latest Health Tips & Updates
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-slate-400 max-w-2xl mx-auto">
+              Stay informed with our latest articles on health, wellness, and platform updates
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Blog Post 1 */}
+            <article className="bg-gray-50 dark:bg-slate-700/30 rounded-xl overflow-hidden hover:shadow-lg transition-shadow">
+              <div className="h-48 bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center">
+                <Heart className="w-16 h-16 text-white opacity-50" />
+              </div>
+              <div className="p-6">
+                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-slate-400 mb-3">
+                  <CalendarIcon className="w-4 h-4" />
+                  <span>May 1, 2026</span>
+                  <span className="mx-2">•</span>
+                  <BookOpen className="w-4 h-4" />
+                  <span>5 min read</span>
+                </div>
+                <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-3">
+                  10 Tips for Maintaining Heart Health
+                </h3>
+                <p className="text-gray-600 dark:text-slate-400 mb-4">
+                  Learn essential practices to keep your heart healthy and reduce the risk of cardiovascular diseases.
+                </p>
+                <a
+                  href="#blog"
+                  className="text-primary hover:text-blue-800 dark:hover:text-blue-400 font-medium inline-flex items-center gap-2">
+                  Read More
+                  <ArrowRight className="w-4 h-4" />
+                </a>
+              </div>
+            </article>
+
+            {/* Blog Post 2 */}
+            <article className="bg-gray-50 dark:bg-slate-700/30 rounded-xl overflow-hidden hover:shadow-lg transition-shadow">
+              <div className="h-48 bg-gradient-to-br from-green-500 to-green-700 flex items-center justify-center">
+                <Activity className="w-16 h-16 text-white opacity-50" />
+              </div>
+              <div className="p-6">
+                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-slate-400 mb-3">
+                  <CalendarIcon className="w-4 h-4" />
+                  <span>April 28, 2026</span>
+                  <span className="mx-2">•</span>
+                  <BookOpen className="w-4 h-4" />
+                  <span>4 min read</span>
+                </div>
+                <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-3">
+                  New Feature: Virtual Consultations
+                </h3>
+                <p className="text-gray-600 dark:text-slate-400 mb-4">
+                  We're excited to announce our new telemedicine feature, making healthcare more accessible than ever.
+                </p>
+                <a
+                  href="#blog"
+                  className="text-primary hover:text-blue-800 dark:hover:text-blue-400 font-medium inline-flex items-center gap-2">
+                  Read More
+                  <ArrowRight className="w-4 h-4" />
+                </a>
+              </div>
+            </article>
+
+            {/* Blog Post 3 */}
+            <article className="bg-gray-50 dark:bg-slate-700/30 rounded-xl overflow-hidden hover:shadow-lg transition-shadow">
+              <div className="h-48 bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center">
+                <Shield className="w-16 h-16 text-white opacity-50" />
+              </div>
+              <div className="p-6">
+                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-slate-400 mb-3">
+                  <CalendarIcon className="w-4 h-4" />
+                  <span>April 25, 2026</span>
+                  <span className="mx-2">•</span>
+                  <BookOpen className="w-4 h-4" />
+                  <span>6 min read</span>
+                </div>
+                <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-3">
+                  Understanding Your Medical Records
+                </h3>
+                <p className="text-gray-600 dark:text-slate-400 mb-4">
+                  A comprehensive guide to understanding and managing your digital medical records securely.
+                </p>
+                <a
+                  href="#blog"
+                  className="text-primary hover:text-blue-800 dark:hover:text-blue-400 font-medium inline-flex items-center gap-2">
+                  Read More
+                  <ArrowRight className="w-4 h-4" />
+                </a>
+              </div>
+            </article>
+          </div>
+
+          <div className="text-center mt-12">
+            <a
+              href="#blog"
+              className="inline-flex items-center gap-2 px-8 py-3 border-2 border-primary text-primary hover:bg-primary hover:text-white rounded-xl transition-colors font-medium">
+              View All Articles
+              <ArrowRight className="w-5 h-5" />
+            </a>
           </div>
         </div>
       </section>
