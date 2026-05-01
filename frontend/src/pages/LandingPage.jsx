@@ -34,6 +34,8 @@ import {
   Twitter,
   Linkedin,
   Instagram,
+  Menu,
+  X,
 } from "lucide-react";
 import { AuthContext } from "../context/AuthContext";
 import { ThemeContext } from "../context/ThemeContext";
@@ -44,6 +46,7 @@ const LandingPage = () => {
   const navigate = useNavigate();
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [stats, setStats] = useState([
     { number: "500+", label: "Healthcare Professionals" },
     { number: "10,000+", label: "Happy Patients" },
@@ -537,16 +540,78 @@ const LandingPage = () => {
               </button>
               <Link
                 to="/login"
-                className="px-4 py-2 text-gray-700 dark:text-slate-300 hover:text-primary transition-colors">
+                className="hidden md:block px-4 py-2 text-gray-700 dark:text-slate-300 hover:text-primary transition-colors">
                 Login
               </Link>
               <Link
                 to="/register"
-                className="px-6 py-2 bg-primary hover:bg-blue-800 text-white rounded-xl transition-colors">
+                className="hidden md:block px-6 py-2 bg-primary hover:bg-blue-800 text-white rounded-xl transition-colors">
                 Get Started
               </Link>
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
+                aria-label="Toggle menu">
+                {mobileMenuOpen ? (
+                  <X className="w-6 h-6 text-gray-700 dark:text-slate-300" />
+                ) : (
+                  <Menu className="w-6 h-6 text-gray-700 dark:text-slate-300" />
+                )}
+              </button>
             </div>
           </div>
+
+          {/* Mobile Menu */}
+          {mobileMenuOpen && (
+            <div className="md:hidden py-4 border-t border-gray-200 dark:border-slate-700">
+              <div className="flex flex-col space-y-4">
+                <a
+                  href="#about"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-gray-700 dark:text-slate-300 hover:text-primary transition-colors px-4 py-2">
+                  About
+                </a>
+                <a
+                  href="#features"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-gray-700 dark:text-slate-300 hover:text-primary transition-colors px-4 py-2">
+                  Features
+                </a>
+                <a
+                  href="#specializations"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-gray-700 dark:text-slate-300 hover:text-primary transition-colors px-4 py-2">
+                  Specializations
+                </a>
+                <a
+                  href="#pricing"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-gray-700 dark:text-slate-300 hover:text-primary transition-colors px-4 py-2">
+                  Pricing
+                </a>
+                <a
+                  href="#contact"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-gray-700 dark:text-slate-300 hover:text-primary transition-colors px-4 py-2">
+                  Contact
+                </a>
+                <div className="border-t border-gray-200 dark:border-slate-700 pt-4 px-4 space-y-2">
+                  <Link
+                    to="/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block w-full text-center px-4 py-2 text-gray-700 dark:text-slate-300 hover:text-primary transition-colors border border-gray-300 dark:border-slate-600 rounded-xl">
+                    Login
+                  </Link>
+                  <Link
+                    to="/register"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block w-full text-center px-6 py-2 bg-primary hover:bg-blue-800 text-white rounded-xl transition-colors">
+                    Get Started
+                  </Link>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </nav>
 
