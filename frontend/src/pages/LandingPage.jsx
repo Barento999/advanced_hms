@@ -30,6 +30,10 @@ import {
   Moon,
   Sun,
   ChevronUp,
+  Facebook,
+  Twitter,
+  Linkedin,
+  Instagram,
 } from "lucide-react";
 import { AuthContext } from "../context/AuthContext";
 import { ThemeContext } from "../context/ThemeContext";
@@ -1571,11 +1575,47 @@ const LandingPage = () => {
               </ul>
             </div>
           </div>
-          <div className="border-t border-slate-800 pt-8 text-center text-slate-400">
-            <p>
-              &copy; {new Date().getFullYear()} HealthCare Management System.
-              All rights reserved.
-            </p>
+          <div className="border-t border-slate-800 pt-8 mt-8">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+              <p className="text-slate-400 text-center md:text-left">
+                &copy; {new Date().getFullYear()} HealthCare Management System.
+                All rights reserved.
+              </p>
+              <div className="flex items-center gap-4">
+                <a
+                  href="https://facebook.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 bg-slate-800 hover:bg-primary rounded-full flex items-center justify-center transition-colors"
+                  aria-label="Facebook">
+                  <Facebook className="w-5 h-5 text-slate-300" />
+                </a>
+                <a
+                  href="https://twitter.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 bg-slate-800 hover:bg-primary rounded-full flex items-center justify-center transition-colors"
+                  aria-label="Twitter">
+                  <Twitter className="w-5 h-5 text-slate-300" />
+                </a>
+                <a
+                  href="https://linkedin.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 bg-slate-800 hover:bg-primary rounded-full flex items-center justify-center transition-colors"
+                  aria-label="LinkedIn">
+                  <Linkedin className="w-5 h-5 text-slate-300" />
+                </a>
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 bg-slate-800 hover:bg-primary rounded-full flex items-center justify-center transition-colors"
+                  aria-label="Instagram">
+                  <Instagram className="w-5 h-5 text-slate-300" />
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </footer>
