@@ -101,14 +101,8 @@ function App() {
       />
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route
-          path="/login"
-          element={!user ? <Login /> : <Navigate to={`/${user.role}`} />}
-        />
-        <Route
-          path="/register"
-          element={!user ? <Register /> : <Navigate to={`/${user.role}`} />}
-        />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/complete-profile" element={<CompleteProfile />} />
 
         {/* Admin Routes */}

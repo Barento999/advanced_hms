@@ -27,11 +27,15 @@ import {
   Phone,
   MapPin,
   ChevronDown,
+  Moon,
+  Sun,
 } from "lucide-react";
 import { AuthContext } from "../context/AuthContext";
+import { ThemeContext } from "../context/ThemeContext";
 
 const LandingPage = () => {
   const { user } = useContext(AuthContext);
+  const { darkMode, toggleDarkMode } = useContext(ThemeContext);
   const navigate = useNavigate();
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
   const [stats, setStats] = useState([
@@ -442,6 +446,16 @@ const LandingPage = () => {
               </a>
             </div>
             <div className="flex items-center gap-4">
+              <button
+                onClick={toggleDarkMode}
+                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
+                aria-label="Toggle dark mode">
+                {darkMode ? (
+                  <Sun className="w-5 h-5 text-yellow-500" />
+                ) : (
+                  <Moon className="w-5 h-5 text-gray-700" />
+                )}
+              </button>
               <Link
                 to="/login"
                 className="px-4 py-2 text-gray-700 dark:text-slate-300 hover:text-primary transition-colors">
