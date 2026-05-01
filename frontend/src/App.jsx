@@ -29,6 +29,7 @@ import Analytics from "./pages/admin/Analytics";
 import Reports from "./pages/admin/Reports";
 import AdminDoctorProfile from "./pages/admin/DoctorProfile";
 import AdminPatientProfile from "./pages/admin/PatientProfile";
+import BlogManagement from "./pages/admin/BlogManagement";
 
 // Doctor Pages
 import DoctorDashboard from "./pages/doctor/DoctorDashboard";
@@ -167,6 +168,14 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={["admin"]}>
               <AdminAppointments />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/blog"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <BlogManagement />
             </ProtectedRoute>
           }
         />

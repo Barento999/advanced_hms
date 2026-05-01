@@ -11,6 +11,7 @@ import {
   Star,
   BarChart3,
   FileBarChart,
+  BookOpen,
 } from "lucide-react";
 import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
@@ -29,6 +30,7 @@ const Sidebar = () => {
         { icon: Users, label: "Doctors", path: "/admin/doctors" },
         { icon: Users, label: "Patients", path: "/admin/patients" },
         { icon: Calendar, label: "Appointments", path: "/admin/appointments" },
+        { icon: BookOpen, label: "Blog", path: "/admin/blog" },
         { icon: Star, label: "Reviews", path: "/admin/reviews" },
         { icon: BarChart3, label: "Analytics", path: "/admin/analytics" },
         { icon: FileBarChart, label: "Reports", path: "/admin/reports" },
