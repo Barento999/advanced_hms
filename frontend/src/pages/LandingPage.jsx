@@ -615,6 +615,11 @@ const LandingPage = () => {
                 className="text-gray-700 dark:text-slate-300 hover:text-primary transition-colors">
                 Specializations
               </a>
+              <Link
+                to="/blog"
+                className="text-gray-700 dark:text-slate-300 hover:text-primary transition-colors">
+                Blog
+              </Link>
               <a
                 href="#pricing"
                 className="text-gray-700 dark:text-slate-300 hover:text-primary transition-colors">
@@ -682,6 +687,12 @@ const LandingPage = () => {
                   className="text-gray-700 dark:text-slate-300 hover:text-primary transition-colors px-4 py-2">
                   Specializations
                 </a>
+                <Link
+                  to="/blog"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-gray-700 dark:text-slate-300 hover:text-primary transition-colors px-4 py-2">
+                  Blog
+                </Link>
                 <a
                   href="#pricing"
                   onClick={() => setMobileMenuOpen(false)}
@@ -1939,6 +1950,13 @@ const LandingPage = () => {
                     className="hover:text-white transition-colors">
                     About Us
                   </a>
+                </li>
+                <li>
+                  <Link
+                    to="/blog"
+                    className="hover:text-white transition-colors">
+                    Blog
+                  </Link>
                 </li>
                 <li>
                   <a
