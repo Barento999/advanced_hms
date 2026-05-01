@@ -1418,12 +1418,12 @@ const LandingPage = () => {
                       <p className="text-gray-600 dark:text-slate-400 mb-4 line-clamp-3">
                         {post.description}
                       </p>
-                      <a
-                        href={`#blog/${post.slug}`}
+                      <Link
+                        to={`/blog/${post.slug}`}
                         className="text-primary hover:text-blue-800 dark:hover:text-blue-400 font-medium inline-flex items-center gap-2 transition-colors">
                         Read More
                         <ArrowRight className="w-4 h-4" />
-                      </a>
+                      </Link>
                     </div>
                   </article>
                 );
@@ -1450,12 +1450,12 @@ const LandingPage = () => {
                     <p className="text-gray-600 dark:text-slate-400 mb-4 line-clamp-3">
                       Learn essential practices to keep your heart healthy and reduce the risk of cardiovascular diseases.
                     </p>
-                    <a
-                      href="#blog"
+                    <Link
+                      to="/blog"
                       className="text-primary hover:text-blue-800 dark:hover:text-blue-400 font-medium inline-flex items-center gap-2 transition-colors">
                       Read More
                       <ArrowRight className="w-4 h-4" />
-                    </a>
+                    </Link>
                   </div>
                 </article>
 
@@ -1478,12 +1478,12 @@ const LandingPage = () => {
                     <p className="text-gray-600 dark:text-slate-400 mb-4 line-clamp-3">
                       We're excited to announce our new telemedicine feature, making healthcare more accessible than ever.
                     </p>
-                    <a
-                      href="#blog"
+                    <Link
+                      to="/blog"
                       className="text-primary hover:text-blue-800 dark:hover:text-blue-400 font-medium inline-flex items-center gap-2 transition-colors">
                       Read More
                       <ArrowRight className="w-4 h-4" />
-                    </a>
+                    </Link>
                   </div>
                 </article>
 
@@ -1506,12 +1506,12 @@ const LandingPage = () => {
                     <p className="text-gray-600 dark:text-slate-400 mb-4 line-clamp-3">
                       A comprehensive guide to understanding and managing your digital medical records securely.
                     </p>
-                    <a
-                      href="#blog"
+                    <Link
+                      to="/blog"
                       className="text-primary hover:text-blue-800 dark:hover:text-blue-400 font-medium inline-flex items-center gap-2 transition-colors">
                       Read More
                       <ArrowRight className="w-4 h-4" />
-                    </a>
+                    </Link>
                   </div>
                 </article>
               </>
@@ -1519,12 +1519,12 @@ const LandingPage = () => {
           </div>
 
           <div className="text-center mt-12">
-            <a
-              href="#blog"
+            <Link
+              to="/blog"
               className="inline-flex items-center gap-2 px-8 py-3 bg-primary hover:bg-blue-800 text-white rounded-xl transition-colors font-medium shadow-sm hover:shadow-md">
               View All Articles
               <ArrowRight className="w-5 h-5" />
-            </a>
+            </Link>
           </div>
         </div>
       </section>

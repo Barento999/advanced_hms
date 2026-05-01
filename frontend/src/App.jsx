@@ -16,6 +16,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import CompleteProfile from "./pages/CompleteProfile";
 import Notifications from "./pages/Notifications";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 
 // Admin Pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -105,6 +107,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/complete-profile" element={<CompleteProfile />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:slug" element={<BlogPost />} />
 
         {/* Admin Routes */}
         <Route
