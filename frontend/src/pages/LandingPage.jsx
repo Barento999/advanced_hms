@@ -795,9 +795,9 @@ const LandingPage = () => {
             <div className="relative">
               <div className="bg-gradient-to-br from-primary/20 to-accent/20 rounded-3xl p-8 backdrop-blur-sm">
                 <img
-                  src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&h=600&fit=crop"
-                  alt="Healthcare professionals"
-                  className="rounded-2xl shadow-2xl w-full h-auto"
+                  src="https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=800&h=600&fit=crop&q=80"
+                  alt="Healthcare professionals using technology"
+                  className="rounded-2xl shadow-2xl w-full h-auto object-cover"
                 />
               </div>
               {/* Floating Stats */}
@@ -856,9 +856,9 @@ const LandingPage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <img
-                src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&h=600&fit=crop"
-                alt="Healthcare team"
-                className="rounded-2xl shadow-2xl w-full h-auto"
+                src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&h=600&fit=crop&q=80"
+                alt="Diverse healthcare team collaborating"
+                className="rounded-2xl shadow-2xl w-full h-auto object-cover"
               />
             </div>
             <div>
@@ -1043,6 +1043,15 @@ const LandingPage = () => {
             </p>
           </div>
 
+          {/* Featured Image */}
+          <div className="mb-12">
+            <img
+              src="https://images.unsplash.com/photo-1584982751601-97dcc096659c?w=1200&h=400&fit=crop&q=80"
+              alt="Medical professionals with credentials and certifications"
+              className="rounded-2xl shadow-lg w-full h-64 object-cover"
+            />
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
             <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm hover:shadow-md transition-all hover:-translate-y-1">
               <div className="w-14 h-14 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center mb-4">
@@ -1179,6 +1188,15 @@ const LandingPage = () => {
             <p className="text-xl text-gray-600 dark:text-slate-400 max-w-3xl mx-auto">
               We accept most major insurance plans and offer flexible payment options to make quality healthcare accessible to everyone.
             </p>
+          </div>
+
+          {/* Featured Image */}
+          <div className="mb-12">
+            <img
+              src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&h=400&fit=crop&q=80"
+              alt="Healthcare payment and insurance planning"
+              className="rounded-2xl shadow-lg w-full h-64 object-cover"
+            />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
@@ -1395,9 +1413,9 @@ const LandingPage = () => {
             <div className="order-1 lg:order-2">
               <div className="relative">
                 <img
-                  src="https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=800&h=600&fit=crop"
-                  alt="Healthcare technology"
-                  className="rounded-2xl shadow-2xl w-full h-auto"
+                  src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&h=600&fit=crop&q=80"
+                  alt="Doctor using digital healthcare technology"
+                  className="rounded-2xl shadow-2xl w-full h-auto object-cover"
                 />
                 <div className="absolute -bottom-6 -right-6 bg-white dark:bg-slate-800 rounded-xl shadow-xl p-4 max-w-xs">
                   <div className="flex items-center gap-3">
@@ -1506,9 +1524,9 @@ const LandingPage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <img
-                src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&h=600&fit=crop"
-                alt="Medical professionals"
-                className="rounded-2xl shadow-2xl w-full h-auto"
+                src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=800&h=600&fit=crop&q=80"
+                alt="Healthcare professionals reviewing patient data securely"
+                className="rounded-2xl shadow-2xl w-full h-auto object-cover"
               />
             </div>
             <div>
@@ -1965,9 +1983,9 @@ const LandingPage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
             <div>
               <img
-                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=600&fit=crop"
-                alt="Team collaboration"
-                className="rounded-2xl shadow-2xl w-full h-auto"
+                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=600&fit=crop&q=80"
+                alt="Diverse team collaborating in modern healthcare environment"
+                className="rounded-2xl shadow-2xl w-full h-auto object-cover"
               />
             </div>
             <div>
