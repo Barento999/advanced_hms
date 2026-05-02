@@ -8,6 +8,7 @@ import api from "../../utils/api";
 import toast from "react-hot-toast";
 
 const BookAppointment = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [doctors, setDoctors] = useState([]);
   const [filteredDoctors, setFilteredDoctors] = useState([]);
   const [selectedDoctor, setSelectedDoctor] = useState(null);
@@ -128,11 +129,11 @@ const BookAppointment = () => {
 
   return (
     <div className="flex min-h-screen">
-      <Sidebar />
-      <div className="flex-1 ml-64">
-        <Navbar />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="flex-1 ml-0 lg:ml-64">
+        <Navbar onMenuClick={() => setSidebarOpen(true)} />
 
-        <div className="p-8 mt-20">
+        <div className="p-4 sm:p-6 lg:p-8 mt-16 sm:mt-20">
           <div className="max-w-2xl mx-auto">
             <h2 className="text-2xl font-bold text-dark dark:text-slate-100 mb-6">
               Book Appointment

@@ -18,6 +18,7 @@ import ExportButton from "../../components/ExportButton";
 import AddAdminModal from "../../components/AddAdminModal";
 
 const AdminManagement = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [admins, setAdmins] = useState([]);
   const [allAdmins, setAllAdmins] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -124,10 +125,10 @@ const AdminManagement = () => {
   if (loading) {
     return (
       <div className="flex">
-        <Sidebar />
-        <div className="flex-1 ml-64">
-          <Navbar />
-          <div className="p-8 mt-20">
+        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+        <div className="flex-1 ml-0 lg:ml-64">
+          <Navbar onMenuClick={() => setSidebarOpen(true)} />
+          <div className="p-4 sm:p-6 lg:p-8 mt-16 sm:mt-20">
             {/* Real Header - Shows Immediately */}
             <div className="mb-8">
               <div className="flex items-center justify-between">
@@ -226,10 +227,10 @@ const AdminManagement = () => {
 
   return (
     <div className="flex min-h-screen">
-      <Sidebar />
-      <div className="flex-1 ml-64">
-        <Navbar />
-        <div className="p-8 mt-20">
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="flex-1 ml-0 lg:ml-64">
+        <Navbar onMenuClick={() => setSidebarOpen(true)} />
+        <div className="p-4 sm:p-6 lg:p-8 mt-16 sm:mt-20">
           {/* Real Header - Shows Immediately */}
           <div className="mb-8">
             <div className="flex items-center justify-between">

@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 const AdminDashboard = () => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     fetchStats();
@@ -31,9 +32,9 @@ const AdminDashboard = () => {
   if (loading) {
     return (
       <div className="flex">
-        <Sidebar />
-        <div className="flex-1 ml-64">
-          <Navbar />
+        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+        <div className="flex-1 ml-0 lg:ml-64">
+          <Navbar onMenuClick={() => setSidebarOpen(true)} />
           <AdminDashboardSkeleton />
         </div>
       </div>
@@ -42,11 +43,11 @@ const AdminDashboard = () => {
 
   return (
     <div className="flex min-h-screen">
-      <Sidebar />
-      <div className="flex-1 ml-64">
-        <Navbar />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="flex-1 ml-0 lg:ml-64">
+        <Navbar onMenuClick={() => setSidebarOpen(true)} />
 
-        <div className="p-8 mt-20">
+        <div className="p-4 sm:p-6 lg:p-8 mt-16 sm:mt-20">
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-dark dark:text-slate-100">

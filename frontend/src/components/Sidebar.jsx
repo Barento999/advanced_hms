@@ -12,12 +12,13 @@ import {
   BarChart3,
   FileBarChart,
   BookOpen,
+  X,
 } from "lucide-react";
 import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import ConfirmationModal from "./ConfirmationModal";
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, onClose }) => {
   const location = useLocation();
   const { user, logout } = useContext(AuthContext);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -86,18 +87,39 @@ const Sidebar = () => {
   const menuItems = getMenuItems();
 
   return (
-    <div
-      className="hidden lg:block fixed left-0 top-0 w-64 h-screen flex-col shadow-2xl z-40 transition-colors duration-200"
-      style={{ backgroundColor: "#1E3A8A" }}>
-      <div className="dark:bg-slate-900 dark:shadow-slate-900/50 h-full flex flex-col">
-        <div className="p-6 border-b border-white/10 dark:border-slate-700">
-          <h1 className="text-2xl font-bold text-white dark:text-slate-100">
-            HealthCare
-          </h1>
-          <p className="text-sm text-white/80 dark:text-slate-400 mt-1">
-            {user?.role?.toUpperCase()}
-          </p>
-        </div>
+    <>
+      {/* Mobile Overlay */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={onClose}
+        />
+      )}
+
+      {/* Sidebar */}
+      <div
+        className={`fixed left-0 top-0 w-64 h-screen flex-col shadow-2xl z-50 transition-transform duration-300 lg:translate-x-0 ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:block`}
+        style={{ backgroundColor: "#1E3A8A" }}>
+        <div className="dark:bg-slate-900 dark:shadow-slate-900/50 h-full flex flex-col">
+          {/* Header with close button for mobile */}
+          <div className="p-6 border-b border-white/10 dark:border-slate-700 flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold text-white dark:text-slate-100">
+                HealthCare
+              </h1>
+              <p className="text-sm text-white/80 dark:text-slate-400 mt-1">
+                {user?.role?.toUpperCase()}
+              </p>
+            </div>
+            <button
+              onClick={onClose}
+              className="lg:hidden p-2 hover:bg-white/10 rounded-lg transition-colors"
+              aria-label="Close menu">
+              <X size={24} className="text-white" />
+            </button>
+          </div>
 
         <nav className="flex-1 p-4 overflow-y-auto">
           {menuItems.map((item) => {
@@ -108,6 +130,7 @@ const Sidebar = () => {
               <Link
                 key={item.path}
                 to={item.path}
+                onClick={onClose}
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl mb-2 transition-all duration-200 ${
                   isActive
                     ? "bg-white dark:bg-slate-800 text-primary dark:text-slate-100 shadow-lg transform scale-105"
@@ -124,6 +147,7 @@ const Sidebar = () => {
           {user?.role === "patient" && (
             <Link
               to="/patient/profile"
+              onClick={onClose}
               className={`flex items-center gap-3 px-4 py-3 rounded-xl mb-2 transition-all duration-200 ${
                 location.pathname === "/patient/profile"
                   ? "bg-white dark:bg-slate-800 text-primary dark:text-slate-100 shadow-lg transform scale-105"
@@ -136,6 +160,7 @@ const Sidebar = () => {
           {user?.role === "doctor" && (
             <Link
               to="/doctor/profile"
+              onClick={onClose}
               className={`flex items-center gap-3 px-4 py-3 rounded-xl mb-2 transition-all duration-200 ${
                 location.pathname === "/doctor/profile"
                   ? "bg-white dark:bg-slate-800 text-primary dark:text-slate-100 shadow-lg transform scale-105"
@@ -163,6 +188,7 @@ const Sidebar = () => {
         loading={logoutLoading}
       />
     </div>
+    </>
   );
 };
 

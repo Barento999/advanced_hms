@@ -1,11 +1,11 @@
-import { Bell, User, Moon, Sun, ChevronDown, Shield } from "lucide-react";
+import { Bell, User, Moon, Sun, ChevronDown, Shield, Menu } from "lucide-react";
 import { useContext, useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { NotificationContext } from "../context/SocketContext";
 import { ThemeContext } from "../context/ThemeContext";
 
-const Navbar = () => {
+const Navbar = ({ onMenuClick }) => {
   const { user } = useContext(AuthContext);
   const { notifications, unreadCount } = useContext(NotificationContext) || {
     notifications: [],
@@ -71,13 +71,23 @@ const Navbar = () => {
 
   return (
     <div className="fixed top-0 right-0 left-0 lg:left-64 bg-white dark:bg-slate-800 shadow-md px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex justify-between items-center border-b border-border dark:border-slate-700 z-30 transition-all duration-200">
-      <div className="min-w-0 flex-1">
-        <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-dark dark:text-white truncate">
-          Welcome back, {user?.name}
-        </h2>
-        <p className="text-muted dark:text-slate-400 text-xs sm:text-sm hidden sm:block">
-          {getRoleGreeting()}
-        </p>
+      <div className="flex items-center gap-3 min-w-0 flex-1">
+        {/* Mobile Menu Button */}
+        <button
+          onClick={onMenuClick}
+          className="lg:hidden p-2 hover:bg-secondary dark:hover:bg-slate-700 rounded-xl transition-colors flex-shrink-0"
+          aria-label="Open menu">
+          <Menu size={24} className="text-dark dark:text-white" />
+        </button>
+
+        <div className="min-w-0 flex-1">
+          <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-dark dark:text-white truncate">
+            Welcome back, {user?.name}
+          </h2>
+          <p className="text-muted dark:text-slate-400 text-xs sm:text-sm hidden sm:block">
+            {getRoleGreeting()}
+          </p>
+        </div>
       </div>
 
       <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 flex-shrink-0">

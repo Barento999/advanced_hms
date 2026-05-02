@@ -28,6 +28,7 @@ import toast from "react-hot-toast";
 const COLORS = ["#1E3A8A", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6"];
 
 const Analytics = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [analytics, setAnalytics] = useState(null);
   const [loading, setLoading] = useState(true);
   const [period, setPeriod] = useState("month");
@@ -154,9 +155,9 @@ const Analytics = () => {
   if (loading) {
     return (
       <div className="flex">
-        <Sidebar />
-        <div className="flex-1 ml-64">
-          <Navbar />
+        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+        <div className="flex-1 ml-0 lg:ml-64">
+          <Navbar onMenuClick={() => setSidebarOpen(true)} />
           <DashboardSkeleton
             title="Analytics & Reports"
             subtitle="Comprehensive insights and performance metrics"
@@ -175,11 +176,11 @@ const Analytics = () => {
 
   return (
     <div className="flex min-h-screen">
-      <Sidebar />
-      <div className="flex-1 ml-64">
-        <Navbar />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="flex-1 ml-0 lg:ml-64">
+        <Navbar onMenuClick={() => setSidebarOpen(true)} />
 
-        <div className="p-8 mt-20">
+        <div className="p-4 sm:p-6 lg:p-8 mt-16 sm:mt-20">
           {/* Header */}
           <div className="flex justify-between items-center mb-8">
             <div>

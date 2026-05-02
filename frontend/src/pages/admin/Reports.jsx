@@ -8,6 +8,7 @@ import api from "../../utils/api";
 import toast from "react-hot-toast";
 
 const Reports = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [reports, setReports] = useState(null);
   const [loading, setLoading] = useState(false);
   const [reportType, setReportType] = useState("users");
@@ -474,9 +475,9 @@ const Reports = () => {
   if (loading) {
     return (
       <div className="flex min-h-screen">
-        <Sidebar />
-        <div className="flex-1 ml-64">
-          <Navbar />
+        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+        <div className="flex-1 ml-0 lg:ml-64">
+          <Navbar onMenuClick={() => setSidebarOpen(true)} />
           <ReportsSkeleton
             reportType={reportType}
             setReportType={setReportType}
@@ -492,11 +493,11 @@ const Reports = () => {
 
   return (
     <div className="flex min-h-screen">
-      <Sidebar />
-      <div className="flex-1 ml-64">
-        <Navbar />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="flex-1 ml-0 lg:ml-64">
+        <Navbar onMenuClick={() => setSidebarOpen(true)} />
 
-        <div className="p-8 mt-20">
+        <div className="p-4 sm:p-6 lg:p-8 mt-16 sm:mt-20">
           {/* Header */}
           <div className="flex justify-between items-center mb-8">
             <div>

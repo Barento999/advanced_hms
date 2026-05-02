@@ -9,6 +9,7 @@ import api from "../../utils/api";
 import toast from "react-hot-toast";
 
 const Reviews = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [appointments, setAppointments] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
@@ -82,10 +83,10 @@ const Reviews = () => {
   if (loading) {
     return (
       <div className="flex min-h-screen">
-        <Sidebar />
-        <div className="flex-1 ml-64">
-          <Navbar />
-          <div className="p-8 mt-20">
+        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+        <div className="flex-1 ml-0 lg:ml-64">
+          <Navbar onMenuClick={() => setSidebarOpen(true)} />
+          <div className="p-4 sm:p-6 lg:p-8 mt-16 sm:mt-20">
             {/* Real Header - Shows Immediately */}
             <div className="mb-6">
               <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
@@ -114,11 +115,11 @@ const Reviews = () => {
 
   return (
     <div className="flex min-h-screen">
-      <Sidebar />
-      <div className="flex-1 ml-64">
-        <Navbar />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="flex-1 ml-0 lg:ml-64">
+        <Navbar onMenuClick={() => setSidebarOpen(true)} />
 
-        <div className="p-8 mt-20">
+        <div className="p-4 sm:p-6 lg:p-8 mt-16 sm:mt-20">
           <div className="mb-6">
             <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
               Doctor Reviews

@@ -10,6 +10,7 @@ import api from "../../utils/api";
 import toast from "react-hot-toast";
 
 const Reviews = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [doctors, setDoctors] = useState([]);
   const [selectedDoctor, setSelectedDoctor] = useState("");
   const [reviews, setReviews] = useState([]);
@@ -167,9 +168,9 @@ const Reviews = () => {
   if (loading) {
     return (
       <div className="flex min-h-screen">
-        <Sidebar />
-        <div className="flex-1 ml-64">
-          <Navbar />
+        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+        <div className="flex-1 ml-0 lg:ml-64">
+          <Navbar onMenuClick={() => setSidebarOpen(true)} />
           <AdminReviewsSkeleton />
         </div>
       </div>
@@ -178,11 +179,11 @@ const Reviews = () => {
 
   return (
     <div className="flex min-h-screen">
-      <Sidebar />
-      <div className="flex-1 ml-64">
-        <Navbar />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="flex-1 ml-0 lg:ml-64">
+        <Navbar onMenuClick={() => setSidebarOpen(true)} />
 
-        <div className="p-8 mt-20">
+        <div className="p-4 sm:p-6 lg:p-8 mt-16 sm:mt-20">
           <div className="mb-6">
             <div className="flex justify-between items-center">
               <div>

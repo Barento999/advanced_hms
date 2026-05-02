@@ -14,6 +14,7 @@ import toast from "react-hot-toast";
 
 const Doctors = () => {
   const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [doctors, setDoctors] = useState([]);
   const [allDoctors, setAllDoctors] = useState([]); // For export
   const [loading, setLoading] = useState(true);
@@ -149,9 +150,9 @@ const Doctors = () => {
   if (loading) {
     return (
       <div className="flex min-h-screen">
-        <Sidebar />
-        <div className="flex-1 ml-64">
-          <Navbar />
+        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+        <div className="flex-1 ml-0 lg:ml-64">
+          <Navbar onMenuClick={() => setSidebarOpen(true)} />
           <AdminTablePageSkeleton
             title="Doctor Management"
             subtitle="Manage doctor profiles and professional information"
@@ -172,11 +173,11 @@ const Doctors = () => {
 
   return (
     <div className="flex min-h-screen">
-      <Sidebar />
-      <div className="flex-1 ml-64">
-        <Navbar />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="flex-1 ml-0 lg:ml-64">
+        <Navbar onMenuClick={() => setSidebarOpen(true)} />
 
-        <div className="p-8 mt-20">
+        <div className="p-4 sm:p-6 lg:p-8 mt-16 sm:mt-20">
           <div className="card">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold text-dark dark:text-slate-100">

@@ -10,6 +10,7 @@ import api from "../../utils/api";
 import toast from "react-hot-toast";
 
 const Payments = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [payments, setPayments] = useState([]);
   const [allPayments, setAllPayments] = useState([]); // For stats calculation
   const [loading, setLoading] = useState(true);
@@ -88,14 +89,14 @@ const Payments = () => {
 
   return (
     <div className="flex min-h-screen">
-      <Sidebar />
-      <div className="flex-1 ml-64">
-        <Navbar />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="flex-1 ml-0 lg:ml-64">
+        <Navbar onMenuClick={() => setSidebarOpen(true)} />
 
         {loading ? (
           <PatientPaymentsSkeleton />
         ) : (
-          <div className="p-8 mt-20">
+          <div className="p-4 sm:p-6 lg:p-8 mt-16 sm:mt-20">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               <div className="card">
                 <div className="flex items-center justify-between">

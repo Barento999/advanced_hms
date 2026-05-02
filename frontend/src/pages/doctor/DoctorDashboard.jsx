@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 
 const DoctorDashboard = () => {
   const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [appointments, setAppointments] = useState([]);
   const [stats, setStats] = useState({
     total: 0,
@@ -105,14 +106,14 @@ const DoctorDashboard = () => {
 
   return (
     <div className="flex min-h-screen">
-      <Sidebar />
-      <div className="flex-1 ml-64">
-        <Navbar />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="flex-1 ml-0 lg:ml-64">
+        <Navbar onMenuClick={() => setSidebarOpen(true)} />
 
         {loading ? (
           <DoctorDashboardSkeleton />
         ) : (
-          <div className="p-8 mt-20">
+          <div className="p-4 sm:p-6 lg:p-8 mt-16 sm:mt-20">
             <div className="mb-8">
               <h1 className="text-3xl font-bold text-dark dark:text-slate-100">
                 Doctor Dashboard

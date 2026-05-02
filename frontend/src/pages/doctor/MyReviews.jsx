@@ -10,6 +10,7 @@ import api from "../../utils/api";
 import toast from "react-hot-toast";
 
 const MyReviews = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [reviews, setReviews] = useState([]);
   const [allReviews, setAllReviews] = useState([]); // For stats calculation
   const [profile, setProfile] = useState(null);
@@ -84,9 +85,9 @@ const MyReviews = () => {
   if (loading) {
     return (
       <div className="flex min-h-screen">
-        <Sidebar />
-        <div className="flex-1 ml-64">
-          <Navbar />
+        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+        <div className="flex-1 ml-0 lg:ml-64">
+          <Navbar onMenuClick={() => setSidebarOpen(true)} />
           <DoctorReviewsSkeleton />
         </div>
       </div>
@@ -95,11 +96,11 @@ const MyReviews = () => {
 
   return (
     <div className="flex min-h-screen">
-      <Sidebar />
-      <div className="flex-1 ml-64">
-        <Navbar />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="flex-1 ml-0 lg:ml-64">
+        <Navbar onMenuClick={() => setSidebarOpen(true)} />
 
-        <div className="p-8 mt-20">
+        <div className="p-4 sm:p-6 lg:p-8 mt-16 sm:mt-20">
           <div className="mb-6">
             <div className="flex justify-between items-center">
               <div>

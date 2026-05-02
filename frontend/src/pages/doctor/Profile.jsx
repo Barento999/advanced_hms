@@ -28,6 +28,7 @@ import api from "../../utils/api";
 import toast from "react-hot-toast";
 
 const Profile = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
@@ -239,10 +240,10 @@ const Profile = () => {
   if (loading) {
     return (
       <div className="flex min-h-screen">
-        <Sidebar />
-        <div className="flex-1 ml-64">
-          <Navbar />
-          <div className="p-8 mt-20">
+        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+        <div className="flex-1 ml-0 lg:ml-64">
+          <Navbar onMenuClick={() => setSidebarOpen(true)} />
+          <div className="p-4 sm:p-6 lg:p-8 mt-16 sm:mt-20">
             {/* Real Header - Shows Immediately */}
             <div className="mb-8">
               <h1 className="text-3xl font-bold text-dark dark:text-slate-100">
@@ -261,11 +262,11 @@ const Profile = () => {
 
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-slate-900">
-      <Sidebar />
-      <div className="flex-1 ml-64">
-        <Navbar />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="flex-1 ml-0 lg:ml-64">
+        <Navbar onMenuClick={() => setSidebarOpen(true)} />
 
-        <div className="p-8 mt-20">
+        <div className="p-4 sm:p-6 lg:p-8 mt-16 sm:mt-20">
           {/* Page Header */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-dark dark:text-slate-100">
