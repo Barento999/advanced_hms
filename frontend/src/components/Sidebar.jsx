@@ -87,7 +87,7 @@ const Sidebar = () => {
 
   return (
     <div
-      className="fixed left-0 top-0 w-64 h-screen flex flex-col shadow-2xl z-40 transition-colors duration-200"
+      className="hidden lg:block fixed left-0 top-0 w-64 h-screen flex-col shadow-2xl z-40 transition-colors duration-200"
       style={{ backgroundColor: "#1E3A8A" }}>
       <div className="dark:bg-slate-900 dark:shadow-slate-900/50 h-full flex flex-col">
         <div className="p-6 border-b border-white/10 dark:border-slate-700">

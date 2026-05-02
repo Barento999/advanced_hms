@@ -185,32 +185,3 @@
 .animate-shake {
   animation: shake 0.5s ease-in-out;
 }
-
-/* Mobile Responsive Styles */
-@media (max-width: 1023px) {
-  /* Hide sidebar on mobile/tablet */
-  .fixed.left-0.w-64.h-screen {
-    display: none;
-  }
-  
-  /* Make navbar full width on mobile */
-  .fixed.top-0.right-0.left-64 {
-    left: 0 !important;
-  }
-  
-  /* Adjust content area */
-  .dashboard-content {
-    margin-left: 0 !important;
-  }
-}
-
-/* Tablet and Mobile padding adjustments */
-@media (max-width: 640px) {
-  .card {
-    padding: 1rem;
-  }
-  
-  .dashboard-main {
-    padding: 1rem;
-  }
-}

@@ -70,51 +70,51 @@ const Navbar = () => {
   };
 
   return (
-    <div className="fixed top-0 right-0 left-64 bg-white dark:bg-slate-800 shadow-md px-8 py-4 flex justify-between items-center border-b border-border dark:border-slate-700 z-30 transition-colors duration-200">
-      <div>
-        <h2 className="text-2xl font-bold text-dark dark:text-white">
+    <div className="fixed top-0 right-0 left-0 lg:left-64 bg-white dark:bg-slate-800 shadow-md px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex justify-between items-center border-b border-border dark:border-slate-700 z-30 transition-all duration-200">
+      <div className="min-w-0 flex-1">
+        <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-dark dark:text-white truncate">
           Welcome back, {user?.name}
         </h2>
-        <p className="text-muted dark:text-slate-400 text-sm">
+        <p className="text-muted dark:text-slate-400 text-xs sm:text-sm hidden sm:block">
           {getRoleGreeting()}
         </p>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 flex-shrink-0">
         {/* Dark Mode Toggle */}
         <button
           onClick={() => {
             console.log("Toggle clicked, current darkMode:", darkMode);
             toggleDarkMode();
           }}
-          className="p-3 hover:bg-secondary dark:hover:bg-slate-700 rounded-xl transition-all duration-200 border border-transparent hover:border-border dark:hover:border-slate-600"
+          className="p-2 sm:p-3 hover:bg-secondary dark:hover:bg-slate-700 rounded-xl transition-all duration-200 border border-transparent hover:border-border dark:hover:border-slate-600"
           title={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}>
           {darkMode ? (
-            <Sun size={24} className="text-yellow-400" />
+            <Sun size={20} className="sm:w-6 sm:h-6 text-yellow-400" />
           ) : (
-            <Moon size={24} className="text-slate-600" />
+            <Moon size={20} className="sm:w-6 sm:h-6 text-slate-600" />
           )}
         </button>
 
         <div className="relative" ref={notificationDropdownRef}>
           <button
             onClick={() => setShowNotifications(!showNotifications)}
-            className="relative p-3 hover:bg-secondary dark:hover:bg-slate-700 rounded-xl transition-all duration-200 group">
+            className="relative p-2 sm:p-3 hover:bg-secondary dark:hover:bg-slate-700 rounded-xl transition-all duration-200 group">
             <Bell
-              size={24}
-              className="text-muted dark:text-slate-400 group-hover:text-primary transition-colors"
+              size={20}
+              className="sm:w-6 sm:h-6 text-muted dark:text-slate-400 group-hover:text-primary transition-colors"
             />
             {unreadCount > 0 && (
-              <span className="absolute top-2 right-2 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-bold">
-                {unreadCount}
+              <span className="absolute top-1 right-1 sm:top-2 sm:right-2 w-4 h-4 sm:w-5 sm:h-5 bg-red-500 text-white text-[10px] sm:text-xs rounded-full flex items-center justify-center font-bold">
+                {unreadCount > 9 ? '9+' : unreadCount}
               </span>
             )}
           </button>
 
           {/* Notifications Dropdown */}
           {showNotifications && (
-            <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-border dark:border-slate-700 z-50 max-h-96 overflow-y-auto">
-              <div className="p-4 border-b border-border dark:border-slate-700">
+            <div className="absolute right-0 mt-2 w-72 sm:w-80 lg:w-96 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-border dark:border-slate-700 z-50 max-h-96 overflow-y-auto">
+              <div className="p-3 sm:p-4 border-b border-border dark:border-slate-700">
                 <h3 className="font-bold text-dark dark:text-white">
                   Notifications
                 </h3>
@@ -166,10 +166,10 @@ const Navbar = () => {
           )}
         </div>
 
-        <div className="flex items-center gap-3 pl-4 border-l-2 border-border dark:border-slate-700">
+        <div className="hidden sm:flex items-center gap-2 sm:gap-3 pl-3 sm:pl-4 border-l-2 border-border dark:border-slate-700">
           <div
-            className={`w-11 h-11 ${getRoleBadgeColor()} rounded-full flex items-center justify-center shadow-md`}>
-            <User size={22} className="text-white" />
+            className={`w-9 h-9 sm:w-10 sm:h-10 lg:w-11 lg:h-11 ${getRoleBadgeColor()} rounded-full flex items-center justify-center shadow-md`}>
+            <User size={18} className="sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-white" />
           </div>
 
           {/* Admin Dropdown */}
@@ -177,18 +177,18 @@ const Navbar = () => {
             <div className="relative" ref={adminDropdownRef}>
               <button
                 onClick={() => setShowAdminDropdown(!showAdminDropdown)}
-                className="flex items-center gap-2 hover:bg-secondary dark:hover:bg-slate-700 rounded-xl px-3 py-2 transition-all duration-200 group">
-                <div>
-                  <p className="font-semibold text-dark dark:text-white text-left">
+                className="flex items-center gap-2 hover:bg-secondary dark:hover:bg-slate-700 rounded-xl px-2 sm:px-3 py-2 transition-all duration-200 group">
+                <div className="text-left">
+                  <p className="font-semibold text-dark dark:text-white text-sm lg:text-base">
                     {user?.name}
                   </p>
-                  <p className="text-xs text-primary dark:text-blue-400 font-medium uppercase">
+                  <p className="text-[10px] sm:text-xs text-primary dark:text-blue-400 font-medium uppercase">
                     {user?.role}
                   </p>
                 </div>
                 <ChevronDown
-                  size={16}
-                  className={`text-muted dark:text-slate-400 group-hover:text-primary transition-all duration-200 ${
+                  size={14}
+                  className={`sm:w-4 sm:h-4 text-muted dark:text-slate-400 group-hover:text-primary transition-all duration-200 ${
                     showAdminDropdown ? "rotate-180" : ""
                   }`}
                 />
@@ -196,7 +196,7 @@ const Navbar = () => {
 
               {/* Admin Dropdown Menu */}
               {showAdminDropdown && (
-                <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-border dark:border-slate-700 z-50 py-2">
+                <div className="absolute right-0 mt-2 w-48 sm:w-56 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-border dark:border-slate-700 z-50 py-2">
                   <button
                     onClick={() => {
                       setShowAdminDropdown(false);
@@ -225,11 +225,11 @@ const Navbar = () => {
             </div>
           ) : (
             /* Non-admin users - regular display */
-            <div>
-              <p className="font-semibold text-dark dark:text-white">
+            <div className="text-left">
+              <p className="font-semibold text-dark dark:text-white text-sm lg:text-base">
                 {user?.name}
               </p>
-              <p className="text-xs text-primary dark:text-blue-400 font-medium uppercase">
+              <p className="text-[10px] sm:text-xs text-primary dark:text-blue-400 font-medium uppercase">
                 {user?.role}
               </p>
             </div>
