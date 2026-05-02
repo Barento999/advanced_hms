@@ -29,6 +29,7 @@ import toast from "react-hot-toast";
 const PatientProfile = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [patient, setPatient] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
@@ -213,10 +214,10 @@ const PatientProfile = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
-        <Sidebar />
-        <div className="ml-64">
-          <Navbar />
-          <div className="p-8 pt-28">
+        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+        <div className="ml-0 lg:ml-64">
+          <Navbar onMenuClick={() => setSidebarOpen(true)} />
+          <div className="p-4 sm:p-6 lg:p-8 pt-20 sm:pt-24 lg:pt-28">
             <AdminPatientProfileSkeleton navigate={navigate} />
           </div>
         </div>
@@ -227,10 +228,10 @@ const PatientProfile = () => {
   if (!patient) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
-        <Sidebar />
-        <div className="ml-64">
-          <Navbar />
-          <div className="p-8 pt-28">
+        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+        <div className="ml-0 lg:ml-64">
+          <Navbar onMenuClick={() => setSidebarOpen(true)} />
+          <div className="p-4 sm:p-6 lg:p-8 pt-20 sm:pt-24 lg:pt-28">
             <div className="text-center py-12">
               <h2 className="text-2xl font-bold text-gray-900 dark:text-slate-100 mb-4">
                 Patient Not Found
@@ -249,9 +250,9 @@ const PatientProfile = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
-      <Sidebar />
-      <div className="ml-64">
-        <Navbar />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="ml-0 lg:ml-64">
+        <Navbar onMenuClick={() => setSidebarOpen(true)} />
 
         <div className="p-8 pt-28 space-y-8">
           {/* Header with Back Button */}
@@ -1010,3 +1011,4 @@ const PatientProfile = () => {
 };
 
 export default PatientProfile;
+

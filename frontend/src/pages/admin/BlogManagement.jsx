@@ -25,6 +25,7 @@ import ImageUpload from "../../components/ImageUpload";
 
 const BlogManagement = () => {
   const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -258,10 +259,10 @@ const BlogManagement = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
-      <Navbar />
-      <Sidebar />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Navbar onMenuClick={() => setSidebarOpen(true)} />
 
-      <div className="ml-64 pt-16">
+      <div className="ml-0 lg:ml-64 pt-16">
         <div className="p-8">
           {/* Header */}
           <div className="mb-8">
