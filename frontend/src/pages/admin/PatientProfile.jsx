@@ -213,9 +213,9 @@ const PatientProfile = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
+      <div className="flex min-h-screen">
         <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-        <div className="ml-0 lg:ml-64">
+        <div className="flex-1 ml-0 lg:ml-64">
           <Navbar onMenuClick={() => setSidebarOpen(true)} />
           <div className="p-4 sm:p-6 lg:p-8 pt-20 sm:pt-24 lg:pt-28">
             <AdminPatientProfileSkeleton navigate={navigate} />
@@ -227,9 +227,9 @@ const PatientProfile = () => {
 
   if (!patient) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
+      <div className="flex min-h-screen">
         <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-        <div className="ml-0 lg:ml-64">
+        <div className="flex-1 ml-0 lg:ml-64">
           <Navbar onMenuClick={() => setSidebarOpen(true)} />
           <div className="p-4 sm:p-6 lg:p-8 pt-20 sm:pt-24 lg:pt-28">
             <div className="text-center py-12">
@@ -249,12 +249,12 @@ const PatientProfile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
+    <div className="flex min-h-screen">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <div className="ml-0 lg:ml-64">
+      <div className="flex-1 ml-0 lg:ml-64">
         <Navbar onMenuClick={() => setSidebarOpen(true)} />
 
-        <div className="p-8 pt-28 space-y-8">
+        <div className="p-4 sm:p-6 lg:p-8 pt-20 sm:pt-24 lg:pt-28 space-y-8">
           {/* Header with Back Button */}
           <div className="flex items-center gap-4 mb-8">
             <button

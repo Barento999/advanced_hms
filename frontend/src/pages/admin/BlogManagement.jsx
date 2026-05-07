@@ -258,12 +258,12 @@ const BlogManagement = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
+    <div className="flex min-h-screen">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <Navbar onMenuClick={() => setSidebarOpen(true)} />
+      <div className="flex-1 ml-0 lg:ml-64">
+        <Navbar onMenuClick={() => setSidebarOpen(true)} />
 
-      <div className="ml-0 lg:ml-64 pt-16">
-        <div className="p-8">
+        <div className="p-4 sm:p-6 lg:p-8 mt-16 sm:mt-20">
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900 dark:text-slate-100 mb-2">
@@ -699,6 +699,8 @@ const BlogManagement = () => {
         message={`Are you sure you want to delete "${postToDelete?.title}"? This action cannot be undone.`}
         type="delete"
       />
+        </div>
+      </div>
     </div>
   );
 };
