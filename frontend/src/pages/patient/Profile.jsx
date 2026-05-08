@@ -244,61 +244,61 @@ const Profile = () => {
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-slate-900">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <div className="flex-1 ml-0 lg:ml-64">
+      <div className="flex-1 ml-0 lg:ml-64 overflow-x-hidden">
         <Navbar onMenuClick={() => setSidebarOpen(true)} />
 
-        <div className="p-4 sm:p-6 lg:p-8 mt-16 sm:mt-20">
+        <div className="p-3 sm:p-4 md:p-6 lg:p-8 mt-16 sm:mt-20 max-w-full overflow-x-hidden">
           {/* Page Header */}
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-dark dark:text-slate-100">
+          <div className="mb-6 sm:mb-8">
+            <h1 className="text-2xl sm:text-3xl font-bold text-dark dark:text-slate-100">
               Patient Profile
             </h1>
-            <p className="text-gray-600 dark:text-slate-400 mt-2">
+            <p className="text-sm sm:text-base text-gray-600 dark:text-slate-400 mt-1 sm:mt-2">
               Manage your personal information and healthcare details
             </p>
           </div>
           {/* Professional Header Section */}
-          <div className="bg-gradient-to-r from-primary to-blue-700 rounded-2xl p-8 mb-8 text-white shadow-xl">
-            <div className="flex items-start justify-between">
-              <div className="flex items-center space-x-6">
-                <div className="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
-                  <User size={40} className="text-white" />
+          <div className="bg-gradient-to-r from-primary to-blue-600 rounded-xl p-4 sm:p-6 lg:p-8 text-white shadow-lg mb-6 sm:mb-8">
+            <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
+              <div className="flex items-center space-x-4 sm:space-x-6 w-full sm:w-auto">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm flex-shrink-0">
+                  <User size={32} className="text-white sm:w-8 sm:h-8 lg:w-10 lg:h-10" />
                 </div>
-                <div>
-                  <h1 className="text-3xl font-bold mb-2">
+                <div className="min-w-0 flex-1">
+                  <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-2 truncate">
                     {user?.name || "Patient Name"}
                   </h1>
-                  <div className="flex items-center space-x-4 text-blue-100">
-                    <span className="flex items-center gap-2">
-                      <Activity size={16} />
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-4 mb-2 text-sm sm:text-base">
+                    <span className="flex items-center gap-1 sm:gap-2">
+                      <Activity size={14} className="sm:w-4 sm:h-4 flex-shrink-0" />
                       {calculateAge(profile.dateOfBirth)} years old
                     </span>
-                    <span className="flex items-center gap-2">
-                      <Droplets size={16} />
+                    <span className="flex items-center gap-1 sm:gap-2">
+                      <Droplets size={14} className="sm:w-4 sm:h-4 flex-shrink-0" />
                       {profile.bloodGroup || "Blood Type N/A"}
                     </span>
                   </div>
-                  <div className="flex items-center space-x-4 mt-2 text-blue-100">
-                    <span className="flex items-center gap-2">
-                      <Heart size={16} className="text-red-300" />
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-blue-100 text-sm">
+                    <span className="flex items-center gap-1 sm:gap-2">
+                      <Heart size={14} className="text-red-300 sm:w-4 sm:h-4 flex-shrink-0" />
                       {profile.allergies.length} Allergies
                     </span>
-                    <span className="flex items-center gap-2">
-                      <FileText size={16} />
+                    <span className="flex items-center gap-1 sm:gap-2">
+                      <FileText size={14} className="sm:w-4 sm:h-4 flex-shrink-0" />
                       {profile.medicalHistory.length} Conditions
                     </span>
                   </div>
                 </div>
               </div>
-              <div className="text-right">
+              <div className="text-left sm:text-right w-full sm:w-auto">
                 <div className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-500/20 text-green-100 border border-green-400/30">
                   <Shield size={14} className="mr-1" />
                   Active Patient
                 </div>
-                <p className="text-blue-100 text-sm mt-2">
+                <p className="text-blue-100 text-xs sm:text-sm mt-2">
                   Patient ID: #{user?._id?.slice(-6).toUpperCase() || "N/A"}
                 </p>
-                <p className="text-blue-100 text-sm">
+                <p className="text-blue-100 text-xs sm:text-sm">
                   Member since{" "}
                   {new Date(user?.createdAt).getFullYear() || "N/A"}
                 </p>
@@ -307,78 +307,78 @@ const Profile = () => {
           </div>
 
           {/* Quick Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-slate-700">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8">
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-4 sm:p-6 shadow-sm border border-gray-200 dark:border-slate-700">
               <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-slate-400">
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-slate-400 truncate">
                     Age
                   </p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-slate-100">
+                  <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-slate-100">
                     {calculateAge(profile.dateOfBirth)}
                   </p>
                 </div>
-                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center flex-shrink-0 ml-2">
                   <Calendar
-                    size={24}
-                    className="text-blue-600 dark:text-blue-400"
+                    size={20}
+                    className="text-blue-600 dark:text-blue-400 sm:w-6 sm:h-6"
                   />
                 </div>
               </div>
             </div>
 
-            <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-slate-700">
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-4 sm:p-6 shadow-sm border border-gray-200 dark:border-slate-700">
               <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-slate-400">
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-slate-400 truncate">
                     Blood Type
                   </p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-slate-100">
+                  <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-slate-100">
                     {profile.bloodGroup || "N/A"}
                   </p>
                 </div>
-                <div className="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center flex-shrink-0 ml-2">
                   <Droplets
-                    size={24}
-                    className="text-red-600 dark:text-red-400"
+                    size={20}
+                    className="text-red-600 dark:text-red-400 sm:w-6 sm:h-6"
                   />
                 </div>
               </div>
             </div>
 
-            <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-slate-700">
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-4 sm:p-6 shadow-sm border border-gray-200 dark:border-slate-700">
               <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-slate-400">
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-slate-400 truncate">
                     Allergies
                   </p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-slate-100">
+                  <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-slate-100">
                     {profile.allergies.length}
                   </p>
                 </div>
-                <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center flex-shrink-0 ml-2">
                   <AlertCircle
-                    size={24}
-                    className="text-orange-600 dark:text-orange-400"
+                    size={20}
+                    className="text-orange-600 dark:text-orange-400 sm:w-6 sm:h-6"
                   />
                 </div>
               </div>
             </div>
 
-            <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-slate-700">
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-4 sm:p-6 shadow-sm border border-gray-200 dark:border-slate-700">
               <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-slate-400">
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-slate-400 truncate">
                     Conditions
                   </p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-slate-100">
+                  <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-slate-100">
                     {profile.medicalHistory.length}
                   </p>
                 </div>
-                <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center flex-shrink-0 ml-2">
                   <Heart
-                    size={24}
-                    className="text-purple-600 dark:text-purple-400"
+                    size={20}
+                    className="text-purple-600 dark:text-purple-400 sm:w-6 sm:h-6"
                   />
                 </div>
               </div>
@@ -386,46 +386,46 @@ const Profile = () => {
           </div>
 
           {/* Navigation Tabs */}
-          <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-200 dark:border-slate-700 mb-8">
-            <div className="flex space-x-1 p-2">
+          <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-200 dark:border-slate-700 mb-6 sm:mb-8 overflow-hidden">
+            <div className="flex overflow-x-auto gap-1 p-2 scrollbar-hide">
               <button
                 onClick={() => setActiveTab("overview")}
-                className={`flex items-center gap-2 px-4 py-3 rounded-lg text-sm font-medium transition-all ${
+                className={`flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-3 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 ${
                   activeTab === "overview"
                     ? "bg-primary text-white shadow-md"
                     : "text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-700"
                 }`}>
-                <User size={16} />
+                <User size={14} className="sm:w-4 sm:h-4" />
                 Overview
               </button>
               <button
                 onClick={() => setActiveTab("contact")}
-                className={`flex items-center gap-2 px-4 py-3 rounded-lg text-sm font-medium transition-all ${
+                className={`flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-3 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 ${
                   activeTab === "contact"
                     ? "bg-primary text-white shadow-md"
                     : "text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-700"
                 }`}>
-                <Edit3 size={16} />
+                <Edit3 size={14} className="sm:w-4 sm:h-4" />
                 Contact Info
               </button>
               <button
                 onClick={() => setActiveTab("medical")}
-                className={`flex items-center gap-2 px-4 py-3 rounded-lg text-sm font-medium transition-all ${
+                className={`flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-3 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 ${
                   activeTab === "medical"
                     ? "bg-primary text-white shadow-md"
                     : "text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-700"
                 }`}>
-                <Heart size={16} />
+                <Heart size={14} className="sm:w-4 sm:h-4" />
                 Medical Info
               </button>
               <button
                 onClick={() => setActiveTab("password")}
-                className={`flex items-center gap-2 px-4 py-3 rounded-lg text-sm font-medium transition-all ${
+                className={`flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-3 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 ${
                   activeTab === "password"
                     ? "bg-primary text-white shadow-md"
                     : "text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-700"
                 }`}>
-                <Lock size={16} />
+                <Lock size={14} className="sm:w-4 sm:h-4" />
                 Security
               </button>
             </div>
