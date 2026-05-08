@@ -260,12 +260,14 @@ const Appointments = () => {
                               <div className="flex gap-2">
                                 <button
                                   onClick={() => updateStatus(apt, "confirmed")}
-                                  className="p-2 bg-green-100 dark:bg-green-900/30 text-accent dark:text-green-400 rounded-lg hover:bg-green-200 dark:hover:bg-green-900/50 transition-colors">
+                                  className="p-2 bg-green-100 dark:bg-green-900/30 text-accent dark:text-green-400 rounded-lg hover:bg-green-200 dark:hover:bg-green-900/50 transition-colors"
+                                  title="Confirm">
                                   <Check size={18} />
                                 </button>
                                 <button
                                   onClick={() => updateStatus(apt, "cancelled")}
-                                  className="p-2 bg-red-100 dark:bg-red-900/30 text-danger dark:text-red-400 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors">
+                                  className="p-2 bg-red-100 dark:bg-red-900/30 text-danger dark:text-red-400 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors"
+                                  title="Cancel">
                                   <X size={18} />
                                 </button>
                               </div>
@@ -276,6 +278,11 @@ const Appointments = () => {
                                 className="btn-primary text-sm">
                                 Complete
                               </button>
+                            )}
+                            {(apt.status === "completed" || apt.status === "cancelled") && (
+                              <span className="text-sm text-gray-500 dark:text-slate-400 italic">
+                                No actions available
+                              </span>
                             )}
                           </td>
                         </tr>
@@ -343,6 +350,11 @@ const Appointments = () => {
                             className="w-full px-4 py-2.5 bg-primary hover:bg-blue-700 text-white rounded-lg transition-colors text-sm font-medium">
                             Mark as Complete
                           </button>
+                        )}
+                        {(apt.status === "completed" || apt.status === "cancelled") && (
+                          <div className="text-center py-2 text-sm text-gray-500 dark:text-slate-400 italic">
+                            No actions available
+                          </div>
                         )}
                       </div>
                     </div>

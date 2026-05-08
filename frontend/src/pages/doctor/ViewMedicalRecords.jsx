@@ -65,20 +65,20 @@ const ViewMedicalRecords = () => {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen">
+      <div className="flex min-h-screen bg-gray-50 dark:bg-slate-900">
         <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
         <div className="flex-1 ml-0 lg:ml-64">
           <Navbar onMenuClick={() => setSidebarOpen(true)} />
-          <div className="p-4 sm:p-6 lg:p-8 mt-16 sm:mt-20">
+          <div className="p-3 sm:p-4 md:p-6 lg:p-8 mt-16 sm:mt-20">
             <div className="card">
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
+                <h2 className="text-xl sm:text-2xl font-bold text-dark dark:text-slate-100">
                   Medical Records
                 </h2>
 
                 {/* Search */}
-                <form onSubmit={handleSearch} className="flex gap-2">
-                  <div className="relative">
+                <form onSubmit={handleSearch} className="flex gap-2 w-full sm:w-auto">
+                  <div className="relative flex-1 sm:flex-initial">
                     <Search
                       size={20}
                       className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
@@ -86,14 +86,14 @@ const ViewMedicalRecords = () => {
                     <input
                       type="text"
                       placeholder="Search by patient name or diagnosis..."
-                      className="pl-10 pr-4 py-2 border border-gray-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-dark dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-transparent"
+                      className="w-full sm:w-64 pl-10 pr-4 py-2 border border-gray-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-dark dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                     />
                   </div>
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-primary text-white rounded-xl hover:bg-blue-700 transition-colors">
+                    className="px-4 py-2 bg-primary text-white rounded-xl hover:bg-blue-700 transition-colors text-sm whitespace-nowrap">
                     Search
                   </button>
                 </form>
@@ -166,27 +166,27 @@ const ViewMedicalRecords = () => {
                   {records.map((record) => (
                     <div
                       key={record._id}
-                      className="bg-gray-50 dark:bg-slate-700/30 rounded-xl p-6 hover:shadow-lg transition-shadow cursor-pointer"
+                      className="bg-gray-50 dark:bg-slate-700/30 rounded-xl p-4 sm:p-6 hover:shadow-lg transition-shadow cursor-pointer"
                       onClick={() =>
                         setSelectedRecord(
                           selectedRecord?._id === record._id ? null : record,
                         )
                       }>
-                      <div className="flex justify-between items-start mb-4">
-                        <div>
-                          <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-2">
+                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 sm:gap-0 mb-4">
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-lg sm:text-xl font-bold text-dark dark:text-slate-100 mb-2 break-words">
                             {record.diagnosis}
                           </h3>
-                          <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-slate-400">
+                          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-gray-600 dark:text-slate-400">
                             <div className="flex items-center gap-2">
-                              <User size={16} />
-                              <span>
+                              <User size={16} className="flex-shrink-0" />
+                              <span className="truncate">
                                 {record.patientId?.userId?.name ||
                                   "Unknown Patient"}
                               </span>
                             </div>
                             <div className="flex items-center gap-2">
-                              <Calendar size={16} />
+                              <Calendar size={16} className="flex-shrink-0" />
                               <span>
                                 {new Date(
                                   record.createdAt,
@@ -195,7 +195,7 @@ const ViewMedicalRecords = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 flex-shrink-0">
                           <PrescriptionButton
                             medicalRecord={record}
                             patientInfo={{
@@ -214,7 +214,7 @@ const ViewMedicalRecords = () => {
                                 record.doctorId?.specialization || "",
                             }}
                           />
-                          <FileText size={24} className="text-primary" />
+                          <FileText size={20} className="text-primary sm:w-6 sm:h-6" />
                         </div>
                       </div>
 
@@ -222,14 +222,14 @@ const ViewMedicalRecords = () => {
                         <div className="mt-4 pt-4 border-t border-gray-200 dark:border-slate-700 space-y-4">
                           {record.symptoms && record.symptoms.length > 0 && (
                             <div>
-                              <h4 className="font-semibold text-gray-700 dark:text-slate-300 mb-2">
+                              <h4 className="font-semibold text-sm sm:text-base text-gray-700 dark:text-slate-300 mb-2">
                                 Symptoms:
                               </h4>
                               <div className="flex flex-wrap gap-2">
                                 {record.symptoms.map((symptom, index) => (
                                   <span
                                     key={index}
-                                    className="badge bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-400">
+                                    className="badge bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-400 text-xs">
                                     {symptom}
                                   </span>
                                 ))}
@@ -240,25 +240,25 @@ const ViewMedicalRecords = () => {
                           {record.prescription &&
                             record.prescription.length > 0 && (
                               <div>
-                                <h4 className="font-semibold text-gray-700 dark:text-slate-300 mb-2">
+                                <h4 className="font-semibold text-sm sm:text-base text-gray-700 dark:text-slate-300 mb-2">
                                   Prescription:
                                 </h4>
                                 <div className="space-y-3">
                                   {record.prescription.map((med, index) => (
                                     <div
                                       key={index}
-                                      className="bg-white dark:bg-slate-800 p-4 rounded-lg">
-                                      <p className="font-semibold text-dark dark:text-slate-100">
+                                      className="bg-white dark:bg-slate-800 p-3 sm:p-4 rounded-lg">
+                                      <p className="font-semibold text-sm sm:text-base text-dark dark:text-slate-100 break-words">
                                         {med.medicine}
                                       </p>
-                                      <p className="text-sm text-gray-600 dark:text-slate-400">
+                                      <p className="text-xs sm:text-sm text-gray-600 dark:text-slate-400 mt-1">
                                         Dosage: {med.dosage}
                                       </p>
-                                      <p className="text-sm text-gray-600 dark:text-slate-400">
+                                      <p className="text-xs sm:text-sm text-gray-600 dark:text-slate-400">
                                         Duration: {med.duration}
                                       </p>
                                       {med.instructions && (
-                                        <p className="text-sm text-gray-600 dark:text-slate-400 mt-1">
+                                        <p className="text-xs sm:text-sm text-gray-600 dark:text-slate-400 mt-1 break-words">
                                           Instructions: {med.instructions}
                                         </p>
                                       )}
@@ -270,10 +270,10 @@ const ViewMedicalRecords = () => {
 
                           {record.notes && (
                             <div>
-                              <h4 className="font-semibold text-gray-700 dark:text-slate-300 mb-2">
+                              <h4 className="font-semibold text-sm sm:text-base text-gray-700 dark:text-slate-300 mb-2">
                                 Doctor's Notes:
                               </h4>
-                              <p className="text-gray-600 dark:text-slate-400">
+                              <p className="text-xs sm:text-sm text-gray-600 dark:text-slate-400 break-words">
                                 {record.notes}
                               </p>
                             </div>
