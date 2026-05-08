@@ -687,7 +687,6 @@ const BlogManagement = () => {
         </div>
       )}
 
-      {/* Delete Confirmation Modal */}
       <ConfirmationModal
         isOpen={deleteModal}
         onClose={() => {
@@ -699,8 +698,6 @@ const BlogManagement = () => {
         message={`Are you sure you want to delete "${postToDelete?.title}"? This action cannot be undone.`}
         type="delete"
       />
-        </div>
-      </div>
     </div>
   );
 };
