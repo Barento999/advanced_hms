@@ -17,7 +17,7 @@ import {
   Star,
   Shield,
   Edit3,
-  UserCheck,
+  Users,
   Stethoscope,
   GraduationCap,
 } from "lucide-react";
@@ -263,10 +263,10 @@ const Profile = () => {
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-slate-900">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <div className="flex-1 ml-0 lg:ml-64">
+      <div className="flex-1 ml-0 lg:ml-64 overflow-x-hidden">
         <Navbar onMenuClick={() => setSidebarOpen(true)} />
 
-        <div className="p-3 sm:p-4 md:p-6 lg:p-8 mt-16 sm:mt-20">
+        <div className="p-3 sm:p-4 md:p-6 lg:p-8 mt-16 sm:mt-20 max-w-full overflow-x-hidden">
           {/* Page Header */}
           <div className="mb-6 sm:mb-8">
             <h1 className="text-2xl sm:text-3xl font-bold text-dark dark:text-slate-100">
@@ -277,42 +277,42 @@ const Profile = () => {
             </p>
           </div>
 
-          {/* Professional Header Section */}
-          <div className="bg-gradient-to-r from-primary to-blue-700 rounded-2xl p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8 text-white shadow-xl">
-            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
-                <div className="w-20 h-20 sm:w-24 sm:h-24 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm flex-shrink-0">
-                  <Stethoscope size={32} className="text-white sm:w-10 sm:h-10" />
+          {/* Professional Header */}
+          <div className="bg-gradient-to-r from-primary to-blue-600 rounded-xl p-4 sm:p-6 lg:p-8 text-white shadow-lg">
+            <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
+              <div className="flex items-center space-x-4 sm:space-x-6 w-full sm:w-auto">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm flex-shrink-0">
+                  <Stethoscope size={32} className="text-white sm:w-8 sm:h-8 lg:w-10 lg:h-10" />
                 </div>
-                <div className="text-center sm:text-left">
-                  <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-2 break-words">
+                <div className="min-w-0 flex-1">
+                  <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-2 truncate">
                     {basicInfo.name || "Doctor Name"}
                   </h1>
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-blue-100">
-                    <span className="flex items-center justify-center sm:justify-start gap-2">
-                      <GraduationCap size={16} className="flex-shrink-0" />
-                      <span className="truncate">{professionalInfo.specialization || "Specialization"}</span>
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-4 mb-2 text-sm sm:text-base">
+                    <span className="flex items-center gap-1 sm:gap-2">
+                      <GraduationCap size={14} className="sm:w-4 sm:h-4 flex-shrink-0" />
+                      <span className="truncate">{professionalInfo.specialization || "General Practice"}</span>
                     </span>
-                    <span className="flex items-center justify-center sm:justify-start gap-2">
-                      <Award size={16} className="flex-shrink-0" />
-                      {professionalInfo.experience} years experience
+                    <span className="flex items-center gap-1 sm:gap-2">
+                      <Award size={14} className="sm:w-4 sm:h-4 flex-shrink-0" />
+                      {professionalInfo.experience} years
                     </span>
                   </div>
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mt-2 text-sm text-blue-100">
-                    <span className="flex items-center justify-center sm:justify-start gap-2">
-                      <Star size={16} className="text-yellow-300 flex-shrink-0" />
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-blue-100 text-sm">
+                    <span className="flex items-center gap-1 sm:gap-2">
+                      <Star size={14} className="sm:w-4 sm:h-4 flex-shrink-0" />
                       {professionalInfo.rating.toFixed(1)} Rating
                     </span>
-                    <span className="flex items-center justify-center sm:justify-start gap-2">
-                      <UserCheck size={16} className="flex-shrink-0" />
+                    <span className="flex items-center gap-1 sm:gap-2">
+                      <Users size={14} className="sm:w-4 sm:h-4 flex-shrink-0" />
                       {professionalInfo.totalPatients} Patients
                     </span>
                   </div>
                 </div>
               </div>
-              <div className="text-center sm:text-right flex-shrink-0">
+              <div className="text-left sm:text-right w-full sm:w-auto">
                 <div
-                  className={`inline-flex items-center px-3 py-1 rounded-full text-xs sm:text-sm font-medium ${
+                  className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
                     professionalInfo.isActive
                       ? "bg-green-500/20 text-green-100 border border-green-400/30"
                       : "bg-red-500/20 text-red-100 border border-red-400/30"
@@ -329,18 +329,18 @@ const Profile = () => {
           </div>
 
           {/* Quick Stats Cards */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
             <div className="bg-white dark:bg-slate-800 rounded-xl p-4 sm:p-6 shadow-sm border border-gray-200 dark:border-slate-700">
               <div className="flex items-center justify-between">
                 <div className="min-w-0 flex-1">
                   <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-slate-400 truncate">
                     Consultation Fee
                   </p>
-                  <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-slate-100">
+                  <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-slate-100 truncate">
                     ${professionalInfo.consultationFee}
                   </p>
                 </div>
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center flex-shrink-0 ml-2">
                   <DollarSign
                     size={20}
                     className="text-green-600 dark:text-green-400 sm:w-6 sm:h-6"
@@ -359,7 +359,7 @@ const Profile = () => {
                     {professionalInfo.totalPatients}
                   </p>
                 </div>
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center flex-shrink-0 ml-2">
                   <User
                     size={20}
                     className="text-blue-600 dark:text-blue-400 sm:w-6 sm:h-6"
@@ -378,7 +378,7 @@ const Profile = () => {
                     {professionalInfo.totalAppointments}
                   </p>
                 </div>
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center flex-shrink-0 ml-2">
                   <Calendar
                     size={20}
                     className="text-purple-600 dark:text-purple-400 sm:w-6 sm:h-6"
@@ -393,14 +393,14 @@ const Profile = () => {
                   <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-slate-400 truncate">
                     Rating
                   </p>
-                  <div className="flex items-center space-x-1">
+                  <div className="flex items-center gap-1">
                     <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-slate-100">
                       {professionalInfo.rating.toFixed(1)}
                     </p>
                     <Star size={16} className="text-yellow-500 fill-current sm:w-5 sm:h-5" />
                   </div>
                 </div>
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg flex items-center justify-center flex-shrink-0 ml-2">
                   <Star
                     size={20}
                     className="text-yellow-600 dark:text-yellow-400 sm:w-6 sm:h-6"
@@ -411,11 +411,11 @@ const Profile = () => {
           </div>
 
           {/* Navigation Tabs */}
-          <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-200 dark:border-slate-700 mb-6 sm:mb-8">
-            <div className="flex overflow-x-auto space-x-1 p-2">
+          <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-200 dark:border-slate-700 mb-6 sm:mb-8 overflow-hidden">
+            <div className="flex overflow-x-auto gap-1 p-2 scrollbar-hide">
               <button
                 onClick={() => setActiveTab("overview")}
-                className={`flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-3 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${
+                className={`flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-3 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 ${
                   activeTab === "overview"
                     ? "bg-primary text-white shadow-md"
                     : "text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-700"
@@ -426,7 +426,7 @@ const Profile = () => {
               </button>
               <button
                 onClick={() => setActiveTab("basic")}
-                className={`flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-3 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${
+                className={`flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-3 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 ${
                   activeTab === "basic"
                     ? "bg-primary text-white shadow-md"
                     : "text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-700"
@@ -437,7 +437,7 @@ const Profile = () => {
               </button>
               <button
                 onClick={() => setActiveTab("professional")}
-                className={`flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-3 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${
+                className={`flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-3 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 ${
                   activeTab === "professional"
                     ? "bg-primary text-white shadow-md"
                     : "text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-700"
@@ -448,7 +448,7 @@ const Profile = () => {
               </button>
               <button
                 onClick={() => setActiveTab("schedule")}
-                className={`flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-3 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${
+                className={`flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-3 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 ${
                   activeTab === "schedule"
                     ? "bg-primary text-white shadow-md"
                     : "text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-700"
@@ -458,7 +458,7 @@ const Profile = () => {
               </button>
               <button
                 onClick={() => setActiveTab("password")}
-                className={`flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-3 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${
+                className={`flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-3 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 ${
                   activeTab === "password"
                     ? "bg-primary text-white shadow-md"
                     : "text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-700"
