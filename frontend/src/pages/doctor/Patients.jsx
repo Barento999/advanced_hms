@@ -105,7 +105,7 @@ const Patients = () => {
 
         <div className="p-3 sm:p-4 md:p-6 lg:p-8 mt-16 sm:mt-20">
           <div className="card">
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
+            <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl sm:text-2xl font-bold text-dark dark:text-slate-100">
                 My Patients
               </h2>

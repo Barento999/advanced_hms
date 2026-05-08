@@ -166,7 +166,7 @@ const Appointments = () => {
         <div className="p-3 sm:p-4 md:p-6 lg:p-8 mt-16 sm:mt-20">
           <div className="card">
             <div className="flex flex-col gap-4 mb-6">
-              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+              <div className="flex justify-between items-center">
                 <h2 className="text-xl sm:text-2xl font-bold text-dark dark:text-slate-100">
                   My Appointments
                 </h2>
