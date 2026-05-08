@@ -67,7 +67,7 @@ const Blog = () => {
         params.search = searchTerm;
       }
 
-      const response = await axios.get("http://localhost:5000/api/blog/posts", {
+      const response = await axios.get("http://localhost:8000/api/blog/posts", {
         params,
       });
 
@@ -86,7 +86,7 @@ const Blog = () => {
   const fetchCategories = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/blog/categories"
+        "http://localhost:8000/api/blog/categories"
       );
       if (response.data.success) {
         setCategories(response.data.data);

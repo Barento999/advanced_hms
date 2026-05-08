@@ -252,7 +252,7 @@ const LandingPage = () => {
     const fetchLandingStats = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/auth/landing-stats",
+          "http://localhost:8000/api/auth/landing-stats",
         );
         if (response.data.success) {
           const {
@@ -349,7 +349,7 @@ const LandingPage = () => {
     const fetchBlogPosts = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/blog/featured?limit=3"
+          "http://localhost:8000/api/blog/featured?limit=3"
         );
         if (response.data.success) {
           setBlogPosts(response.data.data);

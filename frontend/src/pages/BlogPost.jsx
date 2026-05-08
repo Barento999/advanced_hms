@@ -44,7 +44,7 @@ const BlogPost = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `http://localhost:5000/api/blog/posts/${slug}`
+        `http://localhost:8000/api/blog/posts/${slug}`
       );
 
       if (response.data.success) {
@@ -63,7 +63,7 @@ const BlogPost = () => {
 
   const fetchRelatedPosts = async (category, currentPostId) => {
     try {
-      const response = await axios.get("http://localhost:5000/api/blog/posts", {
+      const response = await axios.get("http://localhost:8000/api/blog/posts", {
         params: {
           category,
           limit: 3,
