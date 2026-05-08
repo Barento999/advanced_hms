@@ -232,40 +232,38 @@ const AdminManagement = () => {
         <Navbar onMenuClick={() => setSidebarOpen(true)} />
         <div className="p-3 sm:p-4 md:p-6 lg:p-8 mt-16 sm:mt-20">
           {/* Real Header - Shows Immediately */}
-          <div className="mb-8">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-3xl font-bold text-dark dark:text-slate-100">
-                  Admin Management
-                </h1>
-                <p className="text-gray-600 dark:text-slate-400 mt-2">
-                  Manage system administrators and their access
-                </p>
-              </div>
-              <div className="flex items-center gap-3">
-                <ExportButton
-                  data={allAdmins}
-                  filename="admins"
-                  columns={[
-                    { key: "name", label: "Name" },
-                    { key: "email", label: "Email" },
-                    { key: "phone", label: "Phone" },
-                    { key: "isActive", label: "Status" },
-                    { key: "createdAt", label: "Created Date" },
-                  ]}
-                />
-                <button
-                  onClick={() => setShowAddModal(true)}
-                  className="flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary-dark text-white rounded-xl transition-colors">
-                  <Plus size={16} />
-                  Add Admin
-                </button>
-              </div>
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6 sm:mb-8">
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold text-dark dark:text-slate-100">
+                Admin Management
+              </h1>
+              <p className="text-sm sm:text-base text-gray-600 dark:text-slate-400 mt-1 sm:mt-2">
+                Manage system administrators and their access
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <ExportButton
+                data={allAdmins}
+                filename="admins"
+                columns={[
+                  { key: "name", label: "Name" },
+                  { key: "email", label: "Email" },
+                  { key: "phone", label: "Phone" },
+                  { key: "isActive", label: "Status" },
+                  { key: "createdAt", label: "Created Date" },
+                ]}
+              />
+              <button
+                onClick={() => setShowAddModal(true)}
+                className="flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary-dark text-white rounded-xl transition-colors text-sm sm:text-base">
+                <Plus size={16} />
+                Add Admin
+              </button>
             </div>
           </div>
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
             <div className="card">
               <div className="flex items-center justify-between">
                 <div>
@@ -354,7 +352,8 @@ const AdminManagement = () => {
 
           {/* Admins Table */}
           <div className="card overflow-hidden">
-            <div className="overflow-x-auto">
+            {/* Desktop Table View */}
+            <div className="hidden md:block overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-gray-50 dark:bg-slate-700">
                   <tr>
@@ -445,6 +444,91 @@ const AdminManagement = () => {
                   ))}
                 </tbody>
               </table>
+            </div>
+
+            {/* Mobile Card View */}
+            <div className="md:hidden space-y-4 p-4">
+              {admins.map((admin) => (
+                <div
+                  key={admin._id}
+                  className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-200 dark:border-slate-700 overflow-hidden">
+                  {/* Header Section */}
+                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-slate-700 dark:to-slate-700 p-4 border-b border-gray-200 dark:border-slate-600">
+                    <div className="flex items-start gap-3">
+                      <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+                        <Shield size={20} className="text-white" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-base text-dark dark:text-slate-100 truncate">
+                          {admin.name}
+                        </h3>
+                        <p className="text-xs text-gray-600 dark:text-slate-400 mt-0.5">
+                          System Administrator
+                        </p>
+                      </div>
+                      {getStatusBadge(admin.isActive)}
+                    </div>
+                  </div>
+
+                  {/* Content Section */}
+                  <div className="p-4 space-y-3">
+                    <div>
+                      <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">
+                        Email
+                      </p>
+                      <p className="text-sm font-medium text-dark dark:text-slate-100 truncate">
+                        {admin.email}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">
+                        Phone
+                      </p>
+                      <p className="text-sm font-medium text-dark dark:text-slate-100">
+                        {admin.phone || "No phone"}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">
+                        Created Date
+                      </p>
+                      <p className="text-sm font-medium text-dark dark:text-slate-100">
+                        {new Date(admin.createdAt).toLocaleDateString()}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Actions Section */}
+                  <div className="px-4 pb-4 flex gap-2">
+                    <button
+                      onClick={() =>
+                        setConfirmModal({
+                          isOpen: true,
+                          type: admin.isActive ? "deactivate" : "activate",
+                          admin,
+                        })
+                      }
+                      className={`flex-1 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                        admin.isActive
+                          ? "bg-yellow-100 text-yellow-800 hover:bg-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-400"
+                          : "bg-green-100 text-green-800 hover:bg-green-200 dark:bg-green-900/30 dark:text-green-400"
+                      }`}>
+                      {admin.isActive ? "Deactivate" : "Activate"}
+                    </button>
+                    <button
+                      onClick={() =>
+                        setConfirmModal({
+                          isOpen: true,
+                          type: "delete",
+                          admin,
+                        })
+                      }
+                      className="px-4 py-2.5 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/30 text-danger dark:text-red-400 rounded-lg transition-colors">
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
 
             {admins.length === 0 && !loading && (
