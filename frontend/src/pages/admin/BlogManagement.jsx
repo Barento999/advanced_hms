@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/api";
 import toast from "react-hot-toast";
 import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
@@ -74,7 +74,6 @@ const BlogManagement = () => {
   const fetchPosts = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem("token");
       const params = {
         page: currentPage,
         limit: 10,
@@ -84,13 +83,7 @@ const BlogManagement = () => {
         params.status = statusFilter;
       }
 
-      const response = await axios.get(
-        "http://localhost:5000/api/blog/admin/posts",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-          params,
-        }
-      );
+      const response = await api.get("/blog/admin/posts", { params });
 
       if (response.data.success) {
         setPosts(response.data.data.posts);
@@ -166,7 +159,6 @@ const BlogManagement = () => {
     }
 
     try {
-      const token = localStorage.getItem("token");
       const postData = {
         ...formData,
         tags: formData.tags
@@ -176,13 +168,7 @@ const BlogManagement = () => {
       };
 
       if (modalMode === "create") {
-        const response = await axios.post(
-          "http://localhost:5000/api/blog/posts",
-          postData,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const response = await api.post("/blog/posts", postData);
 
         if (response.data.success) {
           toast.success("Blog post created successfully");
@@ -190,12 +176,9 @@ const BlogManagement = () => {
           handleCloseModal();
         }
       } else {
-        const response = await axios.put(
-          `http://localhost:5000/api/blog/posts/${selectedPost._id}`,
-          postData,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
+        const response = await api.put(
+          `/blog/posts/${selectedPost._id}`,
+          postData
         );
 
         if (response.data.success) {
@@ -214,12 +197,8 @@ const BlogManagement = () => {
 
   const handleDelete = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const response = await axios.delete(
-        `http://localhost:5000/api/blog/posts/${postToDelete._id}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+      const response = await api.delete(
+        `/blog/posts/${postToDelete._id}`
       );
 
       if (response.data.success) {
