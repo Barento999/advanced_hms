@@ -256,20 +256,20 @@ const PatientProfile = () => {
 
         <div className="p-3 sm:p-4 md:p-6 lg:p-8 pt-20 sm:pt-24 lg:pt-28 space-y-6 sm:space-y-8">
           {/* Header with Back Button */}
-          <div className="flex items-center gap-4 mb-8">
+          <div className="flex items-center gap-3 sm:gap-4">
             <button
               onClick={() => navigate("/admin/patients")}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors">
+              className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors flex-shrink-0">
               <ArrowLeft
                 size={20}
                 className="text-gray-600 dark:text-slate-400"
               />
             </button>
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-slate-100">
+            <div className="min-w-0 flex-1">
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-slate-100 truncate">
                 Patient Profile Management
               </h1>
-              <p className="text-gray-600 dark:text-slate-400">
+              <p className="text-sm sm:text-base text-gray-600 dark:text-slate-400 mt-1">
                 {isEditing
                   ? "Edit patient information"
                   : "Complete patient profile and medical information"}
@@ -278,47 +278,47 @@ const PatientProfile = () => {
           </div>
 
           {/* Professional Header */}
-          <div className="bg-gradient-to-r from-primary to-blue-600 rounded-xl p-8 text-white shadow-lg">
-            <div className="flex items-start justify-between">
-              <div className="flex items-center space-x-6">
-                <div className="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
-                  <User size={40} className="text-white" />
+          <div className="bg-gradient-to-r from-primary to-blue-600 rounded-xl p-4 sm:p-6 lg:p-8 text-white shadow-lg">
+            <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
+              <div className="flex items-center space-x-4 sm:space-x-6 w-full sm:w-auto">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm flex-shrink-0">
+                  <User size={32} className="text-white sm:w-8 sm:h-8 lg:w-10 lg:h-10" />
                 </div>
-                <div>
-                  <h1 className="text-3xl font-bold mb-2">
+                <div className="min-w-0 flex-1">
+                  <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-2 truncate">
                     {patient.userId?.name || patient.name}
                   </h1>
-                  <div className="flex items-center space-x-4 mb-2">
-                    <span className="flex items-center gap-2">
-                      <Activity size={16} />
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-4 mb-2 text-sm sm:text-base">
+                    <span className="flex items-center gap-1 sm:gap-2">
+                      <Activity size={14} className="sm:w-4 sm:h-4 flex-shrink-0" />
                       {calculateAge(patient.dateOfBirth)} years old
                     </span>
-                    <span className="flex items-center gap-2">
-                      <Droplets size={16} />
-                      {patient.bloodGroup || "Unknown"} Blood Type
+                    <span className="flex items-center gap-1 sm:gap-2">
+                      <Droplets size={14} className="sm:w-4 sm:h-4 flex-shrink-0" />
+                      {patient.bloodGroup || "Unknown"}
                     </span>
                   </div>
-                  <div className="flex items-center space-x-4 text-blue-100">
-                    <span className="flex items-center gap-2">
-                      <Heart size={16} className="text-red-300" />
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-blue-100 text-sm">
+                    <span className="flex items-center gap-1 sm:gap-2">
+                      <Heart size={14} className="text-red-300 sm:w-4 sm:h-4 flex-shrink-0" />
                       {patient.allergies?.length || 0} Allergies
                     </span>
-                    <span className="flex items-center gap-2">
-                      <FileText size={16} />
+                    <span className="flex items-center gap-1 sm:gap-2">
+                      <FileText size={14} className="sm:w-4 sm:h-4 flex-shrink-0" />
                       {patient.medicalHistory?.length || 0} Conditions
                     </span>
                   </div>
                 </div>
               </div>
-              <div className="text-right">
+              <div className="text-left sm:text-right w-full sm:w-auto">
                 <div className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-500/20 text-green-100 border border-green-400/30">
                   <Shield size={14} className="mr-1" />
                   Active Patient
                 </div>
-                <p className="text-blue-100 text-sm mt-2">
+                <p className="text-blue-100 text-xs sm:text-sm mt-2">
                   Patient ID: #{patient._id?.slice(-6).toUpperCase() || "N/A"}
                 </p>
-                <p className="text-blue-100 text-sm">
+                <p className="text-blue-100 text-xs sm:text-sm">
                   Member since{" "}
                   {formatDate(patient.createdAt || patient.userId?.createdAt)}
                 </p>
@@ -327,27 +327,27 @@ const PatientProfile = () => {
           </div>
 
           {/* Quick Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-slate-700">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-4 sm:p-6 shadow-sm border border-gray-200 dark:border-slate-700">
               <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-slate-400">
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-slate-400 truncate">
                     Age
                   </p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-slate-100">
+                  <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-slate-100">
                     {calculateAge(patient.dateOfBirth)}
                   </p>
                 </div>
-                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center flex-shrink-0 ml-2">
                   <Calendar
-                    size={24}
-                    className="text-blue-600 dark:text-blue-400"
+                    size={20}
+                    className="text-blue-600 dark:text-blue-400 sm:w-6 sm:h-6"
                   />
                 </div>
               </div>
             </div>
 
-            <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-slate-700">
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-4 sm:p-6 shadow-sm border border-gray-200 dark:border-slate-700">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600 dark:text-slate-400">

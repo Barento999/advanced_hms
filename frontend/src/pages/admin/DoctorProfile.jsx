@@ -183,20 +183,20 @@ const DoctorProfile = () => {
 
         <div className="p-3 sm:p-4 md:p-6 lg:p-8 pt-20 sm:pt-24 lg:pt-28 space-y-6 sm:space-y-8">
           {/* Header with Back Button */}
-          <div className="flex items-center gap-4 mb-8">
+          <div className="flex items-center gap-3 sm:gap-4">
             <button
               onClick={() => navigate("/admin/doctors")}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors">
+              className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors flex-shrink-0">
               <ArrowLeft
                 size={20}
                 className="text-gray-600 dark:text-slate-400"
               />
             </button>
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-slate-100">
+            <div className="min-w-0 flex-1">
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-slate-100 truncate">
                 Doctor Profile Management
               </h1>
-              <p className="text-gray-600 dark:text-slate-400">
+              <p className="text-sm sm:text-base text-gray-600 dark:text-slate-400 mt-1">
                 {isEditing
                   ? "Edit doctor information"
                   : "Complete doctor profile and statistics"}
@@ -205,42 +205,42 @@ const DoctorProfile = () => {
           </div>
 
           {/* Professional Header */}
-          <div className="bg-gradient-to-r from-primary to-blue-600 rounded-xl p-8 text-white shadow-lg">
-            <div className="flex items-start justify-between">
-              <div className="flex items-center space-x-6">
-                <div className="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
-                  <Stethoscope size={40} className="text-white" />
+          <div className="bg-gradient-to-r from-primary to-blue-600 rounded-xl p-4 sm:p-6 lg:p-8 text-white shadow-lg">
+            <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
+              <div className="flex items-center space-x-4 sm:space-x-6 w-full sm:w-auto">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm flex-shrink-0">
+                  <Stethoscope size={32} className="text-white sm:w-8 sm:h-8 lg:w-10 lg:h-10" />
                 </div>
-                <div>
-                  <h1 className="text-3xl font-bold mb-2">
+                <div className="min-w-0 flex-1">
+                  <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-2 truncate">
                     {doctor.userId?.name || "Unknown"}
                   </h1>
-                  <div className="flex items-center space-x-4 mb-2">
-                    <span className="flex items-center gap-2">
-                      <GraduationCap size={16} />
-                      {doctor.specialization || "General Practice"}
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-4 mb-2 text-sm sm:text-base">
+                    <span className="flex items-center gap-1 sm:gap-2">
+                      <GraduationCap size={14} className="sm:w-4 sm:h-4 flex-shrink-0" />
+                      <span className="truncate">{doctor.specialization || "General Practice"}</span>
                     </span>
-                    <span className="flex items-center gap-2">
-                      <Award size={16} />
-                      {doctor.experience} years experience
+                    <span className="flex items-center gap-1 sm:gap-2">
+                      <Award size={14} className="sm:w-4 sm:h-4 flex-shrink-0" />
+                      {doctor.experience} years
                     </span>
                   </div>
-                  <div className="flex items-center space-x-4 text-blue-100">
-                    <span className="flex items-center gap-2">
-                      <Star size={16} />
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-blue-100 text-sm">
+                    <span className="flex items-center gap-1 sm:gap-2">
+                      <Star size={14} className="sm:w-4 sm:h-4 flex-shrink-0" />
                       {doctor.rating !== undefined && doctor.rating !== null
                         ? doctor.rating.toFixed(1)
                         : "N/A"}{" "}
                       Rating
                     </span>
-                    <span className="flex items-center gap-2">
-                      <Users size={16} />
+                    <span className="flex items-center gap-1 sm:gap-2">
+                      <Users size={14} className="sm:w-4 sm:h-4 flex-shrink-0" />
                       {doctor.totalPatients || 0} Patients
                     </span>
                   </div>
                 </div>
               </div>
-              <div className="text-right">
+              <div className="text-left sm:text-right w-full sm:w-auto">
                 <div
                   className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
                     doctor.userId?.isActive
@@ -250,10 +250,10 @@ const DoctorProfile = () => {
                   <Shield size={14} className="mr-1" />
                   {doctor.userId?.isActive ? "Active" : "Inactive"}
                 </div>
-                <p className="text-blue-100 text-sm mt-2">
+                <p className="text-blue-100 text-xs sm:text-sm mt-2">
                   Doctor ID: #{doctor._id?.slice(-6).toUpperCase() || "N/A"}
                 </p>
-                <p className="text-blue-100 text-sm">
+                <p className="text-blue-100 text-xs sm:text-sm">
                   Member since {formatDate(doctor.createdAt)}
                 </p>
               </div>
@@ -261,83 +261,83 @@ const DoctorProfile = () => {
           </div>
 
           {/* Quick Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-slate-700">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-4 sm:p-6 shadow-sm border border-gray-200 dark:border-slate-700">
               <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-slate-400">
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-slate-400 truncate">
                     Consultation Fee
                   </p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-slate-100">
+                  <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-slate-100 truncate">
                     ${doctor.consultationFee || 0}
                   </p>
                 </div>
-                <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center flex-shrink-0 ml-2">
                   <DollarSign
-                    size={24}
-                    className="text-green-600 dark:text-green-400"
+                    size={20}
+                    className="text-green-600 dark:text-green-400 sm:w-6 sm:h-6"
                   />
                 </div>
               </div>
             </div>
 
-            <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-slate-700">
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-4 sm:p-6 shadow-sm border border-gray-200 dark:border-slate-700">
               <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-slate-400">
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-slate-400 truncate">
                     Total Patients
                   </p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-slate-100">
+                  <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-slate-100">
                     {doctor.totalPatients || 0}
                   </p>
                 </div>
-                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center flex-shrink-0 ml-2">
                   <Users
-                    size={24}
-                    className="text-blue-600 dark:text-blue-400"
+                    size={20}
+                    className="text-blue-600 dark:text-blue-400 sm:w-6 sm:h-6"
                   />
                 </div>
               </div>
             </div>
 
-            <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-slate-700">
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-4 sm:p-6 shadow-sm border border-gray-200 dark:border-slate-700">
               <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-slate-400">
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-slate-400 truncate">
                     Total Appointments
                   </p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-slate-100">
+                  <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-slate-100">
                     {doctor.totalAppointments || 0}
                   </p>
                 </div>
-                <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center flex-shrink-0 ml-2">
                   <Calendar
-                    size={24}
-                    className="text-purple-600 dark:text-purple-400"
+                    size={20}
+                    className="text-purple-600 dark:text-purple-400 sm:w-6 sm:h-6"
                   />
                 </div>
               </div>
             </div>
 
-            <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-slate-700">
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-4 sm:p-6 shadow-sm border border-gray-200 dark:border-slate-700">
               <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-slate-400">
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-slate-400 truncate">
                     Rating
                   </p>
                   <div className="flex items-center gap-1">
-                    <p className="text-2xl font-bold text-gray-900 dark:text-slate-100">
+                    <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-slate-100">
                       {doctor.rating !== undefined && doctor.rating !== null
                         ? doctor.rating.toFixed(1)
                         : "N/A"}
                     </p>
-                    <Star size={20} className="text-yellow-500 fill-current" />
+                    <Star size={16} className="text-yellow-500 fill-current sm:w-5 sm:h-5" />
                   </div>
                 </div>
-                <div className="w-12 h-12 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg flex items-center justify-center flex-shrink-0 ml-2">
                   <Star
-                    size={24}
-                    className="text-yellow-600 dark:text-yellow-400"
+                    size={20}
+                    className="text-yellow-600 dark:text-yellow-400 sm:w-6 sm:h-6"
                   />
                 </div>
               </div>
@@ -347,18 +347,18 @@ const DoctorProfile = () => {
           {/* Edit Controls */}
           <div className="flex justify-end">
             {isEditing ? (
-              <div className="flex items-center gap-3">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                 <button
                   onClick={handleEditToggle}
                   disabled={saving}
-                  className="btn-secondary flex items-center gap-2">
+                  className="btn-secondary flex items-center gap-2 text-sm sm:text-base">
                   <X size={16} />
-                  Cancel
+                  <span className="hidden sm:inline">Cancel</span>
                 </button>
                 <button
                   onClick={handleSave}
                   disabled={saving}
-                  className="btn-primary flex items-center gap-2">
+                  className="btn-primary flex items-center gap-2 text-sm sm:text-base">
                   <Save size={16} />
                   {saving ? "Saving..." : "Save Changes"}
                 </button>
@@ -366,9 +366,10 @@ const DoctorProfile = () => {
             ) : (
               <button
                 onClick={handleEditToggle}
-                className="btn-primary flex items-center gap-2">
+                className="btn-primary flex items-center gap-2 text-sm sm:text-base">
                 <Edit3 size={16} />
-                Edit Profile
+                <span className="hidden sm:inline">Edit Profile</span>
+                <span className="sm:hidden">Edit</span>
               </button>
             )}
           </div>
