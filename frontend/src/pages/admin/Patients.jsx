@@ -194,26 +194,33 @@ const Patients = () => {
         <Navbar onMenuClick={() => setSidebarOpen(true)} />
 
         <div className="p-3 sm:p-4 md:p-6 lg:p-8 mt-16 sm:mt-20">
-          <div className="card">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
+          {/* Header Section */}
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
+            <div>
+              <h2 className="text-2xl sm:text-3xl font-bold text-dark dark:text-slate-100">
                 Patient Management
               </h2>
-              <div className="flex gap-3">
-                <button
-                  onClick={handleAddPatient}
-                  className="btn btn-primary flex items-center gap-2">
-                  <Plus size={20} />
-                  Add Patient
-                </button>
-                <ExportButton
-                  data={allPatients}
-                  type="adminPatients"
-                  title="Patients Report"
-                  filename="patients_report"
-                />
-              </div>
+              <p className="text-sm text-gray-600 dark:text-slate-400 mt-1">
+                Manage patient records and medical information
+              </p>
             </div>
+            <div className="flex flex-wrap gap-3">
+              <button
+                onClick={handleAddPatient}
+                className="btn btn-primary flex items-center gap-2">
+                <Plus size={20} />
+                Add Patient
+              </button>
+              <ExportButton
+                data={allPatients}
+                type="adminPatients"
+                title="Patients Report"
+                filename="patients_report"
+              />
+            </div>
+          </div>
+
+          <div className="card">
 
             {patients.length === 0 ? (
               <EmptyState type="patients" className="py-12" />
