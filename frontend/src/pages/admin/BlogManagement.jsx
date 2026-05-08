@@ -84,20 +84,35 @@ const BlogManagement = () => {
         setPosts(response.data.data.posts);
         setTotalPages(response.data.data.pagination.pages);
 
-        // Calculate stats
-        const allPosts = response.data.data.posts;
-        setStats({
-          total: response.data.data.pagination.total,
-          published: allPosts.filter((p) => p.status === "published").length,
-          draft: allPosts.filter((p) => p.status === "draft").length,
-          archived: allPosts.filter((p) => p.status === "archived").length,
-        });
+        // Fetch stats for all posts (not just current page)
+        await fetchStats();
       }
     } catch (error) {
       console.error("Error fetching posts:", error);
       toast.error("Failed to fetch blog posts");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchStats = async () => {
+    try {
+      // Fetch counts for each status
+      const [totalRes, publishedRes, draftRes, archivedRes] = await Promise.all([
+        api.get("/blog/admin/posts", { params: { limit: 1 } }),
+        api.get("/blog/admin/posts", { params: { status: "published", limit: 1 } }),
+        api.get("/blog/admin/posts", { params: { status: "draft", limit: 1 } }),
+        api.get("/blog/admin/posts", { params: { status: "archived", limit: 1 } }),
+      ]);
+
+      setStats({
+        total: totalRes.data.data.pagination.total,
+        published: publishedRes.data.data.pagination.total,
+        draft: draftRes.data.data.pagination.total,
+        archived: archivedRes.data.data.pagination.total,
+      });
+    } catch (error) {
+      console.error("Error fetching stats:", error);
     }
   };
 
