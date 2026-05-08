@@ -88,68 +88,68 @@ const Payments = () => {
     allPayments.length > 0 ? allPayments.length : pagination.totalItems;
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-gray-50 dark:bg-slate-900">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <div className="flex-1 ml-0 lg:ml-64">
+      <div className="flex-1 ml-0 lg:ml-64 overflow-x-hidden">
         <Navbar onMenuClick={() => setSidebarOpen(true)} />
 
         {loading ? (
           <PatientPaymentsSkeleton />
         ) : (
-          <div className="p-4 sm:p-6 lg:p-8 mt-16 sm:mt-20">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="p-3 sm:p-4 md:p-6 lg:p-8 mt-16 sm:mt-20">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
               <div className="card">
                 <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-gray-500 dark:text-slate-400 text-sm font-medium">
+                  <div className="min-w-0 flex-1">
+                    <p className="text-gray-500 dark:text-slate-400 text-xs sm:text-sm font-medium truncate">
                       Total Paid
                     </p>
-                    <h3 className="text-3xl font-bold text-accent mt-2">
+                    <h3 className="text-2xl sm:text-3xl font-bold text-accent mt-2">
                       ${totalPaid}
                     </h3>
                   </div>
-                  <div className="w-14 h-14 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center">
-                    <DollarSign size={28} className="text-accent" />
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center flex-shrink-0 ml-2">
+                    <DollarSign size={24} className="text-accent sm:w-7 sm:h-7" />
                   </div>
                 </div>
               </div>
 
               <div className="card">
                 <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-gray-500 dark:text-slate-400 text-sm font-medium">
+                  <div className="min-w-0 flex-1">
+                    <p className="text-gray-500 dark:text-slate-400 text-xs sm:text-sm font-medium truncate">
                       Pending
                     </p>
-                    <h3 className="text-3xl font-bold text-yellow-600 mt-2">
+                    <h3 className="text-2xl sm:text-3xl font-bold text-yellow-600 mt-2">
                       ${totalPending}
                     </h3>
                   </div>
-                  <div className="w-14 h-14 bg-yellow-100 dark:bg-yellow-900/30 rounded-xl flex items-center justify-center">
-                    <DollarSign size={28} className="text-yellow-600" />
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 bg-yellow-100 dark:bg-yellow-900/30 rounded-xl flex items-center justify-center flex-shrink-0 ml-2">
+                    <DollarSign size={24} className="text-yellow-600 sm:w-7 sm:h-7" />
                   </div>
                 </div>
               </div>
 
-              <div className="card">
+              <div className="card sm:col-span-2 lg:col-span-1">
                 <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-gray-500 dark:text-slate-400 text-sm font-medium">
+                  <div className="min-w-0 flex-1">
+                    <p className="text-gray-500 dark:text-slate-400 text-xs sm:text-sm font-medium truncate">
                       Total Transactions
                     </p>
-                    <h3 className="text-3xl font-bold text-primary mt-2">
+                    <h3 className="text-2xl sm:text-3xl font-bold text-primary mt-2">
                       {totalTransactions}
                     </h3>
                   </div>
-                  <div className="w-14 h-14 bg-orange-100 dark:bg-orange-900/30 rounded-xl flex items-center justify-center">
-                    <CreditCard size={28} className="text-primary" />
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 bg-orange-100 dark:bg-orange-900/30 rounded-xl flex items-center justify-center flex-shrink-0 ml-2">
+                    <CreditCard size={24} className="text-primary sm:w-7 sm:h-7" />
                   </div>
                 </div>
               </div>
             </div>
 
             <div className="card">
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0 mb-6">
+                <h2 className="text-xl sm:text-2xl font-bold text-dark dark:text-slate-100">
                   Payment History
                 </h2>
                 <ExportButton

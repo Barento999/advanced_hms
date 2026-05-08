@@ -82,17 +82,17 @@ const Reviews = () => {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen">
+      <div className="flex min-h-screen bg-gray-50 dark:bg-slate-900">
         <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-        <div className="flex-1 ml-0 lg:ml-64">
+        <div className="flex-1 ml-0 lg:ml-64 overflow-x-hidden">
           <Navbar onMenuClick={() => setSidebarOpen(true)} />
-          <div className="p-4 sm:p-6 lg:p-8 mt-16 sm:mt-20">
+          <div className="p-3 sm:p-4 md:p-6 lg:p-8 mt-16 sm:mt-20">
             {/* Real Header - Shows Immediately */}
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
+            <div className="mb-4 sm:mb-6">
+              <h2 className="text-xl sm:text-2xl font-bold text-dark dark:text-slate-100">
                 Doctor Reviews
               </h2>
-              <p className="text-gray-600 dark:text-slate-400 mt-1">
+              <p className="text-sm sm:text-base text-gray-600 dark:text-slate-400 mt-1">
                 Rate and review your completed appointments
               </p>
             </div>
@@ -114,17 +114,17 @@ const Reviews = () => {
   }
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-gray-50 dark:bg-slate-900">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <div className="flex-1 ml-0 lg:ml-64">
+      <div className="flex-1 ml-0 lg:ml-64 overflow-x-hidden">
         <Navbar onMenuClick={() => setSidebarOpen(true)} />
 
-        <div className="p-4 sm:p-6 lg:p-8 mt-16 sm:mt-20">
-          <div className="mb-6">
-            <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
+        <div className="p-3 sm:p-4 md:p-6 lg:p-8 mt-16 sm:mt-20">
+          <div className="mb-4 sm:mb-6">
+            <h2 className="text-xl sm:text-2xl font-bold text-dark dark:text-slate-100">
               Doctor Reviews
             </h2>
-            <p className="text-gray-600 dark:text-slate-400 mt-1">
+            <p className="text-sm sm:text-base text-gray-600 dark:text-slate-400 mt-1">
               Rate and review your completed appointments
             </p>
           </div>

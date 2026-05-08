@@ -128,23 +128,23 @@ const BookAppointment = () => {
   };
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-gray-50 dark:bg-slate-900">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <div className="flex-1 ml-0 lg:ml-64">
+      <div className="flex-1 ml-0 lg:ml-64 overflow-x-hidden">
         <Navbar onMenuClick={() => setSidebarOpen(true)} />
 
-        <div className="p-4 sm:p-6 lg:p-8 mt-16 sm:mt-20">
+        <div className="p-3 sm:p-4 md:p-6 lg:p-8 mt-16 sm:mt-20">
           <div className="max-w-2xl mx-auto">
-            <h2 className="text-2xl font-bold text-dark dark:text-slate-100 mb-6">
+            <h2 className="text-xl sm:text-2xl font-bold text-dark dark:text-slate-100 mb-4 sm:mb-6">
               Book Appointment
             </h2>
 
             {/* Search and Filter Section */}
-            <div className="card mb-6">
-              <h3 className="text-lg font-semibold text-dark dark:text-slate-100 mb-4">
+            <div className="card mb-4 sm:mb-6">
+              <h3 className="text-base sm:text-lg font-semibold text-dark dark:text-slate-100 mb-4">
                 Find a Doctor
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                     <span className="flex items-center gap-2">
@@ -179,7 +179,7 @@ const BookAppointment = () => {
                   </select>
                 </div>
               </div>
-              <div className="mt-3 text-sm text-gray-600 dark:text-slate-400">
+              <div className="mt-3 text-xs sm:text-sm text-gray-600 dark:text-slate-400">
                 Showing{" "}
                 {(pagination.currentPage - 1) * pagination.itemsPerPage + 1} to{" "}
                 {Math.min(
