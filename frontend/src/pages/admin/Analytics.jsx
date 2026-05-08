@@ -468,26 +468,28 @@ const Analytics = () => {
             <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-4">
               Top Performing Doctors
             </h3>
-            <div className="overflow-x-auto">
+            
+            {/* Desktop Table View */}
+            <div className="hidden md:block overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-gray-200 dark:border-slate-700">
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
+                    <th className="text-left py-3 px-4 font-semibold text-sm text-gray-600 dark:text-slate-400">
                       Doctor
                     </th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
+                    <th className="text-left py-3 px-4 font-semibold text-sm text-gray-600 dark:text-slate-400">
                       Specialization
                     </th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
+                    <th className="text-left py-3 px-4 font-semibold text-sm text-gray-600 dark:text-slate-400">
                       Total Appointments
                     </th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
+                    <th className="text-left py-3 px-4 font-semibold text-sm text-gray-600 dark:text-slate-400">
                       Completed
                     </th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
+                    <th className="text-left py-3 px-4 font-semibold text-sm text-gray-600 dark:text-slate-400">
                       Rating
                     </th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
+                    <th className="text-left py-3 px-4 font-semibold text-sm text-gray-600 dark:text-slate-400">
                       Success Rate
                     </th>
                   </tr>
@@ -497,22 +499,22 @@ const Analytics = () => {
                     <tr
                       key={index}
                       className="border-b border-gray-100 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
-                      <td className="py-3 px-4 text-dark dark:text-slate-100 font-medium">
+                      <td className="py-3 px-4 text-sm text-dark dark:text-slate-100 font-medium">
                         {doctor.name}
                       </td>
-                      <td className="py-3 px-4 text-dark dark:text-slate-100">
+                      <td className="py-3 px-4 text-sm text-dark dark:text-slate-100">
                         {doctor.specialization}
                       </td>
-                      <td className="py-3 px-4 text-dark dark:text-slate-100">
+                      <td className="py-3 px-4 text-sm text-dark dark:text-slate-100">
                         {doctor.appointmentCount}
                       </td>
-                      <td className="py-3 px-4 text-dark dark:text-slate-100">
+                      <td className="py-3 px-4 text-sm text-dark dark:text-slate-100">
                         {doctor.completedAppointments}
                       </td>
                       <td className="py-3 px-4">
                         <div className="flex items-center gap-1">
                           <span className="text-yellow-500">★</span>
-                          <span className="text-dark dark:text-slate-100">
+                          <span className="text-sm text-dark dark:text-slate-100">
                             {doctor.rating?.toFixed(1) || "N/A"}
                           </span>
                         </div>
@@ -533,6 +535,67 @@ const Analytics = () => {
                   ))}
                 </tbody>
               </table>
+            </div>
+
+            {/* Mobile Card View */}
+            <div className="md:hidden space-y-3">
+              {analytics?.topDoctors?.map((doctor, index) => (
+                <div
+                  key={index}
+                  className="bg-gray-50 dark:bg-slate-700/50 rounded-lg p-4 space-y-3">
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-dark dark:text-slate-100 truncate">
+                        {doctor.name}
+                      </p>
+                      <p className="text-sm text-gray-600 dark:text-slate-400 mt-1">
+                        {doctor.specialization}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-1 ml-2 flex-shrink-0">
+                      <span className="text-yellow-500">★</span>
+                      <span className="text-sm font-medium text-dark dark:text-slate-100">
+                        {doctor.rating?.toFixed(1) || "N/A"}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">
+                        Total Appointments
+                      </p>
+                      <p className="text-sm font-medium text-dark dark:text-slate-100">
+                        {doctor.appointmentCount}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">
+                        Completed
+                      </p>
+                      <p className="text-sm font-medium text-dark dark:text-slate-100">
+                        {doctor.completedAppointments}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="pt-2 border-t border-gray-200 dark:border-slate-600">
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-gray-500 dark:text-slate-400">
+                        Success Rate
+                      </span>
+                      <span className="badge bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400">
+                        {doctor.appointmentCount > 0
+                          ? (
+                              (doctor.completedAppointments /
+                                doctor.appointmentCount) *
+                              100
+                            ).toFixed(1)
+                          : 0}
+                        %
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>

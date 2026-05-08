@@ -205,41 +205,45 @@ const Reports = () => {
         </div>
 
         {/* Monthly breakdown table */}
-        <div className="mt-8 overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-gray-200 dark:border-slate-700">
-                <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
-                  Month/Year
-                </th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
-                  Status
-                </th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
-                  Count
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {reports.report.map((item, index) => (
-                <tr
-                  key={index}
-                  className="border-b border-gray-100 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
-                  <td className="py-3 px-4 text-dark dark:text-slate-100">
-                    {item._id.month}/{item._id.year}
-                  </td>
-                  <td className="py-3 px-4">
-                    <span className={`badge badge-${item._id.status}`}>
-                      {item._id.status}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4 text-dark dark:text-slate-100 font-semibold">
-                    {item.count}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="mt-8">
+          <div className="overflow-x-auto -mx-4 sm:mx-0">
+            <div className="inline-block min-w-full align-middle px-4 sm:px-0">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-gray-200 dark:border-slate-700">
+                    <th className="text-left py-3 px-4 font-semibold text-sm text-gray-600 dark:text-slate-400 whitespace-nowrap">
+                      Month/Year
+                    </th>
+                    <th className="text-left py-3 px-4 font-semibold text-sm text-gray-600 dark:text-slate-400 whitespace-nowrap">
+                      Status
+                    </th>
+                    <th className="text-left py-3 px-4 font-semibold text-sm text-gray-600 dark:text-slate-400 whitespace-nowrap">
+                      Count
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {reports.report.map((item, index) => (
+                    <tr
+                      key={index}
+                      className="border-b border-gray-100 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
+                      <td className="py-3 px-4 text-sm text-dark dark:text-slate-100 whitespace-nowrap">
+                        {item._id.month}/{item._id.year}
+                      </td>
+                      <td className="py-3 px-4 whitespace-nowrap">
+                        <span className={`badge badge-${item._id.status}`}>
+                          {item._id.status}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 text-sm text-dark dark:text-slate-100 font-semibold whitespace-nowrap">
+                        {item.count}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -318,45 +322,47 @@ const Reports = () => {
         </div>
 
         {/* Monthly breakdown */}
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-gray-200 dark:border-slate-700">
-                <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
-                  Month/Year
-                </th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
-                  Revenue
-                </th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
-                  Transactions
-                </th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
-                  Avg Transaction
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {reports.report.map((item, index) => (
-                <tr
-                  key={index}
-                  className="border-b border-gray-100 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
-                  <td className="py-3 px-4 text-dark dark:text-slate-100">
-                    {item._id.month}/{item._id.year}
-                  </td>
-                  <td className="py-3 px-4 text-dark dark:text-slate-100 font-semibold">
-                    ${item.totalRevenue.toFixed(2)}
-                  </td>
-                  <td className="py-3 px-4 text-dark dark:text-slate-100">
-                    {item.transactionCount}
-                  </td>
-                  <td className="py-3 px-4 text-dark dark:text-slate-100">
-                    ${item.avgTransaction.toFixed(2)}
-                  </td>
+        <div className="overflow-x-auto -mx-4 sm:mx-0">
+          <div className="inline-block min-w-full align-middle px-4 sm:px-0">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-gray-200 dark:border-slate-700">
+                  <th className="text-left py-3 px-4 font-semibold text-sm text-gray-600 dark:text-slate-400 whitespace-nowrap">
+                    Month/Year
+                  </th>
+                  <th className="text-left py-3 px-4 font-semibold text-sm text-gray-600 dark:text-slate-400 whitespace-nowrap">
+                    Revenue
+                  </th>
+                  <th className="text-left py-3 px-4 font-semibold text-sm text-gray-600 dark:text-slate-400 whitespace-nowrap">
+                    Transactions
+                  </th>
+                  <th className="text-left py-3 px-4 font-semibold text-sm text-gray-600 dark:text-slate-400 whitespace-nowrap">
+                    Avg Transaction
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {reports.report.map((item, index) => (
+                  <tr
+                    key={index}
+                    className="border-b border-gray-100 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
+                    <td className="py-3 px-4 text-sm text-dark dark:text-slate-100 whitespace-nowrap">
+                      {item._id.month}/{item._id.year}
+                    </td>
+                    <td className="py-3 px-4 text-sm text-dark dark:text-slate-100 font-semibold whitespace-nowrap">
+                      ${item.totalRevenue.toFixed(2)}
+                    </td>
+                    <td className="py-3 px-4 text-sm text-dark dark:text-slate-100 whitespace-nowrap">
+                      {item.transactionCount}
+                    </td>
+                    <td className="py-3 px-4 text-sm text-dark dark:text-slate-100 whitespace-nowrap">
+                      ${item.avgTransaction.toFixed(2)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     );
@@ -383,75 +389,77 @@ const Reports = () => {
         <h3 className="text-xl font-bold text-dark dark:text-slate-100 mb-4">
           Doctor Performance Report
         </h3>
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-gray-200 dark:border-slate-700">
-                <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
-                  Doctor
-                </th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
-                  Specialization
-                </th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
-                  Experience
-                </th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
-                  Fee
-                </th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
-                  Appointments
-                </th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
-                  Completed
-                </th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
-                  Rating
-                </th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-600 dark:text-slate-400">
-                  Reviews
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {reports.report.map((doctor, index) => (
-                <tr
-                  key={index}
-                  className="border-b border-gray-100 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
-                  <td className="py-3 px-4 text-dark dark:text-slate-100 font-medium">
-                    {doctor.name}
-                  </td>
-                  <td className="py-3 px-4 text-dark dark:text-slate-100">
-                    {doctor.specialization}
-                  </td>
-                  <td className="py-3 px-4 text-dark dark:text-slate-100">
-                    {doctor.experience} years
-                  </td>
-                  <td className="py-3 px-4 text-dark dark:text-slate-100">
-                    ${doctor.consultationFee}
-                  </td>
-                  <td className="py-3 px-4 text-dark dark:text-slate-100">
-                    {doctor.totalAppointments}
-                  </td>
-                  <td className="py-3 px-4 text-dark dark:text-slate-100">
-                    {doctor.completedAppointments}
-                  </td>
-                  <td className="py-3 px-4">
-                    <div className="flex items-center gap-1">
-                      <span className="text-yellow-500">★</span>
-                      <span className="text-dark dark:text-slate-100">
-                        {doctor.rating?.toFixed(1) || "N/A"}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="py-3 px-4 text-dark dark:text-slate-100">
-                    {doctor.totalReviews} (★{" "}
-                    {doctor.avgReviewRating?.toFixed(1) || "N/A"})
-                  </td>
+        <div className="overflow-x-auto -mx-4 sm:mx-0">
+          <div className="inline-block min-w-full align-middle px-4 sm:px-0">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-gray-200 dark:border-slate-700">
+                  <th className="text-left py-3 px-4 font-semibold text-sm text-gray-600 dark:text-slate-400 whitespace-nowrap">
+                    Doctor
+                  </th>
+                  <th className="text-left py-3 px-4 font-semibold text-sm text-gray-600 dark:text-slate-400 whitespace-nowrap">
+                    Specialization
+                  </th>
+                  <th className="text-left py-3 px-4 font-semibold text-sm text-gray-600 dark:text-slate-400 whitespace-nowrap">
+                    Experience
+                  </th>
+                  <th className="text-left py-3 px-4 font-semibold text-sm text-gray-600 dark:text-slate-400 whitespace-nowrap">
+                    Fee
+                  </th>
+                  <th className="text-left py-3 px-4 font-semibold text-sm text-gray-600 dark:text-slate-400 whitespace-nowrap">
+                    Appointments
+                  </th>
+                  <th className="text-left py-3 px-4 font-semibold text-sm text-gray-600 dark:text-slate-400 whitespace-nowrap">
+                    Completed
+                  </th>
+                  <th className="text-left py-3 px-4 font-semibold text-sm text-gray-600 dark:text-slate-400 whitespace-nowrap">
+                    Rating
+                  </th>
+                  <th className="text-left py-3 px-4 font-semibold text-sm text-gray-600 dark:text-slate-400 whitespace-nowrap">
+                    Reviews
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {reports.report.map((doctor, index) => (
+                  <tr
+                    key={index}
+                    className="border-b border-gray-100 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
+                    <td className="py-3 px-4 text-sm text-dark dark:text-slate-100 font-medium whitespace-nowrap">
+                      {doctor.name}
+                    </td>
+                    <td className="py-3 px-4 text-sm text-dark dark:text-slate-100 whitespace-nowrap">
+                      {doctor.specialization}
+                    </td>
+                    <td className="py-3 px-4 text-sm text-dark dark:text-slate-100 whitespace-nowrap">
+                      {doctor.experience} years
+                    </td>
+                    <td className="py-3 px-4 text-sm text-dark dark:text-slate-100 whitespace-nowrap">
+                      ${doctor.consultationFee}
+                    </td>
+                    <td className="py-3 px-4 text-sm text-dark dark:text-slate-100 whitespace-nowrap">
+                      {doctor.totalAppointments}
+                    </td>
+                    <td className="py-3 px-4 text-sm text-dark dark:text-slate-100 whitespace-nowrap">
+                      {doctor.completedAppointments}
+                    </td>
+                    <td className="py-3 px-4 whitespace-nowrap">
+                      <div className="flex items-center gap-1">
+                        <span className="text-yellow-500">★</span>
+                        <span className="text-sm text-dark dark:text-slate-100">
+                          {doctor.rating?.toFixed(1) || "N/A"}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="py-3 px-4 text-sm text-dark dark:text-slate-100 whitespace-nowrap">
+                      {doctor.totalReviews} (★{" "}
+                      {doctor.avgReviewRating?.toFixed(1) || "N/A"})
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     );
