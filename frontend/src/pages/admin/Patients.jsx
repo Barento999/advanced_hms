@@ -304,53 +304,77 @@ const Patients = () => {
                 </div>
 
                 {/* Mobile Card View */}
-                <div className="md:hidden space-y-3">
+                <div className="md:hidden space-y-4">
                   {patients.map((patient) => (
                     <div
                       key={patient._id}
-                      className="bg-gray-50 dark:bg-slate-700/50 rounded-lg p-4 space-y-3">
-                      <div className="flex justify-between items-start">
-                        <div className="flex-1 min-w-0">
-                          <p className="font-medium text-dark dark:text-slate-100 truncate">
-                            {patient.name}
-                          </p>
-                          <p className="text-sm text-gray-600 dark:text-slate-400 mt-1 truncate">
-                            {patient.email}
-                          </p>
-                        </div>
-                        <span
-                          className={`badge ${patient.isActive ? "badge-completed" : "badge-cancelled"} ml-2 flex-shrink-0`}>
-                          {patient.isActive ? "Active" : "Inactive"}
-                        </span>
-                      </div>
-                      <div className="grid grid-cols-2 gap-3">
-                        <div>
-                          <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">
-                            Age
-                          </p>
-                          <p className="text-sm font-medium text-dark dark:text-slate-100">
-                            {calculateAge(patient.dateOfBirth)} years
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">
-                            Gender
-                          </p>
-                          <span className="badge bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-400 capitalize">
-                            {patient.gender || "N/A"}
+                      className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-200 dark:border-slate-700 overflow-hidden hover:shadow-md transition-shadow">
+                      {/* Header Section */}
+                      <div className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-slate-700 dark:to-slate-700 p-4 border-b border-gray-200 dark:border-slate-600">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1 min-w-0">
+                            <h3 className="font-semibold text-lg text-dark dark:text-slate-100 truncate">
+                              {patient.name}
+                            </h3>
+                            <p className="text-sm text-gray-600 dark:text-slate-400 mt-0.5 truncate">
+                              {patient.email}
+                            </p>
+                          </div>
+                          <span
+                            className={`badge ${patient.isActive ? "badge-completed" : "badge-cancelled"} ml-2 flex-shrink-0`}>
+                            {patient.isActive ? "Active" : "Inactive"}
                           </span>
                         </div>
                       </div>
-                      <div className="flex gap-2 pt-2 border-t border-gray-200 dark:border-slate-600">
+
+                      {/* Content Section */}
+                      <div className="p-4 space-y-3">
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="flex items-center gap-2">
+                            <div className="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center flex-shrink-0">
+                              <svg className="w-4 h-4 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                              </svg>
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-xs text-gray-500 dark:text-slate-400">
+                                Age
+                              </p>
+                              <p className="text-sm font-medium text-dark dark:text-slate-100">
+                                {calculateAge(patient.dateOfBirth)} years
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <div className="w-8 h-8 rounded-lg bg-pink-100 dark:bg-pink-900/30 flex items-center justify-center flex-shrink-0">
+                              <svg className="w-4 h-4 text-pink-600 dark:text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                              </svg>
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-xs text-gray-500 dark:text-slate-400">
+                                Gender
+                              </p>
+                              <p className="text-sm font-medium text-dark dark:text-slate-100 capitalize truncate">
+                                {patient.gender || "N/A"}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Actions Section */}
+                      <div className="px-4 pb-4 flex gap-2">
                         <button
                           onClick={() => handleViewDetails(patient)}
-                          className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg transition-colors text-sm font-medium">
+                          className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-primary hover:bg-blue-700 text-white rounded-lg transition-colors text-sm font-medium shadow-sm">
                           <Eye size={16} />
-                          View
+                          View Details
                         </button>
                         <button
                           onClick={() => handleToggleStatus(patient)}
-                          className="px-3 py-2 bg-gray-200 dark:bg-slate-700 text-gray-600 dark:text-slate-400 rounded-lg transition-colors">
+                          className="px-4 py-2.5 bg-gray-100 hover:bg-gray-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-gray-700 dark:text-slate-300 rounded-lg transition-colors shadow-sm"
+                          title={patient.isActive ? "Deactivate" : "Activate"}>
                           {patient.isActive ? (
                             <ToggleRight size={18} />
                           ) : (
@@ -359,7 +383,8 @@ const Patients = () => {
                         </button>
                         <button
                           onClick={() => handleDelete(patient)}
-                          className="px-3 py-2 bg-red-100 dark:bg-red-900/30 text-danger dark:text-red-400 rounded-lg transition-colors">
+                          className="px-4 py-2.5 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/30 text-danger dark:text-red-400 rounded-lg transition-colors shadow-sm"
+                          title="Delete">
                           <Trash2 size={16} />
                         </button>
                       </div>

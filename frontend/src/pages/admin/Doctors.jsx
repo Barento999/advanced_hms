@@ -282,43 +282,60 @@ const Doctors = () => {
                 </div>
 
                 {/* Mobile Card View */}
-                <div className="md:hidden space-y-3">
+                <div className="md:hidden space-y-4">
                   {doctors.map((doctor) => (
                     <div
                       key={doctor._id}
-                      className="bg-gray-50 dark:bg-slate-700/50 rounded-lg p-4 space-y-3">
-                      <div className="flex justify-between items-start">
-                        <div className="flex-1 min-w-0">
-                          <p className="font-medium text-dark dark:text-slate-100 truncate">
-                            {doctor.name}
-                          </p>
-                          <p className="text-sm text-gray-600 dark:text-slate-400 mt-1 truncate">
-                            {doctor.email}
-                          </p>
+                      className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-200 dark:border-slate-700 overflow-hidden hover:shadow-md transition-shadow">
+                      {/* Header Section */}
+                      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-slate-700 dark:to-slate-700 p-4 border-b border-gray-200 dark:border-slate-600">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1 min-w-0">
+                            <h3 className="font-semibold text-lg text-dark dark:text-slate-100 truncate">
+                              {doctor.name}
+                            </h3>
+                            <p className="text-sm text-gray-600 dark:text-slate-400 mt-0.5 truncate">
+                              {doctor.email}
+                            </p>
+                          </div>
+                          <span
+                            className={`badge ${doctor.isActive ? "badge-completed" : "badge-cancelled"} ml-2 flex-shrink-0`}>
+                            {doctor.isActive ? "Active" : "Inactive"}
+                          </span>
                         </div>
-                        <span
-                          className={`badge ${doctor.isActive ? "badge-completed" : "badge-cancelled"} ml-2 flex-shrink-0`}>
-                          {doctor.isActive ? "Active" : "Inactive"}
-                        </span>
                       </div>
-                      <div>
-                        <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">
-                          Specialization
-                        </p>
-                        <span className="badge bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400">
-                          {doctor.specialization || "N/A"}
-                        </span>
+
+                      {/* Content Section */}
+                      <div className="p-4 space-y-3">
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center flex-shrink-0">
+                            <svg className="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-xs text-gray-500 dark:text-slate-400">
+                              Specialization
+                            </p>
+                            <p className="text-sm font-medium text-dark dark:text-slate-100 truncate">
+                              {doctor.specialization || "N/A"}
+                            </p>
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex gap-2 pt-2 border-t border-gray-200 dark:border-slate-600">
+
+                      {/* Actions Section */}
+                      <div className="px-4 pb-4 flex gap-2">
                         <button
                           onClick={() => handleViewDetails(doctor)}
-                          className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg transition-colors text-sm font-medium">
+                          className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-primary hover:bg-blue-700 text-white rounded-lg transition-colors text-sm font-medium shadow-sm">
                           <Eye size={16} />
-                          View
+                          View Details
                         </button>
                         <button
                           onClick={() => handleToggleStatus(doctor)}
-                          className="px-3 py-2 bg-gray-200 dark:bg-slate-700 text-gray-600 dark:text-slate-400 rounded-lg transition-colors">
+                          className="px-4 py-2.5 bg-gray-100 hover:bg-gray-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-gray-700 dark:text-slate-300 rounded-lg transition-colors shadow-sm"
+                          title={doctor.isActive ? "Deactivate" : "Activate"}>
                           {doctor.isActive ? (
                             <ToggleRight size={18} />
                           ) : (
@@ -327,7 +344,8 @@ const Doctors = () => {
                         </button>
                         <button
                           onClick={() => handleDelete(doctor)}
-                          className="px-3 py-2 bg-red-100 dark:bg-red-900/30 text-danger dark:text-red-400 rounded-lg transition-colors">
+                          className="px-4 py-2.5 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/30 text-danger dark:text-red-400 rounded-lg transition-colors shadow-sm"
+                          title="Delete">
                           <Trash2 size={16} />
                         </button>
                       </div>
