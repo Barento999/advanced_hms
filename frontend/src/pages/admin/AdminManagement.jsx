@@ -244,14 +244,9 @@ const AdminManagement = () => {
             <div className="flex flex-wrap items-center gap-3">
               <ExportButton
                 data={allAdmins}
-                filename="admins"
-                columns={[
-                  { key: "name", label: "Name" },
-                  { key: "email", label: "Email" },
-                  { key: "phone", label: "Phone" },
-                  { key: "isActive", label: "Status" },
-                  { key: "createdAt", label: "Created Date" },
-                ]}
+                type="admins"
+                title="Admins Report"
+                filename="admins_report"
               />
               <button
                 onClick={() => setShowAddModal(true)}

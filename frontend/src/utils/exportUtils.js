@@ -283,6 +283,15 @@ export const EXPORT_COLUMNS = {
     { header: "Created Date", accessor: "createdAt" },
   ],
 
+  admins: [
+    { header: "Name", accessor: "name" },
+    { header: "Email", accessor: "email" },
+    { header: "Phone", accessor: "phone" },
+    { header: "Role", accessor: "role" },
+    { header: "Status", accessor: "isActive" },
+    { header: "Created Date", accessor: "createdAt" },
+  ],
+
   analytics: [
     { header: "Metric", accessor: "metric" },
     { header: "Value", accessor: "value" },
