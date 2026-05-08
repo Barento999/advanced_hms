@@ -175,27 +175,27 @@ const Analytics = () => {
   }
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-gray-50 dark:bg-slate-900">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex-1 ml-0 lg:ml-64">
         <Navbar onMenuClick={() => setSidebarOpen(true)} />
 
-        <div className="p-4 sm:p-6 lg:p-8 mt-16 sm:mt-20">
+        <div className="p-3 sm:p-4 md:p-6 lg:p-8 mt-16 sm:mt-20">
           {/* Header */}
-          <div className="flex justify-between items-center mb-8">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6 sm:mb-8">
             <div>
-              <h1 className="text-3xl font-bold text-dark dark:text-slate-100">
+              <h1 className="text-2xl sm:text-3xl font-bold text-dark dark:text-slate-100">
                 Analytics & Reports
               </h1>
-              <p className="text-gray-600 dark:text-slate-400 mt-2">
+              <p className="text-sm sm:text-base text-gray-600 dark:text-slate-400 mt-1 sm:mt-2">
                 Comprehensive insights and performance metrics
               </p>
             </div>
 
-            <div className="flex items-center gap-4">
-              it is n{/* Period Filter */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
+              {/* Period Filter */}
               <div className="flex items-center gap-2">
-                <Filter size={20} className="text-gray-500" />
+                <Filter size={18} className="text-gray-500 flex-shrink-0 sm:w-5 sm:h-5" />
                 <select
                   value={period}
                   onChange={(e) => setPeriod(e.target.value)}
