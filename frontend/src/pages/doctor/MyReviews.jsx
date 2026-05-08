@@ -95,19 +95,19 @@ const MyReviews = () => {
   }
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-gray-50 dark:bg-slate-900">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex-1 ml-0 lg:ml-64">
         <Navbar onMenuClick={() => setSidebarOpen(true)} />
 
-        <div className="p-4 sm:p-6 lg:p-8 mt-16 sm:mt-20">
+        <div className="p-3 sm:p-4 md:p-6 lg:p-8 mt-16 sm:mt-20">
           <div className="mb-6">
-            <div className="flex justify-between items-center">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
               <div>
-                <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
+                <h2 className="text-xl sm:text-2xl font-bold text-dark dark:text-slate-100">
                   My Reviews
                 </h2>
-                <p className="text-gray-600 dark:text-slate-400 mt-1">
+                <p className="text-sm text-gray-600 dark:text-slate-400 mt-1">
                   See what your patients are saying about you
                 </p>
               </div>
@@ -122,9 +122,9 @@ const MyReviews = () => {
 
           {/* Rating Summary */}
           <div className="card mb-6">
-            <div className="flex items-center gap-6">
+            <div className="flex flex-col sm:flex-row items-center gap-6">
               <div className="text-center">
-                <div className="text-5xl font-bold text-primary">
+                <div className="text-4xl sm:text-5xl font-bold text-primary">
                   {profile?.rating || "0.0"}
                 </div>
                 <div className="flex justify-center mt-2">
@@ -135,7 +135,7 @@ const MyReviews = () => {
                   {allReviews.length === 1 ? "review" : "reviews"}
                 </p>
               </div>
-              <div className="flex-1 border-l dark:border-slate-700 pl-6">
+              <div className="flex-1 w-full sm:border-l dark:border-slate-700 sm:pl-6">
                 <h3 className="font-semibold text-dark dark:text-slate-100 mb-3">
                   Rating Breakdown
                 </h3>

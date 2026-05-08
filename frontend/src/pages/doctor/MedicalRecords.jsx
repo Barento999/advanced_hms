@@ -64,29 +64,29 @@ const MedicalRecords = () => {
   };
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-gray-50 dark:bg-slate-900">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex-1 ml-0 lg:ml-64">
         <Navbar onMenuClick={() => setSidebarOpen(true)} />
 
-        <div className="p-4 sm:p-6 lg:p-8 mt-16 sm:mt-20">
+        <div className="p-3 sm:p-4 md:p-6 lg:p-8 mt-16 sm:mt-20">
           {/* Header */}
           <div className="mb-6">
-            <h1 className="text-3xl font-bold text-dark dark:text-slate-100">
+            <h1 className="text-2xl sm:text-3xl font-bold text-dark dark:text-slate-100">
               Add Medical Record
             </h1>
-            <p className="text-gray-600 dark:text-slate-400 mt-2">
+            <p className="text-sm text-gray-600 dark:text-slate-400 mt-1 sm:mt-2">
               Create comprehensive medical records for your patients
             </p>
           </div>
 
           <div className="max-w-4xl mx-auto card">
-            <h2 className="text-2xl font-bold text-dark dark:text-slate-100 mb-6">
+            <h2 className="text-xl sm:text-2xl font-bold text-dark dark:text-slate-100 mb-6">
               Patient Medical Record Form
             </h2>
 
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                     Patient ID
@@ -170,7 +170,7 @@ const MedicalRecords = () => {
                 {formData.prescription.map((item, index) => (
                   <div
                     key={index}
-                    className="grid grid-cols-2 gap-4 mb-4 p-4 bg-gray-50 dark:bg-slate-700/30 rounded-xl">
+                    className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 p-4 bg-gray-50 dark:bg-slate-700/30 rounded-xl">
                     <input
                       type="text"
                       className="input-field"
@@ -242,7 +242,7 @@ const MedicalRecords = () => {
                 />
               </div>
 
-              <div className="flex gap-4">
+              <div className="flex flex-col sm:flex-row gap-4">
                 <button
                   type="submit"
                   disabled={loading}

@@ -114,21 +114,21 @@ const ViewMedicalRecords = () => {
   }
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-gray-50 dark:bg-slate-900">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex-1 ml-0 lg:ml-64">
         <Navbar onMenuClick={() => setSidebarOpen(true)} />
 
-        <div className="p-4 sm:p-6 lg:p-8 mt-16 sm:mt-20">
+        <div className="p-3 sm:p-4 md:p-6 lg:p-8 mt-16 sm:mt-20">
           <div className="card">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
+              <h2 className="text-xl sm:text-2xl font-bold text-dark dark:text-slate-100">
                 Medical Records
               </h2>
 
               {/* Search */}
-              <form onSubmit={handleSearch} className="flex gap-2">
-                <div className="relative">
+              <form onSubmit={handleSearch} className="flex gap-2 w-full sm:w-auto">
+                <div className="relative flex-1 sm:flex-initial">
                   <Search
                     size={20}
                     className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
@@ -136,14 +136,14 @@ const ViewMedicalRecords = () => {
                   <input
                     type="text"
                     placeholder="Search by patient name or diagnosis..."
-                    className="pl-10 pr-4 py-2 border border-gray-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-dark dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className="w-full sm:w-64 pl-10 pr-4 py-2 border border-gray-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-dark dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-primary text-white rounded-xl hover:bg-blue-700 transition-colors">
+                  className="px-4 py-2 bg-primary text-white rounded-xl hover:bg-blue-700 transition-colors text-sm whitespace-nowrap">
                   Search
                 </button>
               </form>

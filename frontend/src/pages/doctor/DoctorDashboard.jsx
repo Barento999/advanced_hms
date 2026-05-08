@@ -105,7 +105,7 @@ const DoctorDashboard = () => {
   };
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-gray-50 dark:bg-slate-900">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex-1 ml-0 lg:ml-64">
         <Navbar onMenuClick={() => setSidebarOpen(true)} />
@@ -113,17 +113,17 @@ const DoctorDashboard = () => {
         {loading ? (
           <DoctorDashboardSkeleton />
         ) : (
-          <div className="p-4 sm:p-6 lg:p-8 mt-16 sm:mt-20">
-            <div className="mb-8">
-              <h1 className="text-3xl font-bold text-dark dark:text-slate-100">
+          <div className="p-3 sm:p-4 md:p-6 lg:p-8 mt-16 sm:mt-20">
+            <div className="mb-6 sm:mb-8">
+              <h1 className="text-2xl sm:text-3xl font-bold text-dark dark:text-slate-100">
                 Doctor Dashboard
               </h1>
-              <p className="text-gray-600 dark:text-slate-400 mt-2">
+              <p className="text-sm text-gray-600 dark:text-slate-400 mt-1 sm:mt-2">
                 Manage your appointments and patient care
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
               <StatCard
                 icon={Calendar}
                 title="Total Appointments"
@@ -155,11 +155,11 @@ const DoctorDashboard = () => {
             </div>
 
             <div className="card">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xl font-bold text-dark dark:text-slate-100">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-0 mb-6">
+                <h3 className="text-lg sm:text-xl font-bold text-dark dark:text-slate-100">
                   Upcoming Appointments
                 </h3>
-                <div className="text-sm text-gray-500 dark:text-slate-400">
+                <div className="text-xs sm:text-sm text-gray-500 dark:text-slate-400">
                   Pending & Confirmed Only | Total Stats: P:{stats.pending} C:
                   {stats.confirmed}
                 </div>

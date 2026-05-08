@@ -126,22 +126,22 @@ const Schedule = () => {
   }
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-gray-50 dark:bg-slate-900">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex-1 ml-0 lg:ml-64">
         <Navbar onMenuClick={() => setSidebarOpen(true)} />
 
-        <div className="p-4 sm:p-6 lg:p-8 mt-16 sm:mt-20">
+        <div className="p-3 sm:p-4 md:p-6 lg:p-8 mt-16 sm:mt-20">
           <div className="mb-6">
-            <h2 className="text-2xl font-bold text-dark dark:text-slate-100">
+            <h2 className="text-xl sm:text-2xl font-bold text-dark dark:text-slate-100">
               Manage Your Schedule
             </h2>
-            <p className="text-gray-600 dark:text-slate-400 mt-1">
+            <p className="text-sm text-gray-600 dark:text-slate-400 mt-1">
               Set your available days and working hours
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
             {/* Available Days */}
             <div className="card">
               <div className="flex items-center gap-3 mb-6">
@@ -249,8 +249,8 @@ const Schedule = () => {
             <button
               onClick={handleSave}
               disabled={saving}
-              className="flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-semibold hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-              <Save size={20} />
+              className="flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-primary text-white rounded-xl font-semibold hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base">
+              <Save size={18} sm:size={20} />
               {saving ? "Saving..." : "Save Schedule"}
             </button>
           </div>
