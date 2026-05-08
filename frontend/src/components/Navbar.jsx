@@ -176,29 +176,39 @@ const Navbar = ({ onMenuClick }) => {
           )}
         </div>
 
-        <div className="hidden sm:flex items-center gap-2 sm:gap-3 pl-3 sm:pl-4 border-l-2 border-border dark:border-slate-700">
-          <div
-            className={`w-9 h-9 sm:w-10 sm:h-10 lg:w-11 lg:h-11 ${getRoleBadgeColor()} rounded-full flex items-center justify-center shadow-md`}>
-            <User size={18} className="sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-white" />
-          </div>
-
+        <div className="flex items-center gap-2 sm:gap-3 pl-2 sm:pl-3 lg:pl-4 border-l-2 border-border dark:border-slate-700">
           {/* Admin Dropdown */}
           {user?.role === "admin" ? (
             <div className="relative" ref={adminDropdownRef}>
+              {/* Mobile - Circle Only */}
               <button
                 onClick={() => setShowAdminDropdown(!showAdminDropdown)}
-                className="flex items-center gap-2 hover:bg-secondary dark:hover:bg-slate-700 rounded-xl px-2 sm:px-3 py-2 transition-all duration-200 group">
-                <div className="text-left">
-                  <p className="font-semibold text-dark dark:text-white text-sm lg:text-base">
+                className="sm:hidden p-1 hover:bg-secondary dark:hover:bg-slate-700 rounded-full transition-all duration-200">
+                <div
+                  className={`w-9 h-9 ${getRoleBadgeColor()} rounded-full flex items-center justify-center shadow-md`}>
+                  <User size={18} className="text-white" />
+                </div>
+              </button>
+
+              {/* Desktop - Full Profile with Dropdown */}
+              <button
+                onClick={() => setShowAdminDropdown(!showAdminDropdown)}
+                className="hidden sm:flex items-center gap-2 hover:bg-secondary dark:hover:bg-slate-700 rounded-xl px-2 sm:px-3 py-2 transition-all duration-200 group">
+                <div
+                  className={`w-9 h-9 lg:w-11 lg:h-11 ${getRoleBadgeColor()} rounded-full flex items-center justify-center shadow-md flex-shrink-0`}>
+                  <User size={18} className="lg:w-6 lg:h-6 text-white" />
+                </div>
+                <div className="text-left min-w-0">
+                  <p className="font-semibold text-dark dark:text-white text-sm lg:text-base truncate">
                     {user?.name}
                   </p>
-                  <p className="text-[10px] sm:text-xs text-primary dark:text-blue-400 font-medium uppercase">
+                  <p className="text-xs text-primary dark:text-blue-400 font-medium uppercase">
                     {user?.role}
                   </p>
                 </div>
                 <ChevronDown
                   size={14}
-                  className={`sm:w-4 sm:h-4 text-muted dark:text-slate-400 group-hover:text-primary transition-all duration-200 ${
+                  className={`sm:w-4 sm:h-4 text-muted dark:text-slate-400 group-hover:text-primary transition-all duration-200 flex-shrink-0 ${
                     showAdminDropdown ? "rotate-180" : ""
                   }`}
                 />
@@ -206,15 +216,15 @@ const Navbar = ({ onMenuClick }) => {
 
               {/* Admin Dropdown Menu */}
               {showAdminDropdown && (
-                <div className="absolute right-0 mt-2 w-48 sm:w-56 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-border dark:border-slate-700 z-50 py-2">
+                <div className="absolute right-0 mt-2 w-44 sm:w-48 lg:w-56 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-border dark:border-slate-700 z-50 py-2">
                   <button
                     onClick={() => {
                       setShowAdminDropdown(false);
                       navigate("/admin/profile");
                     }}
-                    className="w-full flex items-center gap-3 px-4 py-3 hover:bg-secondary dark:hover:bg-slate-700 transition-colors text-left">
-                    <User size={18} className="text-primary" />
-                    <span className="text-dark dark:text-white font-medium">
+                    className="w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 hover:bg-secondary dark:hover:bg-slate-700 transition-colors text-left">
+                    <User size={16} className="sm:w-[18px] sm:h-[18px] text-primary flex-shrink-0" />
+                    <span className="text-dark dark:text-white font-medium text-sm sm:text-base">
                       Admin Profile
                     </span>
                   </button>
@@ -224,9 +234,9 @@ const Navbar = ({ onMenuClick }) => {
                       setShowAdminDropdown(false);
                       navigate("/admin/management");
                     }}
-                    className="w-full flex items-center gap-3 px-4 py-3 hover:bg-secondary dark:hover:bg-slate-700 transition-colors text-left">
-                    <Shield size={18} className="text-primary" />
-                    <span className="text-dark dark:text-white font-medium">
+                    className="w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 hover:bg-secondary dark:hover:bg-slate-700 transition-colors text-left">
+                    <Shield size={16} className="sm:w-[18px] sm:h-[18px] text-primary flex-shrink-0" />
+                    <span className="text-dark dark:text-white font-medium text-sm sm:text-base">
                       Admin Management
                     </span>
                   </button>
@@ -234,15 +244,32 @@ const Navbar = ({ onMenuClick }) => {
               )}
             </div>
           ) : (
-            /* Non-admin users - regular display */
-            <div className="text-left">
-              <p className="font-semibold text-dark dark:text-white text-sm lg:text-base">
-                {user?.name}
-              </p>
-              <p className="text-[10px] sm:text-xs text-primary dark:text-blue-400 font-medium uppercase">
-                {user?.role}
-              </p>
-            </div>
+            /* Non-admin users - Circle on mobile, full on desktop */
+            <>
+              {/* Mobile - Circle Only */}
+              <div className="sm:hidden">
+                <div
+                  className={`w-9 h-9 ${getRoleBadgeColor()} rounded-full flex items-center justify-center shadow-md`}>
+                  <User size={18} className="text-white" />
+                </div>
+              </div>
+
+              {/* Desktop - Full Profile */}
+              <div className="hidden sm:flex items-center gap-2 sm:gap-3">
+                <div
+                  className={`w-9 h-9 lg:w-11 lg:h-11 ${getRoleBadgeColor()} rounded-full flex items-center justify-center shadow-md flex-shrink-0`}>
+                  <User size={18} className="lg:w-6 lg:h-6 text-white" />
+                </div>
+                <div className="text-left min-w-0">
+                  <p className="font-semibold text-dark dark:text-white text-sm lg:text-base truncate">
+                    {user?.name}
+                  </p>
+                  <p className="text-xs text-primary dark:text-blue-400 font-medium uppercase">
+                    {user?.role}
+                  </p>
+                </div>
+              </div>
+            </>
           )}
         </div>
       </div>
