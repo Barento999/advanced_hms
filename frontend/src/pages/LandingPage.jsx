@@ -93,7 +93,6 @@ const LandingPage = () => {
   ]);
   const [loading, setLoading] = useState(true);
   const [blogPosts, setBlogPosts] = useState([]);
-  const [showEmergencyBanner, setShowEmergencyBanner] = useState(true);
 
   // Scroll animation setup
   useEffect(() => {
@@ -598,35 +597,8 @@ const LandingPage = () => {
           }
         }
       `}</style>
-      {/* Emergency Banner */}
-      {showEmergencyBanner && (
-        <div className="bg-red-600 text-white py-3 px-4 fixed w-full top-0 z-[60] shadow-lg left-0 right-0">
-          <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3 flex-1 min-w-0">
-              <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 animate-pulse">
-                <AlertTriangle className="w-5 h-5" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-semibold text-sm md:text-base truncate">
-                  🚨 Medical Emergency? Call 911 Immediately
-                </p>
-                <p className="text-xs text-red-100 hidden sm:block truncate">
-                  This platform is not for emergencies. For urgent care, contact emergency services.
-                </p>
-              </div>
-            </div>
-            <button
-              onClick={() => setShowEmergencyBanner(false)}
-              className="p-1 hover:bg-white/20 rounded-lg transition-colors flex-shrink-0"
-              aria-label="Close emergency banner">
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-        </div>
-      )}
-
       {/* Navigation */}
-      <nav className={`bg-white dark:bg-slate-800 shadow-sm fixed w-full z-50 transition-all left-0 right-0 ${showEmergencyBanner ? 'top-[52px]' : 'top-0'}`}>
+      <nav className="bg-white dark:bg-slate-800 shadow-sm fixed w-full top-0 z-50 transition-all left-0 right-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-2">
@@ -764,7 +736,7 @@ const LandingPage = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className={`pt-32 pb-20 px-4 sm:px-6 lg:px-8 scroll-animate ${showEmergencyBanner ? 'mt-[52px]' : ''}`}>
+      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 scroll-animate">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
