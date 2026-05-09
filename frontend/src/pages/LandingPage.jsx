@@ -643,6 +643,7 @@ const LandingPage = () => {
             </div>
             <div className="flex items-center gap-4">
               <button
+                type="button"
                 onClick={toggleDarkMode}
                 className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
                 aria-label="Toggle dark mode">
@@ -663,6 +664,7 @@ const LandingPage = () => {
                 Get Started
               </Link>
               <button
+                type="button"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
                 aria-label="Toggle menu">
@@ -1653,6 +1655,7 @@ const LandingPage = () => {
                 key={index}
                 className="bg-gray-50 dark:bg-slate-900 rounded-xl overflow-hidden transition-all">
                 <button
+                  type="button"
                   onClick={() => toggleFaq(index)}
                   className="w-full flex items-center justify-between p-6 text-left hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors">
                   <div className="flex items-start gap-4 flex-1">
@@ -1877,7 +1880,7 @@ const LandingPage = () => {
                 placeholder="Enter your email"
                 className="flex-1 px-6 py-3 rounded-xl border-0 focus:ring-2 focus:ring-white"
               />
-              <button className="px-8 py-3 bg-white text-primary hover:bg-gray-100 rounded-xl transition-colors font-medium whitespace-nowrap">
+              <button type="button" className="px-8 py-3 bg-white text-primary hover:bg-gray-100 rounded-xl transition-colors font-medium whitespace-nowrap">
                 Subscribe
               </button>
             </div>
@@ -2569,6 +2572,7 @@ const LandingPage = () => {
       {/* Scroll to Top Button */}
       {showScrollTop && (
         <button
+          type="button"
           onClick={scrollToTop}
           className="fixed bottom-8 right-8 z-50 p-4 bg-primary hover:bg-blue-800 text-white rounded-full shadow-lg transition-all duration-300 hover:scale-110 animate-fade-in"
           aria-label="Scroll to top">
