@@ -36,13 +36,6 @@ export const ThemeProvider = ({ children }) => {
         htmlElement.classList.remove("dark");
       }
 
-      // Force a repaint to ensure styles are applied
-      setTimeout(() => {
-        document.body.style.display = "none";
-        document.body.offsetHeight; // Trigger reflow
-        document.body.style.display = "";
-      }, 0);
-
       localStorage.setItem("darkMode", JSON.stringify(darkMode));
       console.log("Dark mode updated:", darkMode);
     } catch (error) {
